@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\git\\sample_local\\shinnzinn2026\\shinnzinn2026\\shinnzinn2026.csproj": {}
+    "C:\\git\\新人2026\\asp.net core mvc\\shinnzinn2026\\shinnzinn2026.csproj": {}
   },
   "projects": {
-    "C:\\git\\sample_local\\shinnzinn2026\\shinnzinn2026\\shinnzinn2026.csproj": {
+    "C:\\git\\新人2026\\asp.net core mvc\\shinnzinn2026\\shinnzinn2026.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\git\\sample_local\\shinnzinn2026\\shinnzinn2026\\shinnzinn2026.csproj",
+        "projectUniqueName": "C:\\git\\新人2026\\asp.net core mvc\\shinnzinn2026\\shinnzinn2026.csproj",
         "projectName": "shinnzinn2026",
-        "projectPath": "C:\\git\\sample_local\\shinnzinn2026\\shinnzinn2026\\shinnzinn2026.csproj",
-        "packagesPath": "C:\\Users\\RTakahashi\\.nuget\\packages\\",
-        "outputPath": "C:\\git\\sample_local\\shinnzinn2026\\shinnzinn2026\\obj\\",
+        "projectPath": "C:\\git\\新人2026\\asp.net core mvc\\shinnzinn2026\\shinnzinn2026.csproj",
+        "packagesPath": "C:\\Users\\SYanagi\\.nuget\\packages\\",
+        "outputPath": "C:\\git\\新人2026\\asp.net core mvc\\shinnzinn2026\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\RTakahashi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\SYanagi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -68,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
