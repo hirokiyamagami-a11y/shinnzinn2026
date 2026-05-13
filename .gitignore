@@ -5,21 +5,30 @@
 *.sln.docstates
 *.suo
 
-# ビルド結果・キャッシュ
+# ビルド結果・出力ディレクトリ（アーキテクチャごとのフォルダも追加）
 [Bb]in/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
 [Dd]ebug/
 [Rr]elease/
-*.cache
+x64/
+x86/
 
-# NuGetパッケージ関連
+# キャッシュ・ログ関連
+*.cache
+*.log
+
+# NuGetパッケージ関連（近年の.NETプロジェクト用設定を追加）
 *.nupkg
 packages/
 project.lock.json
+project.assets.json
 .nuget/
 
-# Mac / Windows システムファイル
+# Mac / Windows システムファイル（よく混入する隠しファイルを追加）
 .DS_Store
+._*
 Thumbs.db
+ehthumbs.db
+$RECYCLE.BIN/
