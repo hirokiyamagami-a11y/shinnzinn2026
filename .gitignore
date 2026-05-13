@@ -1,17 +1,25 @@
 # Visual Studio関連の一時ファイル・設定ファイル
 .vs/
 *.user
-*.suo
+*.userosscache
 *.sln.docstates
+*.suo
 
-# ビルド結果（これらがよく「変更済み」として大量に出てくる原因です）
+# ビルド結果・キャッシュ
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+[Ll]ogs/
+[Dd]ebug/
+[Rr]elease/
+*.cache
 
-# NuGetパッケージ
+# NuGetパッケージ関連
 *.nupkg
 packages/
+project.lock.json
+.nuget/
 
-# Macユーザー向け（念のため）
+# Mac / Windows システムファイル
 .DS_Store
+Thumbs.db
