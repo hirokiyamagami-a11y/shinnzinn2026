@@ -1,0 +1,48 @@
+﻿@{
+    // 標準のヘッダーやフッターを消去し、完全にこの画面だけのフルスクリーンにする
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>出退勤画面</title>
+</head>
+<body style="margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); font-family: 'Segoe UI', Roboto, 'Hiragino Sans', 'Meiryo', sans-serif;">
+
+    <div style="position: relative; width: 85%; max-width: 1200px; padding: 100px 50px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); text-align: center; color: #ffffff;">
+
+        <div style="position: absolute; top: 40px; right: 50px;">
+            <a href="/Attendance/Details" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s;">
+                詳細
+            </a>
+        </div>
+
+        <h1 style="margin-top: 0; margin-bottom: 20px; font-size: 20px; font-weight: 400; letter-spacing: 8px; text-transform: uppercase; color: rgba(255,255,255,0.7);">
+            Attendance System
+        </h1>
+
+        <div style="font-size: 80px; font-weight: 700; margin-bottom: 80px; letter-spacing: 4px; text-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+            @DateTime.Now.ToString("yyyy/MM/dd HH:mm")
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 80px;">
+
+            <form method="post" asp-controller="Login" asp-action="CheckIn" style="margin: 0;">
+                <button type="submit" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(0, 176, 155, 0.4); cursor: pointer; letter-spacing: 8px;">
+                    出勤
+                </button>
+            </form>
+
+            <form method="post" asp-controller="Login" asp-action="CheckOut" style="margin: 0;">
+                <button type="submit" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #ff512f, #dd2476); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(221, 36, 118, 0.4); cursor: pointer; letter-spacing: 8px;">
+                    退勤
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>
