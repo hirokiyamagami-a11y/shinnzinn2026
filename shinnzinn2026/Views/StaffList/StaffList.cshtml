@@ -2,78 +2,103 @@
     ViewData["Title"] = "社員一覧";
 }
 
-<div class="container mt-5">
-    <div class="text-center mb-5">
-        <h2 class="display-6 bg-info-subtle text-info-emphasis py-3 rounded-4 shadow-sm mx-auto" style="max-width: 600px;">
-            社員一覧
-        </h2>
-    </div>
+<style>
+    header, footer {
+        display: none !important;
+    }
 
-    @* --- テーブルエリア --- *@
-    <div class="card shadow-sm">
-        <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-                <thead class="table-info">
-                    <tr>
-                        <th class="ps-4" style="width: 20%;">ID</th>
-                        <th style="width: 50%;">名前</th>
-                        <th class="text-center" style="width: 30%;">操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @* 🌸 まずはダミーデータで見た目を確認よ！ *@
-                    <tr>
-                        <td class="ps-4">S001</td>
-                        <td>山田 太郎</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info">詳細</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="ps-4">S002</td>
-                        <td>佐藤 花子</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info">詳細</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="ps-4">S003</td>
-                        <td>鈴木 一郎</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info">詳細</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="ps-4">S004</td>
-                        <td>佐藤 次郎</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info">詳細</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="ps-4">S005</td>
-                        <td>山田 櫻子</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info">詳細</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    body {
+        background-color: #2e4a7d !important;
+        overflow-x: hidden;
+    }
+</style>
+
+@* 🌸 画面全体を覆うダークブルーの箱（bodyの代わりよ） *@
+<div style="background-color: #2e4a7d; min-height: 100vh; width: 100vw; margin-left: calc(50% - 50vw); padding: 3rem 1rem; color: #ffffff;">
+    <div class="container pb-5">
+        @* 🌸 中央の大きなカード *@
+        <div style="background-color: #3b598f; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); padding: 3rem;">
+            @* --- タイトルエリア --- *@
+            <div class="text-center mb-4">
+                <div class="mb-2 fw-bold" style="letter-spacing: 0.3em; font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);">STAFF LIST</div>
+                <h2 class="display-5 fw-bold mb-0" style="color: #ffffff;">社員一覧</h2>
+            </div>
+
+            @* --- テーブルエリア --- *@
+            <div class="table-responsive mt-5">
+                <table class="table mb-0" style="color: #ffffff;">
+                    <thead>
+                        <tr>
+                            <th class="ps-4" style="border-bottom: 2px solid rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.8); font-weight: normal; background-color: transparent; width: 20%;">ID</th>
+                            <th style="border-bottom: 2px solid rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.8); font-weight: normal; background-color: transparent; width: 50%;">名前</th>
+                            <th class="text-center" style="border-bottom: 2px solid rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.8); font-weight: normal; background-color: transparent; width: 30%;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">S001</td>
+                            <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">山田 太郎</td>
+                            <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
+                                <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">S002</td>
+                            <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">佐藤 花子</td>
+                            <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
+                                <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">S003</td>
+                            <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">鈴木 一郎</td>
+                            <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
+                                <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">S004</td>
+                            <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">佐藤 次郎</td>
+                            <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
+                                <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">S005</td>
+                            <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">山田 櫻子</td>
+                            <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
+                                <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            @* --- ページネーション --- *@
+            <nav class="mt-5">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.3);">前へ</a>
+                    </li>
+                    @* 🌸 ここが選択中の「出勤ボタン」風グラデーションよ！ *@
+                    <li class="page-item">
+                        <a class="page-link" href="#" style="background: linear-gradient(135deg, #42e695, #3bb2b8); border-color: transparent; box-shadow: 0 0 15px rgba(66, 230, 149, 0.4); color: #fff;">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: #ffffff;">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: #ffffff;">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: #ffffff;">次へ</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="text-center mt-4">
+                <a asp-controller="Home" asp-action="Index" class="text-decoration-none" style="color: rgba(255,255,255,0.5);">メニューへ戻る</a>
+            </div>
         </div>
-    </div>
-
-    @* --- ページネーション --- *@
-    <nav class="mt-4">
-        <ul class="pagination justify-content-center">
-            <li class="page-item disabled"><a class="page-link" href="#">前へ</a></li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">次へ</a></li>
-        </ul>
-    </nav>
-
-    <div class="text-center mt-3">
-        <a asp-controller="Home" asp-action="Index" class="btn btn-link text-secondary">メニューへ戻る</a>
     </div>
 </div>
