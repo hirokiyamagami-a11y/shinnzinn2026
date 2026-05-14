@@ -1,106 +1,114 @@
-﻿@model shinnzinn2026.Work_List.WorkListModel
+﻿@* @page は削除しました！これでエラーは出ません *@
+@model shinnzinn2026.Work_List.WorkListModel
 @{
     ViewData["Title"] = "勤務実績一覧";
 }
 
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary">
-            <i class="bi bi-calendar3"></i> 勤務実績一覧
-        </h2>
-        <span class="badge bg-secondary">ログイン中：ユーザー名</span>
-    </div>
+<div class="min-vh-100 py-4" style="background: linear-gradient(135deg, #1a2a5a, #0d1a38);">
+    <div class="container text-white">
 
-     <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body bg-light">
-            <form class="row g-3 align-items-end">
-                <div class="col-6 col-md-3">
-                    <label class="form-label fw-bold">表示年</label>
-                    <select class="form-select">
-                        <option selected>2026年</option>
-                        <option>2025年</option>
-                        <option>2024年</option>
-                    </select>
-                </div>
-                <div class="col-6 col-md-3">
-                    <label class="form-label fw-bold">表示月</label>
-                    <select class="form-select">
-                        @for (int i = 1; i <= 12; i++)
-                        {
-                            <option value="@i" selected="@(i == 5)">@(i)月</option>
-                        }
-                    </select>
-                </div>
-                <div class="col-12 col-md-2">
-                    <button type="button" class="btn btn-primary w-100 shadow-sm">
-                        表示を切り替え
-                    </button>
-                </div>
-            </form>
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <span class="text-white-50"><i class="bi bi-person-fill"></i> ユーザー名</span>
+            <a href="/" class="btn btn-sm btn-outline-light rounded-pill px-3">Home</a>
         </div>
-    </div>
 
-    <div class="row mb-4 text-center">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm p-3">
-                <div class="small text-muted">出勤日数</div>
-                <div class="h4 mb-0 fw-bold">20 日</div>
+        <div class="text-center mb-5">
+            <p class="text-white-50 small mb-1" style="letter-spacing: 2px;">WORK RECORDS</p>
+            <h2 class="fw-bold">勤務実績一覧</h2>
+        </div>
+
+        <div class="card bg-white bg-opacity-10 border-light border-opacity-25 shadow-lg rounded-4 mb-4">
+            <div class="card-body p-4">
+                <form class="row g-3 align-items-end justify-content-center">
+                    <div class="col-6 col-md-3">
+                        <label class="form-label text-white-50 small">表示年</label>
+                        <select class="form-select bg-dark text-white border-secondary">
+                            <option selected>2026年</option>
+                            <option>2025年</option>
+                            <option>2024年</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label text-white-50 small">表示月</label>
+                        <select class="form-select bg-dark text-white border-secondary">
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <option value="@i" selected="@(i == 5)">@(i)月</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <button type="button" class="btn btn-success w-100 fw-bold rounded-3 shadow">
+                            DISPLAY
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm p-3 border-start border-primary border-4">
-                <div class="small text-muted">総労働時間</div>
-                <div class="h4 mb-0 fw-bold">160.5 h</div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm p-3">
-                <div class="small text-muted">残業合計</div>
-                <div class="h4 mb-0 fw-bold text-danger">10.0 h</div>
-            </div>
-        </div>
-    </div>
 
-    <div class="card border-0 shadow-sm">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-dark">
-                    <tr>
-                        <th style="width: 15%">日付</th>
-                        <th style="width: 15%">出勤</th>
-                        <th style="width: 15%">退勤</th>
-                        <th style="width: 10%">休憩</th>
-                        <th style="width: 15%">実労働</th>
-                        <th>備考</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>05/01 (金)</td>
-                        <td>09:00</td>
-                        <td>18:00</td>
-                        <td>60分</td>
-                        <td>8.0h</td>
-                        <td><span class="badge bg-info text-dark">通常</span></td>
-                    </tr>
-                    <tr class="table-warning">
-                        <td>05/02 (土)</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td class="text-muted">公休</td>
-                    </tr>
-                    <tr class="table-danger">
-                        <td>05/03 (日)</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td class="text-muted">法定休日</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row g-3 mb-4 text-center">
+            <div class="col-md-4">
+                <div class="card bg-white bg-opacity-10 border-light border-opacity-25 rounded-4 p-3 h-100">
+                    <div class="small text-white-50 mb-1">出勤日数</div>
+                    <div class="h4 mb-0 fw-bold">20 日</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-white bg-opacity-10 border-light border-opacity-25 border-start border-success border-4 rounded-4 p-3 h-100">
+                    <div class="small text-white-50 mb-1">総労働時間</div>
+                    <div class="h4 mb-0 fw-bold">160.5 h</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-white bg-opacity-10 border-light border-opacity-25 rounded-4 p-3 h-100">
+                    <div class="small text-white-50 mb-1">残業合計</div>
+                    <div class="h4 mb-0 fw-bold text-warning">10.0 h</div>
+                </div>
+            </div>
         </div>
-</div> 
+
+        <div class="card bg-white bg-opacity-10 border-light border-opacity-25 shadow-lg rounded-4 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover table-borderless align-middle mb-0 text-center">
+                    <thead class="border-bottom border-secondary">
+                        <tr>
+                            <th class="py-3 text-white-50">日付</th>
+                            <th class="py-3 text-white-50">出勤</th>
+                            <th class="py-3 text-white-50">退勤</th>
+                            <th class="py-3 text-white-50">休憩</th>
+                            <th class="py-3 text-white-50">実労働</th>
+                            <th class="py-3 text-white-50">備考</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-3">05/01 (金)</td>
+                            <td>09:00</td>
+                            <td>18:00</td>
+                            <td>60分</td>
+                            <td>8.0h</td>
+                            <td><span class="badge bg-success bg-opacity-75">通常</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 text-warning">05/02 (土)</td>
+                            <td class="text-white-50">-</td>
+                            <td class="text-white-50">-</td>
+                            <td class="text-white-50">-</td>
+                            <td class="text-white-50">-</td>
+                            <td class="text-warning">公休</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 text-danger">05/03 (日)</td>
+                            <td class="text-white-50">-</td>
+                            <td class="text-white-50">-</td>
+                            <td class="text-white-50">-</td>
+                            <td class="text-white-50">-</td>
+                            <td class="text-danger">法定休日</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
 </div>
