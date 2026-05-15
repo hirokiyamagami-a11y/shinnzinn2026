@@ -1,36 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using shinnzinn2026.Work_List; // モデルを参照
+using Microsoft.EntityFrameworkCore;
+using shinnzinn2026.Data;
+using shinnzinn2026.Models;
+using shinnzinn2026.Work_List;
 
 namespace shinnzinn2026.Controllers
 {
     public class WorkListController : Controller
     {
-        // メソッド名を WorkList にしました。
-        // これで URL は /WorkList/WorkList になります。
-        public IActionResult WorkList(int? SelectedYear, int? SelectedMonth)
+        private readonly ApplicationDbContext _context;
+
+        // データベースを使えるように準備
+        public WorkListController(ApplicationDbContext context)
         {
-            var model = new WorkListModel();
+            _context = context;
+        }
 
-            // 検索された値をセット（空なら現在の年月）
-            model.SelectedYear = SelectedYear ?? DateTime.Now.Year;
-            model.SelectedMonth = SelectedMonth ?? DateTime.Now.Month;
+        // URL: /WorkList/WorkList
+        public async Task<IActionResult> WorkList(int? SelectedYear, int? SelectedMonth)
+        {
+            var year = SelectedYear ?? DateTime.Now.Year;
+            var month = SelectedMonth ?? DateTime.Now.Month;
 
-            // 表示用のダミーデータを作成
-            model.AttendanceList = new List<AttendanceRecord>();
-            for (int i = 1; i <= 5; i++)
+            // --- データベースからデータを取得 ---
+            var attendanceData = await _context.Works
+                .Where(w => w.WorkDate.Year == year && w.WorkDate.Month == month)
+                // 本来はここでログイン中の StaffCd でも絞り込みます
+                // .Where(w => w.StaffCd == "ログインユーザーのCD") 
+                .OrderBy(w => w.WorkDate)
+                .ToListAsync();
+
+            // 画面に渡すモデルにセット
+            var viewModel = new WorkListViewModel
             {
-                model.AttendanceList.Add(new AttendanceRecord
-                {
-                    Date = new DateTime(model.SelectedYear, model.SelectedMonth, i),
-                    StartTime = new TimeSpan(9, 0, 0),
-                    EndTime = new TimeSpan(18, 0, 0),
-                    BreakTime = 60,
-                    Note = "通常勤務"
-                });
-            }
+                SelectedYear = year,
+                SelectedMonth = month,
+                AttendanceList = attendanceData
+            };
 
-            // Views/WorkList/WorkList.cshtml を探しに行きます
-            return View(model);
+            return View(viewModel);
         }
     }
 }

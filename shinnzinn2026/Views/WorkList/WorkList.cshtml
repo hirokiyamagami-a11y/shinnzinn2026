@@ -1,10 +1,11 @@
 ﻿@using shinnzinn2026.Work_List
-@model WorkListModel
+@model WorkListViewModel
 @{
     ViewData["Title"] = "勤務実績一覧";
 }
 
 <style>
+    /* 共通のヘッダー・フッターを隠してフルスクリーン感を出す */
     header, footer {
         display: none !important;
     }
@@ -20,7 +21,6 @@
 
         <div class="d-flex justify-content-between align-items-center mb-5">
             <span class="text-white-50"><i class="bi bi-person-fill"></i> ユーザー名</span>
-            @* ログイン画面に戻る（LoginコントローラーのLoginアクションへ） *@
             <a href="/Login/Login" class="btn btn-sm btn-outline-light rounded-pill px-3">戻る</a>
         </div>
 
@@ -29,7 +29,6 @@
             <h2 class="fw-bold">勤務実績一覧</h2>
         </div>
 
-        @* 検索フォーム（送信先を /WorkList/WorkList に指定） *@
         <div class="card bg-white bg-opacity-10 border-light border-opacity-25 shadow-lg rounded-4 mb-4 text-start">
             <div class="card-body p-4">
                 <form method="get" action="/WorkList/WorkList" class="row g-3 align-items-end justify-content-center">
@@ -38,6 +37,7 @@
                         <select name="SelectedYear" class="form-select bg-dark text-white border-secondary">
                             <option value="2026" selected="@(Model.SelectedYear == 2026)">2026年</option>
                             <option value="2025" selected="@(Model.SelectedYear == 2025)">2025年</option>
+                            <option value="2024" selected="@(Model.SelectedYear == 2024)">2024年</option>
                         </select>
                     </div>
                     <div class="col-6 col-md-3">
@@ -56,7 +56,27 @@
             </div>
         </div>
 
-        @* テーブルエリア *@
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card bg-white bg-opacity-10 border-light border-opacity-25 rounded-4 p-3 h-100">
+                    <div class="small text-white-50 mb-1">出勤日数</div>
+                    <div class="h4 mb-0 fw-bold">@(Model.AttendanceList?.Count ?? 0) 日</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-white bg-opacity-10 border-light border-opacity-25 border-start border-success border-4 rounded-4 p-3 h-100">
+                    <div class="small text-white-50 mb-1">総労働時間</div>
+                    <div class="h4 mb-0 fw-bold">160.5 h</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-white bg-opacity-10 border-light border-opacity-25 rounded-4 p-3 h-100">
+                    <div class="small text-white-50 mb-1">残業合計</div>
+                    <div class="h4 mb-0 fw-bold text-warning">10.0 h</div>
+                </div>
+            </div>
+        </div>
+
         <div class="card bg-white bg-opacity-10 border-light border-opacity-25 shadow-lg rounded-4 overflow-hidden mt-4">
             <div class="table-responsive">
                 <table class="table table-dark table-hover table-borderless align-middle mb-0 text-center">
@@ -65,23 +85,35 @@
                             <th class="py-3 text-white-50">日付</th>
                             <th class="py-3 text-white-50">出勤</th>
                             <th class="py-3 text-white-50">退勤</th>
-                            <th class="py-3 text-white-50">実労働</th>
+                            <th class="py-3 text-white-50">休憩</th>
                             <th class="py-3 text-white-50">備考</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.AttendanceList != null)
+                        @if (Model.AttendanceList != null && Model.AttendanceList.Any())
                         {
                             foreach (var item in Model.AttendanceList)
                             {
                                 <tr>
-                                    <td class="py-3">@item.Date.ToString("MM/dd (ddd)")</td>
-                                    <td>@item.StartTime?.ToString(@"hh\:mm")</td>
-                                    <td>@item.EndTime?.ToString(@"hh\:mm")</td>
-                                    <td>8.0h</td>
-                                    <td><span class="badge bg-success bg-opacity-75">@item.Note</span></td>
+                                    <td class="py-3">@item.WorkDate.ToString("MM/dd (ddd)")</td>
+                                    <td>@item.AttendanceTime?.ToString("HH:mm")</td>
+                                    <td>@item.LeaveTime?.ToString("HH:mm")</td>
+                                    @* PostgreSQLのinterval(TimeSpan)を表示 *@
+                                    <td>@(item.RestTime?.ToString(@"hh\:mm") ?? "-")</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Remarks))
+                                        {
+                                            <span class="badge bg-success bg-opacity-75">@item.Remarks</span>
+                                        }
+                                    </td>
                                 </tr>
                             }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="py-5 text-white-50">データが登録されていません</td>
+                            </tr>
                         }
                     </tbody>
                 </table>
