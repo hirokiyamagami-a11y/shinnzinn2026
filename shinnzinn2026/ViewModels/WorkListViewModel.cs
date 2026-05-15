@@ -1,12 +1,14 @@
 ﻿using shinnzinn2026.Models;
+using System.Collections.Generic;
 
-namespace shinnzinn2026.Work_List
+namespace shinnzinn2026.ViewModels
 {
     public class WorkListViewModel
     {
         public int SelectedYear { get; set; }
         public int SelectedMonth { get; set; }
-        // データベースから取得した WorkModel のリストを保持します
-        public List<WorkModel> AttendanceList { get; set; } = new();
+
+        // データベースから取得した勤務データのリスト
+        public List<WorkModel> AttendanceList { get; set; } = new List<WorkModel>();
     }
 }

@@ -1,11 +1,10 @@
-﻿@using shinnzinn2026.Work_List
+﻿@using shinnzinn2026.ViewModels
 @model WorkListViewModel
 @{
     ViewData["Title"] = "勤務実績一覧";
 }
 
 <style>
-    /* 共通のヘッダー・フッターを隠してフルスクリーン感を出す */
     header, footer {
         display: none !important;
     }
@@ -35,9 +34,10 @@
                     <div class="col-6 col-md-3">
                         <label class="form-label text-white-50 small">表示年</label>
                         <select name="SelectedYear" class="form-select bg-dark text-white border-secondary">
-                            <option value="2026" selected="@(Model.SelectedYear == 2026)">2026年</option>
-                            <option value="2025" selected="@(Model.SelectedYear == 2025)">2025年</option>
-                            <option value="2024" selected="@(Model.SelectedYear == 2024)">2024年</option>
+                            @for (int y = 2024; y <= 2026; y++)
+                            {
+                                <option value="@y" selected="@(Model.SelectedYear == y)">@(y)年</option>
+                            }
                         </select>
                     </div>
                     <div class="col-6 col-md-3">
@@ -96,9 +96,8 @@
                             {
                                 <tr>
                                     <td class="py-3">@item.WorkDate.ToString("MM/dd (ddd)")</td>
-                                    <td>@item.AttendanceTime?.ToString("HH:mm")</td>
-                                    <td>@item.LeaveTime?.ToString("HH:mm")</td>
-                                    @* PostgreSQLのinterval(TimeSpan)を表示 *@
+                                    <td>@(item.AttendanceTime?.ToString("HH:mm") ?? "-")</td>
+                                    <td>@(item.LeaveTime?.ToString("HH:mm") ?? "-")</td>
                                     <td>@(item.RestTime?.ToString(@"hh\:mm") ?? "-")</td>
                                     <td>
                                         @if (!string.IsNullOrEmpty(item.Remarks))
@@ -119,6 +118,5 @@
                 </table>
             </div>
         </div>
-
     </div>
 </div>

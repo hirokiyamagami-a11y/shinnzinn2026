@@ -6,7 +6,7 @@ namespace shinnzinn2026.Models
 {
     [Table("work")]
     [Comment("勤務テーブル")]
-    public class Work
+    public class WorkModel
     {
         [Key]
         [Column("id")]
