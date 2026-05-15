@@ -1,0 +1,121 @@
+﻿@model shinnzinn2026.Models.StaffModel
+@{
+    ViewData["Title"] = "ユーザー編集";
+}
+
+@* 🌸 ここは消しちゃダメ！外側の枠を消す魔法と、入力欄をクリックした時の「光るアニメーション（:focus）」だけはここに残すわよ！ *@
+<style>
+    header, footer {
+        display: none !important;
+    }
+
+    body {
+        background-color: #2e4a7d !important;
+        overflow-x: hidden;
+    }
+
+    .glass-input-focus:focus {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+        border-color: #8cc63f !important;
+        box-shadow: 0 0 10px rgba(140, 198, 63, 0.3) !important;
+        color: #ffffff !important;
+        outline: none !important;
+    }
+</style>
+
+<div style="background-color: #2e4a7d; min-height: 100vh; width: 100vw; margin-left: calc(50% - 50vw); padding: 3rem 1rem; color: #ffffff;">
+    <div class="container" style="max-width: 600px;">
+
+        @* --- 戻るボタン --- *@
+        <div class="mb-4">
+            <a asp-controller="StaffList" asp-action="StaffList" class="text-decoration-none" style="color: rgba(255,255,255,0.5);">
+                <i class="fa-solid fa-arrow-left"></i> 社員一覧へ戻る
+            </a>
+        </div>
+
+        @* --- 編集カード --- *@
+        <div style="background-color: #3b598f; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); padding: 3rem;">
+
+            <div class="text-center mb-5">
+                <div class="mb-2 fw-bold" style="letter-spacing: 0.3em; font-size: 0.9rem; color: #8cc63f;">USER EDIT</div>
+                <h2 class="display-6 fw-bold mb-0" style="color: #ffffff;">ユーザー編集</h2>
+            </div>
+
+            @* 🌸 エラーメッセージ *@
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div style="background-color: rgba(255, 99, 132, 0.2); border: 1px solid #ff6384; color: #ffdbe0; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; text-align: center; font-weight: bold;">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <form asp-action="StaffEdit" method="post">
+
+                @* 隠しデータとしてユーザーコードを送る *@
+                <input type="hidden" name="StaffCd" value="@Model.StaffCd" />
+
+                @* 1. ユーザーコード *@
+                <div class="mb-4">
+                    <label style="color: rgba(255, 255, 255, 0.7); font-weight: 600; margin-bottom: 0.5rem;">ユーザーコード</label>
+                    <input type="text" class="form-control glass-input-focus" value="@Model.StaffCd" tabindex="-1" style="pointer-events: none; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: #ffffff; padding: 0.8rem 1rem;" readonly>
+                </div>
+
+                @* 2. 名前 *@
+                <div class="mb-4">
+                    <label style="color: rgba(255, 255, 255, 0.7); font-weight: 600; margin-bottom: 0.5rem;">名前</label>
+                    <input type="text" class="form-control glass-input-focus" name="Name" value="@Model.Name" style="background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: #ffffff; padding: 0.8rem 1rem;" required>
+                </div>
+
+                @* 3. パスワード *@
+                <div class="mb-4">
+                    <label style="color: rgba(255, 255, 255, 0.7); font-weight: 600; margin-bottom: 0.5rem;">新しいパスワード</label>
+                    <input type="password" class="form-control glass-input-focus" name="Password" placeholder="変更する場合のみ入力" style="background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: #ffffff; padding: 0.8rem 1rem;">
+                </div>
+
+                @* 4. パスワード再入力 *@
+                <div class="mb-5">
+                    <label style="color: rgba(255, 255, 255, 0.7); font-weight: 600; margin-bottom: 0.5rem;">パスワード（再入力）</label>
+                    <input type="password" class="form-control glass-input-focus" name="PasswordConfirm" placeholder="変更する場合のみ入力" style="background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: #ffffff; padding: 0.8rem 1rem;">
+                </div>
+
+                @* --- 保存ボタン --- *@
+                <div class="d-grid gap-3">
+                    <button type="submit" class="btn btn-lg fw-bold" style="background: linear-gradient(135deg, #42e695, #3bb2b8); color: #ffffff; border-radius: 50px; padding: 1rem; border: none; box-shadow: 0 5px 15px rgba(66, 230, 149, 0.3);">
+                        変更を保存する
+                    </button>
+
+                    <a asp-controller="StaffList" asp-action="StaffList" class="btn btn-lg fw-bold text-decoration-none" style="background-color: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); border-radius: 50px; padding: 1rem; border: 1px solid rgba(255,255,255,0.1);">
+                        キャンセル
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* 成功ポップアップ（モーダル） *@
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff;">
+                <div class="modal-body text-center" style="padding: 3rem 2rem;">
+
+                    <i class="fa-solid fa-circle-check mb-3" style="font-size: 4rem; color: #8cc63f;"></i>
+                    <h4 class="fw-bold mb-4" style="color: #333333;">@ViewBag.SuccessMessage</h4>
+
+                    <a asp-controller="StaffList" asp-action="StaffList" class="btn btn-lg fw-bold" style="background-color: #3b598f; color: #ffffff; border-radius: 12px; padding: 0.8rem 2rem; width: 100%;">
+                        社員一覧へ戻る
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        });
+    </script>
+}

@@ -69,9 +69,9 @@
 
                                                 <div class="d-grid gap-3">
                                                     @* 1つ目のボタン（二枚目の確定ボタン風のブルー） *@
-                                                    <button type="button" class="btn btn-lg fw-bold" style="background-color: #3b598f; color: #ffffff; border-radius: 12px; padding: 1rem;">
+                                                    <a asp-controller="StaffEdit" asp-action="StaffEdit" asp-route-id="@staff.StaffCd" class="btn btn-lg fw-bold text-decoration-none" style="background-color: #3b598f; color: #ffffff; border-radius: 12px; padding: 1rem;">
                                                         ユーザー編集
-                                                    </button>
+                                                    </a>
 
                                                     @* 2つ目のボタン（少し控えめなグレー） *@
                                                     <button type="button" class="btn btn-lg fw-bold" style="background-color: #51995f; color: #ffffff; border-radius: 12px; padding: 1rem;">
