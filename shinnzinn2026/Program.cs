@@ -2,8 +2,18 @@ using Microsoft.EntityFrameworkCore;
 using shinnzinn2026.Data;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
 var builder = WebApplication.CreateBuilder(args);
+
+// --- 🌸 ここから追加: セッション機能を有効にするための準備 ---
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // 30分で自動ログアウト
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+// --- ここまで追加 ---
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -25,6 +35,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// --- 🌸 ここを追加: セッションを実際に使い始めますという宣言 ---
+app.UseSession();
+// --- ここまで追加 ---
 
 app.UseAuthorization();
 
