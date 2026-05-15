@@ -7,18 +7,36 @@ namespace shinnzinn2026.Controllers
 {
     public class StaffListController : Controller
     {
-        public IActionResult StaffList() => View();
         private readonly ApplicationDbContext _context;
 
-        public async Task<IActionResult> Staff_List()
+        public StaffListController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        // 引数に「page」を追加。何も指定されない時は1ページ目（page = 1）になる
+        public async Task<IActionResult> StaffList(int page = 1)
         {
             try
             {
-                // DBから社員データを全部取ってくる
-                var staffList = await _context.Staffs.OrderBy(s => s.Id).ToListAsync();
+                int pageSize = 5; // 1ページに表示する人数
 
-                // 取得したリストをViewに渡す
-                return View("Staff_List", staffList);
+                // 全体で何人いるか数えて、全部で何ページになるか計算する
+                int totalItems = await _context.Staffs.CountAsync();
+                int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+                // 指定されたページの5人だけを切り取って取得
+                var staffList = await _context.Staffs
+                    .OrderBy(s => s.Id)
+                    .Skip((page - 1) * pageSize)  // 前のページまでの分をスキップ
+                    .Take(pageSize)               // 5件だけ取得
+                    .ToListAsync();
+
+                // 画面（View）でボタンを作るために、ページ情報を「ViewBag」に入れて送る
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+
+                return View("StaffList", staffList);
             }
             catch (Exception ex)
             {
