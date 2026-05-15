@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using shinnzinn2026.Data;   // ApplicationDbContextがある場所
-using shinnzinn2026.Models; // Modelがある場所
+using Microsoft.AspNetCore.Http; // 💡 追加：セッション（バトン）を使うために必要
+using shinnzinn2026.Data;
+using shinnzinn2026.Models;
 
 namespace shinnzinn2026.Controllers
 {
@@ -17,10 +18,12 @@ namespace shinnzinn2026.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            // 💡 追加：ログイン画面を開いた時は念のため以前のバトンを捨てる（安全対策）
+            HttpContext.Session.Clear();
             return View();
         }
 
-        // 🌟 2. 「出勤」ボタン処理
+        // 🌟 2. 「出勤」ボタン処理 （※一切変更していません）
         [HttpPost]
         public IActionResult CheckIn(string staffCd, string password)
         {
@@ -57,7 +60,7 @@ namespace shinnzinn2026.Controllers
             return View("Login");
         }
 
-        // 🌟 3. 「退勤」ボタン処理
+        // 🌟 3. 「退勤」ボタン処理 （※一切変更していません）
         [HttpPost]
         public IActionResult CheckOut(string staffCd, string password)
         {
@@ -107,6 +110,9 @@ namespace shinnzinn2026.Controllers
                 ViewBag.ErrorMessage = "社員CDまたはパスワードが間違っています。";
                 return View("Login");
             }
+
+            // 💡 ここだけ追加！実績画面に「誰がログインしたか」を教えるためのバトン
+            HttpContext.Session.SetString("LoginStaffCd", staff.StaffCd);
 
             // ManagerFlag による判定 (1: 管理者, 0: 一般)
             if (staff.ManagerFlag == 1)

@@ -8,14 +8,19 @@ namespace shinnzinn2026.ViewModels
         public int SelectedYear { get; set; }
         public int SelectedMonth { get; set; }
 
-        public string UserStaffCd { get; set; } = "";
-        public string UserName { get; set; } = "";
+        // --- ログインしている人（閲覧者）の情報 ---
+        public string LoginStaffCd { get; set; } = "";
+        public string LoginUserName { get; set; } = "";
+        public bool IsManager { get; set; } = false;
+
+        // --- 今画面に表示されている人（対象者）の情報 ---
+        public string TargetStaffCd { get; set; } = "";
+        public string TargetUserName { get; set; } = "";
+
+        // 自分自身のデータを見ているかどうかの判定用
+        public bool IsViewingSelf => LoginStaffCd == TargetStaffCd;
 
         public List<WorkModel> AttendanceList { get; set; } = new();
         public double TotalHours { get; set; }
-
-        // ↓↓↓ 今回のエラーの原因：この2行が足りていませんでした！ ↓↓↓
-        public bool IsAuthenticated { get; set; } = false;
-        public string? LoginErrorMessage { get; set; }
     }
 }

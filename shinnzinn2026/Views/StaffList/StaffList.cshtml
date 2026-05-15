@@ -68,15 +68,16 @@
                                                 </p>
 
                                                 <div class="d-grid gap-3">
-                                                    @* 1つ目のボタン（二枚目の確定ボタン風のブルー） *@
-                                                    <a asp-controller="StaffEdit" asp-action="StaffEdit" asp-route-id="@staff.StaffCd" class="btn btn-lg fw-bold text-decoration-none" style="background-color: #3b598f; color: #ffffff; border-radius: 12px; padding: 1rem;">
+                                                    <a asp-controller="StaffEdit" asp-action="StaffEdit" asp-route-id="@staff.StaffCd"
+                                                       class="btn btn-lg fw-bold text-decoration-none" style="background-color: #3b598f; color: #ffffff; border-radius: 12px; padding: 1rem;">
                                                         ユーザー編集
                                                     </a>
 
-                                                    @* 2つ目のボタン（少し控えめなグレー） *@
-                                                    <button type="button" class="btn btn-lg fw-bold" style="background-color: #51995f; color: #ffffff; border-radius: 12px; padding: 1rem;">
+                                                    @* 💡 ここを a タグに変更し、WorkList へ targetStaffCd を渡すようにしました *@
+                                                    <a asp-controller="WorkList" asp-action="WorkList" asp-route-targetStaffCd="@staff.StaffCd"
+                                                       class="btn btn-lg fw-bold text-decoration-none" style="background-color: #51995f; color: #ffffff; border-radius: 12px; padding: 1rem;">
                                                         勤退時間編集
-                                                    </button>
+                                                    </a>
                                                 </div>
                                             </div>
 
