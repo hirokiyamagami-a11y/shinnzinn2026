@@ -1,4 +1,5 @@
 ﻿@{
+    // 標準のヘッダーやフッターを消去し、完全にこの画面だけのフルスクリーンにする
     Layout = null;
 }
 <!DOCTYPE html>
@@ -7,6 +8,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>出退勤画面</title>
+
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body style="margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); font-family: 'Segoe UI', Roboto, 'Hiragino Sans', 'Meiryo', sans-serif;">
 
@@ -31,16 +34,14 @@
             Attendance System
         </h1>
 
-        <div style="font-size: 80px; font-weight: 700; margin-bottom: 80px; letter-spacing: 4px; text-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-            @DateTime.Now.ToString("yyyy/MM/dd HH:mm")
+        <div id="realtimeClock" style="font-size: 80px; font-weight: 700; margin-bottom: 80px; letter-spacing: 4px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); color: #fff; min-height: 100px; display: flex; justify-content: center; align-items: baseline;">
         </div>
-
         <div style="display: flex; justify-content: center; gap: 80px;">
-            <button type="button" onclick="openModal('CheckIn')" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(0, 176, 155, 0.4); cursor: pointer; letter-spacing: 8px;">
+            <button type="button" id="btnCheckIn" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(0, 176, 155, 0.4); cursor: pointer; letter-spacing: 8px;">
                 出勤
             </button>
 
-            <button type="button" onclick="openModal('CheckOut')" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #ff512f, #dd2476); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(221, 36, 118, 0.4); cursor: pointer; letter-spacing: 8px;">
+            <button type="button" id="btnCheckOut" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #ff512f, #dd2476); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(221, 36, 118, 0.4); cursor: pointer; letter-spacing: 8px;">
                 退勤
             </button>
         </div>
@@ -48,7 +49,9 @@
 
     <div id="authModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
         <div style="background: #ffffff; padding: 50px; border-radius: 30px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); position: relative; width: 400px;">
-            <span onclick="closeModal()" style="position: absolute; top: 20px; right: 30px; font-size: 30px; color: #999; cursor: pointer; font-weight: bold;">&times;</span>
+
+            <span id="btnCloseModal" style="position: absolute; top: 20px; right: 30px; font-size: 30px; color: #999; cursor: pointer; font-weight: bold;">&times;</span>
+
             <h2 id="modalTitle" style="color: #333; margin-top: 0; margin-bottom: 30px; letter-spacing: 2px;">打刻</h2>
 
             <form id="modalForm" method="post" action="">
@@ -68,8 +71,10 @@
 
         <div style="background: #ffffff; padding: 40px 50px; border-radius: 30px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); max-width: 500px;">
             <h2 id="resultTitle" style="margin-top: 0; margin-bottom: 20px;"></h2>
-            <p id="resultText" style="font-size: 20px; font-weight: bold; color: #333; line-height: 1.5;"></p>
-            <button type="button" onclick="closeResultModal()" style="margin-top: 30px; padding: 12px 40px; font-size: 18px; font-weight: bold; background: #eee; color: #333; border: none; border-radius: 15px; cursor: pointer; transition: 0.2s;">
+
+            <p id="resultText" style="font-size: 20px; font-weight: bold; color: #333; line-height: 1.5; white-space: pre-wrap; margin: 0;"></p>
+
+            <button type="button" id="btnCloseResultModal" style="margin-top: 30px; padding: 12px 40px; font-size: 18px; font-weight: bold; background: #eee; color: #333; border: none; border-radius: 15px; cursor: pointer; transition: 0.2s;">
                 閉じる
             </button>
         </div>

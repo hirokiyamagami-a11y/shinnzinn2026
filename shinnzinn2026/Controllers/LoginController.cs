@@ -42,7 +42,7 @@ namespace shinnzinn2026.Controllers
             if (existWork != null)
             {
                 // 二重打刻防止：すでにデータがあればエラーにする
-                ViewBag.ErrorMessage = "既に本日の出勤打刻が行われています！";
+                ViewBag.ErrorMessage = "既に本日の出勤が行われています！";
                 return View("Login");
             }
 
@@ -60,7 +60,7 @@ namespace shinnzinn2026.Controllers
             _context.SaveChanges(); // ここで実際にDBに保存されます！
 
             // 成功メッセージを画面に渡す
-            ViewBag.Message = $"{staff.Name} さん、おはようございます！出勤を記録しました。";
+            ViewBag.Message = $"{staff.Name} さん、おはようございます。\n出勤を記録しました。";
             return View("Login");
         }
 
@@ -83,13 +83,13 @@ namespace shinnzinn2026.Controllers
 
             if (work == null)
             {
-                ViewBag.ErrorMessage = "本日の出勤記録が見つかりません！先に出勤打刻をしてください。";
+                ViewBag.ErrorMessage = "本日の出勤記録が見つかりません。\n先に出勤をしてください。";
                 return View("Login");
             }
 
             if (work.LeaveTime != null)
             {
-                ViewBag.ErrorMessage = "既に退勤打刻が行われています！";
+                ViewBag.ErrorMessage = "既に退勤が行われています！";
                 return View("Login");
             }
 
@@ -102,7 +102,7 @@ namespace shinnzinn2026.Controllers
             _context.SaveChanges(); // 変更を保存！
 
             // 成功メッセージを画面に渡す
-            ViewBag.Message = $"{staff.Name} さん、お疲れ様でした！退勤を記録しました。";
+            ViewBag.Message = $"{staff.Name} さん、お疲れ様でした。\n退勤を記録しました。";
             return View("Login");
         }
     }
