@@ -61,6 +61,6 @@ namespace shinnzinn2026.Models
         public long? UpdatedId { get; set; }
 
         [ForeignKey("StaffCd")]
-        public virtual Staff? Staff { get; set; }
+        public virtual StaffModel? Staff { get; set; }
     }
 }

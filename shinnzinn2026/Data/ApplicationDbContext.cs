@@ -10,7 +10,7 @@ namespace shinnzinn2026.Data
             : base(options)
         {
         }
-        public DbSet<Staff> Staffs { get; set; }
+        public DbSet<StaffModel> Staffs { get; set; }
 
         // もしテーブル名やカラム名を細かく調整したいならここに追加するけど、
         // 今はモデルに [Table("staff")] とか書いてるから、ここは空っぽで大丈夫よ

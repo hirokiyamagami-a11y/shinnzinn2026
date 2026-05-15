@@ -18,13 +18,13 @@ namespace shinnzinn2026.Models
         [Column("staff_cd")]
         [MaxLength(10)]
         [Comment("社員CD")]
-        public string StaffCd { get; set; }
+        public string StaffCd { get; set; } = "";
 
         [Required] // NOT NULL
         [Column("password")]
         [MaxLength(10)]
         [Comment("パスワード")]
-        public string Password { get; set; }
+        public string Password { get; set; } = "";
 
         [Column("name")]
         [MaxLength(24)]
