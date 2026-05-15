@@ -1,8 +1,9 @@
-using shinnzinn2026.Data;
 using Microsoft.EntityFrameworkCore;
+using shinnzinn2026.Data;
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

@@ -1,5 +1,4 @@
 ﻿@{
-    // 標準のヘッダーやフッターを消去し、完全にこの画面だけのフルスクリーンにする
     Layout = null;
 }
 <!DOCTYPE html>
@@ -14,10 +13,10 @@
     <div style="position: relative; width: 85%; max-width: 1200px; padding: 100px 50px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); text-align: center; color: #ffffff;">
 
         <div style="position: absolute; top: 40px; left: 50px; display: flex; gap: 15px;">
-            <a asp-controller="StaffList" asp-action="StaffList" style="display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s;">
+            <a href="/StaffList/StaffList" style="display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s;">
                 Staff
             </a>
-            <a asp-controller="WorkList" asp-action="WorkList" style="display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s;">
+            <a href="/WorkList/WorkList" style="display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s;">
                 Work
             </a>
         </div>
@@ -48,21 +47,31 @@
     </div>
 
     <div id="authModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
-
         <div style="background: #ffffff; padding: 50px; border-radius: 30px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); position: relative; width: 400px;">
-
             <span onclick="closeModal()" style="position: absolute; top: 20px; right: 30px; font-size: 30px; color: #999; cursor: pointer; font-weight: bold;">&times;</span>
-
             <h2 id="modalTitle" style="color: #333; margin-top: 0; margin-bottom: 30px; letter-spacing: 2px;">打刻</h2>
 
             <form id="modalForm" method="post" action="">
                 <input type="text" name="staffCd" placeholder="社員CD" required style="width: 100%; box-sizing: border-box; padding: 15px; font-size: 20px; margin-bottom: 20px; border-radius: 15px; border: 2px solid #ddd; outline: none; color: #333;">
                 <input type="password" name="password" placeholder="パスワード" required style="width: 100%; box-sizing: border-box; padding: 15px; font-size: 20px; margin-bottom: 30px; border-radius: 15px; border: 2px solid #ddd; outline: none; color: #333;">
-
                 <button type="submit" style="width: 100%; padding: 15px; font-size: 24px; font-weight: bold; background: #2a5298; color: white; border: none; border-radius: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(42, 82, 152, 0.4);">
                     確定
                 </button>
             </form>
+        </div>
+    </div>
+
+    <div id="resultModal"
+         data-success="@ViewBag.Message"
+         data-error="@ViewBag.ErrorMessage"
+         style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+
+        <div style="background: #ffffff; padding: 40px 50px; border-radius: 30px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); max-width: 500px;">
+            <h2 id="resultTitle" style="margin-top: 0; margin-bottom: 20px;"></h2>
+            <p id="resultText" style="font-size: 20px; font-weight: bold; color: #333; line-height: 1.5;"></p>
+            <button type="button" onclick="closeResultModal()" style="margin-top: 30px; padding: 12px 40px; font-size: 18px; font-weight: bold; background: #eee; color: #333; border: none; border-radius: 15px; cursor: pointer; transition: 0.2s;">
+                閉じる
+            </button>
         </div>
     </div>
 
