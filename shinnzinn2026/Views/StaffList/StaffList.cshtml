@@ -46,9 +46,43 @@
                                     <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">@staff.StaffCd</td>
                                     <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">@staff.Name</td>
                                     <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
-                                        <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
+                                        <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal-@staff.StaffCd" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">
+                                            詳細
+                                        </button>
                                     </td>
                                 </tr>
+                                <div class="modal fade" id="detailModal-@staff.StaffCd" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff;">
+
+                                            @* --- モーダルのヘッダー（×ボタンとタイトル） --- *@
+                                            <div class="modal-header" style="border-bottom: none; padding-top: 2rem; padding-bottom: 0;">
+                                                <h5 class="modal-title fw-bold" style="color: #8cc63f; width: 100%; text-align: center;">操作選択</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; right: 1.5rem; top: 1.5rem;"></button>
+                                            </div>
+
+                                            @* --- モーダルの中身（2つのボタン） --- *@
+                                            <div class="modal-body text-center" style="padding: 2rem;">
+                                                <p style="color: #666666; font-size: 0.9rem; margin-bottom: 2rem;">
+                                                    <strong>@staff.Name</strong> さんに対して行う操作を選んでください。
+                                                </p>
+
+                                                <div class="d-grid gap-3">
+                                                    @* 1つ目のボタン（二枚目の確定ボタン風のブルー） *@
+                                                    <button type="button" class="btn btn-lg fw-bold" style="background-color: #3b598f; color: #ffffff; border-radius: 12px; padding: 1rem;">
+                                                        ユーザー編集
+                                                    </button>
+
+                                                    @* 2つ目のボタン（少し控えめなグレー） *@
+                                                    <button type="button" class="btn btn-lg fw-bold" style="background-color: #51995f; color: #ffffff; border-radius: 12px; padding: 1rem;">
+                                                        勤退時間編集
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
                             }
                         }
                     </tbody>
