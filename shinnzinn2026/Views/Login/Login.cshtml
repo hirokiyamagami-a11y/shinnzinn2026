@@ -13,6 +13,15 @@
 
     <div style="position: relative; width: 85%; max-width: 1200px; padding: 100px 50px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); text-align: center; color: #ffffff;">
 
+        <div style="position: absolute; top: 40px; left: 50px; display: flex; gap: 15px;">
+            <a asp-controller="StaffList" asp-action="StaffList" style="display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s;">
+                Staff
+            </a>
+            <a asp-controller="WorkList" asp-action="WorkList" style="display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s;">
+                Work
+            </a>
+        </div>
+
         <div style="position: absolute; top: 40px; right: 50px;">
             <a href="/Attendance/Details" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s;">
                 詳細
@@ -28,23 +37,35 @@
         </div>
 
         <div style="display: flex; justify-content: center; gap: 80px;">
+            <button type="button" onclick="openModal('CheckIn')" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(0, 176, 155, 0.4); cursor: pointer; letter-spacing: 8px;">
+                出勤
+            </button>
 
-            <form method="post" asp-controller="Login" asp-action="CheckIn" style="margin: 0;">
-                <button type="submit" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(0, 176, 155, 0.4); cursor: pointer; letter-spacing: 8px;">
-                    出勤
-                </button>
-            </form>
-
-            <form method="post" asp-controller="Login" asp-action="CheckOut" style="margin: 0;">
-                <button type="submit" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #ff512f, #dd2476); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(221, 36, 118, 0.4); cursor: pointer; letter-spacing: 8px;">
-                    退勤
-                </button>
-                <a asp-controller="StaffList" asp-action="StaffList" class="btn btn-secondary mb-4">Staff</a>
-                <a asp-controller="WorkList" asp-action="WorkList" class="btn btn-secondary mb-4">Work</a>
-
-            </form>
-
+            <button type="button" onclick="openModal('CheckOut')" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #ff512f, #dd2476); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(221, 36, 118, 0.4); cursor: pointer; letter-spacing: 8px;">
+                退勤
+            </button>
         </div>
     </div>
+
+    <div id="authModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+
+        <div style="background: #ffffff; padding: 50px; border-radius: 30px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); position: relative; width: 400px;">
+
+            <span onclick="closeModal()" style="position: absolute; top: 20px; right: 30px; font-size: 30px; color: #999; cursor: pointer; font-weight: bold;">&times;</span>
+
+            <h2 id="modalTitle" style="color: #333; margin-top: 0; margin-bottom: 30px; letter-spacing: 2px;">打刻</h2>
+
+            <form id="modalForm" method="post" action="">
+                <input type="text" name="staffCd" placeholder="社員CD" required style="width: 100%; box-sizing: border-box; padding: 15px; font-size: 20px; margin-bottom: 20px; border-radius: 15px; border: 2px solid #ddd; outline: none; color: #333;">
+                <input type="password" name="password" placeholder="パスワード" required style="width: 100%; box-sizing: border-box; padding: 15px; font-size: 20px; margin-bottom: 30px; border-radius: 15px; border: 2px solid #ddd; outline: none; color: #333;">
+
+                <button type="submit" style="width: 100%; padding: 15px; font-size: 24px; font-weight: bold; background: #2a5298; color: white; border: none; border-radius: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(42, 82, 152, 0.4);">
+                    確定
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/login.js"></script>
 </body>
 </html>
