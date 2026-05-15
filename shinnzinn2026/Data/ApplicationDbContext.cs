@@ -18,19 +18,16 @@ namespace shinnzinn2026.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // 【エラー防止策】
-            // モデル側の [Table] や [Key] 属性だけだと認識漏れが起きることがあるため、
-            // ここで「どのテーブルの」「どのカラムが主キーか」を念押しで設定します。
-
-            // staffテーブルの明示的な設定
+            // 🌸 StaffCd を「もう一つの鍵（Principal Key）」として認識させる魔法よ！
             modelBuilder.Entity<StaffModel>()
-                .ToTable("staff")
-                .HasKey(e => e.Id);
+                .HasAlternateKey(s => s.StaffCd);
 
-            // workテーブルの明示的な設定
+            // 🌸 WorkModel と Staff を StaffCd で紐付けると明示的に宣言する
             modelBuilder.Entity<WorkModel>()
-                .ToTable("work")
-                .HasKey(e => e.Id);
+                .HasOne(w => w.Staff)
+                .WithMany()
+                .HasPrincipalKey(s => s.StaffCd)
+                .HasForeignKey(w => w.StaffCd);
         }
     }
 }
