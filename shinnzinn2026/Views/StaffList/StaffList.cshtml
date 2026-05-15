@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<shinnzinn2026.Models.Staff>
+@{
     ViewData["Title"] = "社員一覧";
 }
 
@@ -35,41 +36,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">S001</td>
-                            <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">山田 太郎</td>
-                            <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
-                                <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">S002</td>
-                            <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">佐藤 花子</td>
-                            <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
-                                <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">S003</td>
-                            <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">鈴木 一郎</td>
-                            <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
-                                <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">S004</td>
-                            <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">佐藤 次郎</td>
-                            <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
-                                <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">S005</td>
-                            <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">山田 櫻子</td>
-                            <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
-                                <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
-                            </td>
-                        </tr>
+                        @* 🌸 2. ここからループ！ DBから来た人数分（15人分）だけ <tr> を自動で量産するわよ！ *@
+                        @if (Model != null)
+                        {
+                            foreach (var staff in Model)
+                            {
+                                <tr>
+                                    @* 🌸 中身を @staff.StaffCd や @staff.Name に置き換える *@
+                                    <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">@staff.StaffCd</td>
+                                    <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">@staff.Name</td>
+                                    <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
+                                        <button class="btn btn-sm" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.3rem 1.5rem;">詳細</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
