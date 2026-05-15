@@ -17,7 +17,7 @@
 @* 🌸 画面全体を覆うダークブルーの箱（bodyの代わりよ） *@
 <div style="background-color: #2e4a7d; min-height: 100vh; width: 100vw; margin-left: calc(50% - 50vw); padding: 3rem 1rem; color: #ffffff;">
     <div class="container pb-5">
-        @* 🌸 中央の大きなカード *@
+        @*  中央の大きなカード *@
         <div style="background-color: #3b598f; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); padding: 3rem;">
             @* --- タイトルエリア --- *@
             <div class="text-center mb-4">
@@ -36,13 +36,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @* 🌸 2. ここからループ！ DBから来た人数分（15人分）だけ <tr> を自動で量産するわよ！ *@
+                        @* DBから来た人数分だけ <tr> を自動で量産する *@
                         @if (Model != null)
                         {
                             foreach (var staff in Model)
                             {
                                 <tr>
-                                    @* 🌸 中身を @staff.StaffCd や @staff.Name に置き換える *@
+                                    @* 中身を @staff.StaffCd や @staff.Name に置き換える *@
                                     <td class="ps-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">@staff.StaffCd</td>
                                     <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">@staff.Name</td>
                                     <td class="text-center" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); vertical-align: middle; background-color: transparent; color: #ffffff;">
@@ -56,23 +56,41 @@
             </div>
 
             @* --- ページネーション --- *@
+            @{
+                int currentPage = ViewBag.CurrentPage ?? 1;
+                int totalPages = ViewBag.TotalPages ?? 1;
+            }
             <nav class="mt-5">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.3);">前へ</a>
+
+                    @* 「前へ」ボタン（1ページ目の時は押せないようにする） *@
+                    <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" asp-action="StaffList" asp-route-page="@(currentPage - 1)"
+                           style="background-color: transparent; border-color: rgba(255, 255, 255, 0.1); color: @(currentPage == 1 ? "rgba(255, 255, 255, 0.3)" : "#ffffff");">前へ</a>
                     </li>
-                    @* 🌸 ここが選択中の「出勤ボタン」風グラデーションよ！ *@
-                    <li class="page-item">
-                        <a class="page-link" href="#" style="background: linear-gradient(135deg, #42e695, #3bb2b8); border-color: transparent; box-shadow: 0 0 15px rgba(66, 230, 149, 0.4); color: #fff;">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: #ffffff;">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: #ffffff;">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: #ffffff;">次へ</a>
+
+                    @* ページ番号のボタンを自動で作るループ *@
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+                        if (i == currentPage)
+                        {
+                            <li class="page-item active">
+                                <a class="page-link" href="#" style="background: linear-gradient(135deg, #42e695, #3bb2b8); border-color: transparent; box-shadow: 0 0 15px rgba(66, 230, 149, 0.4); color: #fff;">@i</a>
+                            </li>
+                        }
+                        else
+                        {
+                            @* 他のページは通常のボタン（押すとそのページへ飛ぶ） *@
+                            <li class="page-item">
+                                <a class="page-link" asp-action="StaffList" asp-route-page="@i" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: #ffffff;">@i</a>
+                            </li>
+                        }
+                    }
+
+                    @* 「次へ」ボタン（最後のページの時は押せないようにする） *@
+                    <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                        <a class="page-link" asp-action="StaffList" asp-route-page="@(currentPage + 1)"
+                           style="background-color: transparent; border-color: rgba(255, 255, 255, 0.1); color: @(currentPage == totalPages ? "rgba(255, 255, 255, 0.3)" : "#ffffff");">次へ</a>
                     </li>
                 </ul>
             </nav>
