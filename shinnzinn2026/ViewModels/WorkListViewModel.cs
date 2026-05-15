@@ -8,7 +8,7 @@ namespace shinnzinn2026.ViewModels
         public int SelectedYear { get; set; }
         public int SelectedMonth { get; set; }
 
-        // データベースから取得した勤務データのリスト
+        // データベースから取得した WorkModel のリスト
         public List<WorkModel> AttendanceList { get; set; } = new List<WorkModel>();
     }
 }

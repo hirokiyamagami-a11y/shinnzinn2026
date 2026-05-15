@@ -12,7 +12,7 @@ namespace shinnzinn2026.Models
         [Column("id")]
         [Comment("社員ID")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // BIGSERIAL（自動採番）に対応
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         [Required] // NOT NULL
         [Column("staff_cd")]

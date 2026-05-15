@@ -20,7 +20,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-5">
             <span class="text-white-50"><i class="bi bi-person-fill"></i> ユーザー名</span>
-            <a href="/Login/Login" class="btn btn-sm btn-outline-light rounded-pill px-3">戻る</a>
+            <a asp-controller="Login" asp-action="Login" class="btn btn-sm btn-outline-light rounded-pill px-3">戻る</a>
         </div>
 
         <div class="mb-5">
@@ -30,14 +30,12 @@
 
         <div class="card bg-white bg-opacity-10 border-light border-opacity-25 shadow-lg rounded-4 mb-4 text-start">
             <div class="card-body p-4">
-                <form method="get" action="/WorkList/WorkList" class="row g-3 align-items-end justify-content-center">
+                <form method="get" asp-controller="WorkList" asp-action="WorkList" class="row g-3 align-items-end justify-content-center">
                     <div class="col-6 col-md-3">
                         <label class="form-label text-white-50 small">表示年</label>
                         <select name="SelectedYear" class="form-select bg-dark text-white border-secondary">
-                            @for (int y = 2024; y <= 2026; y++)
-                            {
-                                <option value="@y" selected="@(Model.SelectedYear == y)">@(y)年</option>
-                            }
+                            <option value="2026" selected="@(Model.SelectedYear == 2026)">2026年</option>
+                            <option value="2025" selected="@(Model.SelectedYear == 2025)">2025年</option>
                         </select>
                     </div>
                     <div class="col-6 col-md-3">
@@ -53,27 +51,6 @@
                         <button type="submit" class="btn btn-success w-100 fw-bold rounded-3 shadow">DISPLAY</button>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        <div class="row g-3 mb-4">
-            <div class="col-md-4">
-                <div class="card bg-white bg-opacity-10 border-light border-opacity-25 rounded-4 p-3 h-100">
-                    <div class="small text-white-50 mb-1">出勤日数</div>
-                    <div class="h4 mb-0 fw-bold">@(Model.AttendanceList?.Count ?? 0) 日</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card bg-white bg-opacity-10 border-light border-opacity-25 border-start border-success border-4 rounded-4 p-3 h-100">
-                    <div class="small text-white-50 mb-1">総労働時間</div>
-                    <div class="h4 mb-0 fw-bold">160.5 h</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card bg-white bg-opacity-10 border-light border-opacity-25 rounded-4 p-3 h-100">
-                    <div class="small text-white-50 mb-1">残業合計</div>
-                    <div class="h4 mb-0 fw-bold text-warning">10.0 h</div>
-                </div>
             </div>
         </div>
 
@@ -99,19 +76,14 @@
                                     <td>@(item.AttendanceTime?.ToString("HH:mm") ?? "-")</td>
                                     <td>@(item.LeaveTime?.ToString("HH:mm") ?? "-")</td>
                                     <td>@(item.RestTime?.ToString(@"hh\:mm") ?? "-")</td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.Remarks))
-                                        {
-                                            <span class="badge bg-success bg-opacity-75">@item.Remarks</span>
-                                        }
-                                    </td>
+                                    <td><span class="badge bg-success bg-opacity-75">@item.Remarks</span></td>
                                 </tr>
                             }
                         }
                         else
                         {
                             <tr>
-                                <td colspan="5" class="py-5 text-white-50">データが登録されていません</td>
+                                <td colspan="5" class="py-5 text-white-50">表示するデータがありません</td>
                             </tr>
                         }
                     </tbody>
