@@ -1,12 +1,25 @@
 ﻿@using shinnzinn2026.ViewModels
 @model WorkListViewModel
 @{
-    // 💡 共通のヘッダー・フッターを消して完全なフルスクリーンにします
     Layout = null;
-
     ViewData["Title"] = "勤務実績一覧";
     bool isManagerMode = Model.IsManager;
     int selectedWeek = ViewData["SelectedWeek"] as int? ?? 0;
+}
+
+@* 🌟 新機能：データベースの文字列から理由などの詳細を抜き出す関数 *@
+@functions {
+    public string ExtractValue(string source, string key)
+    {
+        if (string.IsNullOrEmpty(source)) return "";
+        string target = "[" + key + ":";
+        int start = source.IndexOf(target);
+        if (start == -1) return "";
+        start += target.Length;
+        int end = source.IndexOf("]", start);
+        if (end == -1) return "";
+        return source.Substring(start, end - start);
+    }
 }
 
 <!DOCTYPE html>
@@ -15,19 +28,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    @* Bootstrapとアイコンの読み込み *@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    @* 🌸 ログアウトモーダルのアイコン（FontAwesome）を表示するための読み込み *@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-@* 🌸 bodyタグ自体をダークブルーにして完全なフルスクリーン空間を作ります *@
-<body style="background-color: #2e4a7d; color: #ffffff; min-height: 100vh; padding-top: 3rem; padding-bottom: 5rem;">
+<body style="background-color: #2e4a7d; color: #ffffff; min-height: 100vh; padding: 2rem;">
 
     <div class="container">
 
-        @* --- ヘッダーエリア --- *@
+        @* --- ヘッダー --- *@
         <div class="d-flex justify-content-between align-items-start mb-5">
             <div>
                 <div style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.5); margin-bottom: 0.25rem;">
@@ -41,14 +51,13 @@
                     <a asp-controller="StaffList" asp-action="StaffList" class="btn btn-sm btn-outline-warning rounded-pill px-4 mb-2">社員一覧へ戻る</a>
                     <br />
                 }
-                @* 💡 ログアウト確認モーダルを呼び出す赤いボタン *@
                 <button type="button" class="btn btn-sm btn-danger rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#logoutModal">
                     <i class="bi bi-box-arrow-right"></i> ログアウト
                 </button>
             </div>
         </div>
 
-        @* --- タイトルエリア --- *@
+        @* --- タイトル --- *@
         <div class="text-center mb-5">
             @if (!Model.IsViewingSelf)
             {
@@ -59,16 +68,16 @@
             }
             else
             {
+
                 <h2 class="fw-bold display-6" style="color: #ffffff;">勤務実績一覧</h2>
             }
         </div>
 
-        @* --- 検索フォーム：年月・週選択 --- *@
-        <div class="shadow-lg mb-4" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 1.5rem;">
+        @* --- 検索フォーム --- *@
+        <div class="shadow-lg mb-4" style="background-color: transparent !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; border-radius: 1.5rem !important;">
             <div class="card-body p-4">
                 <form method="get" asp-controller="WorkList" asp-action="WorkList" class="row g-3 align-items-end justify-content-center">
                     <input type="hidden" name="targetStaffCd" value="@Model.TargetStaffCd" />
-
                     <div class="col-6 col-md-2">
                         <label class="form-label small" style="color: rgba(255, 255, 255, 0.5);">表示年</label>
                         <select name="SelectedYear" class="form-select bg-dark text-white border-secondary">
@@ -85,7 +94,6 @@
                             }
                         </select>
                     </div>
-
                     <div class="col-12 col-md-3">
                         <label class="form-label small" style="color: rgba(255, 255, 255, 0.5);">表示週</label>
                         <select name="SelectedWeek" class="form-select bg-dark text-white border-secondary">
@@ -97,26 +105,23 @@
                             <option value="5" selected="@(selectedWeek == 5)">第5週（29日以降）</option>
                         </select>
                     </div>
-
                     <div class="col-12 col-md-2">
-                        <button type="submit" class="btn btn-success w-100 fw-bold rounded-3 shadow">
-                            <i class="bi bi-search"></i> 検索
-                        </button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold rounded-3 shadow"><i class="bi bi-search"></i> 検索</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        @* --- 集計カードエリア --- *@
+        @* --- 集計カード --- *@
         <div class="row g-3 mb-4">
             <div class="col-6 col-md-6">
-                <div class="p-3 text-center h-100" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 1.5rem;">
+                <div class="p-3 text-center h-100" style="background-color: transparent !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; border-radius: 1.5rem !important;">
                     <div class="small mb-1" style="color: rgba(255, 255, 255, 0.5);">当月出勤日数</div>
                     <div class="h3 mb-0 fw-bold" style="color: #ffffff;">@Model.AttendanceList.Count(x => x.Id != 0) <span class="fs-6 fw-normal">日</span></div>
                 </div>
             </div>
             <div class="col-6 col-md-6">
-                <div class="p-3 text-center h-100 border-start border-success border-4" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 1.5rem;">
+                <div class="p-3 text-center h-100 border-start border-success border-4" style="background-color: transparent !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; border-radius: 1.5rem !important;">
                     <div class="small mb-1" style="color: rgba(255, 255, 255, 0.5);">当月総労働時間</div>
                     <div class="h3 mb-0 fw-bold text-success">@Model.TotalHours <span class="fs-6 fw-normal" style="color: #ffffff;">h</span></div>
                 </div>
@@ -124,65 +129,115 @@
         </div>
 
         @* --- 実績一覧テーブル --- *@
-        <div class="shadow-lg overflow-hidden" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 1.5rem;">
+        <div class="shadow-lg overflow-hidden" style="background-color: transparent !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; border-radius: 1.5rem !important;">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 text-center" style="background-color: transparent;">
-                    <thead>
-                        <tr>
-                            <th class="py-3" style="color: rgba(255, 255, 255, 0.6); font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2); background-color: transparent;">日付</th>
-                            <th style="color: rgba(255, 255, 255, 0.6); font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2); background-color: transparent;">出勤時間</th>
-                            <th style="color: rgba(255, 255, 255, 0.6); font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2); background-color: transparent;">退勤時間</th>
-                            <th style="color: rgba(255, 255, 255, 0.6); font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2); background-color: transparent;">休憩</th>
-                            <th style="color: rgba(255, 255, 255, 0.6); font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2); background-color: transparent;">備考</th>
-                            <th style="color: rgba(255, 255, 255, 0.6); font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2); background-color: transparent;">操作</th>
+                <table class="table align-middle mb-0 text-center" style="background-color: transparent !important; --bs-table-bg: transparent !important; color: #ffffff !important;">
+                    <thead style="background-color: transparent !important;">
+                        <tr style="background-color: transparent !important;">
+                            <th class="py-3" style="background-color: transparent !important; color: rgba(255, 255, 255, 0.6) !important; font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;">日付</th>
+                            <th style="background-color: transparent !important; color: rgba(255, 255, 255, 0.6) !important; font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;">出勤時間</th>
+                            <th style="background-color: transparent !important; color: rgba(255, 255, 255, 0.6) !important; font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;">退勤時間</th>
+                            <th style="background-color: transparent !important; color: rgba(255, 255, 255, 0.6) !important; font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;">休憩</th>
+                            <th style="background-color: transparent !important; color: rgba(255, 255, 255, 0.6) !important; font-weight: bold; border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;">日の労働時間</th>
+                            <th style="background-color: transparent !important; color: rgba(255, 255, 255, 0.6) !important; font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;">備考</th>
+                            <th style="background-color: transparent !important; color: rgba(255, 255, 255, 0.6) !important; font-weight: bold; border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;">編集者</th>
+                            <th style="background-color: transparent !important; color: rgba(255, 255, 255, 0.6) !important; font-weight: normal; border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;">操作</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="background-color: transparent !important;">
                         @foreach (var item in Model.AttendanceList)
                         {
+                            string dateKey = item.WorkDate.ToString("yyyyMMdd");
+                            string r = item.Remarks ?? "";
+
+                            // 🌟 修正：各チェック項目の状態を解析
+                            bool isLate = r.Contains("[遅刻:");
+                            bool isEarly = r.Contains("[早退:");
+                            bool isAbsence = r.Contains("[欠勤:");
+                            bool isPaidLeave = r.Contains("[有給:");
+
+                            string editorLastName = Model.EditorNames.ContainsKey(dateKey) ? Model.EditorNames[dateKey] : "-";
+                            bool isEdited = editorLastName != "-";
+                            string editorColor = (isEdited && item.UpdatedId.HasValue) ? Model.EditorColors[(int)item.UpdatedId.Value] : "#ffffff";
+
                             string dateColor = "#ffffff";
                             if (item.WorkDate.DayOfWeek == DayOfWeek.Saturday) dateColor = "#66b2ff";
                             if (item.WorkDate.DayOfWeek == DayOfWeek.Sunday) dateColor = "#ff6666";
 
                             bool isNotRegistered = item.Id == 0;
+                            string dailyHoursText = "-";
 
-                            <tr>
-                                <td class="py-3 fw-bold" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: @dateColor; background-color: transparent;">
+                            // 🌟 修正：有給休暇の場合は問答無用で8時間表示
+                            if (isPaidLeave)
+                            {
+                                dailyHoursText = "8.00 h";
+                            }
+                            else if (item.AttendanceTime.HasValue && item.LeaveTime.HasValue)
+                            {
+                                var diff = item.LeaveTime.Value - item.AttendanceTime.Value - (item.RestTime ?? TimeSpan.Zero);
+                                dailyHoursText = Math.Round(diff.TotalHours, 2).ToString() + " h";
+                            }
+
+                            // 🌟 修正：備考欄に表示するバッジとホバーテキストの生成
+                            var displayBadges = new List<string>();
+                            var displayTooltips = new List<string>();
+                            if (isLate) { displayBadges.Add("遅刻"); displayTooltips.Add($"遅刻 (理由: {ExtractValue(r, "遅刻")})"); }
+                            if (isEarly) { displayBadges.Add("早退"); displayTooltips.Add($"早退 (理由: {ExtractValue(r, "早退")})"); }
+                            if (isAbsence) { displayBadges.Add("欠勤"); displayTooltips.Add($"欠勤 (理由: {ExtractValue(r, "欠勤")})"); }
+                            if (isPaidLeave) { displayBadges.Add("有給休暇"); displayTooltips.Add($"有給 ({ExtractValue(r, "有給")})"); }
+
+                            <tr style="background-color: transparent !important;">
+                                <td class="py-3 fw-bold" style="background-color: transparent !important; color: @dateColor !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">
                                     @item.WorkDate.ToString("MM/dd (ddd)")
                                 </td>
 
                                 @if (isNotRegistered)
                                 {
-                                    <td colspan="3" class="text-white-50" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: transparent;">未打刻</td>
+                                    <td colspan="4" class="text-white-50" style="background-color: transparent !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">未打刻</td>
                                 }
                                 else
                                 {
-                                    <td class="text-info" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: transparent;">@(item.AttendanceTime?.ToString("HH:mm") ?? "-")</td>
-                                    <td class="text-info" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: transparent;">@(item.LeaveTime?.ToString("HH:mm") ?? "-")</td>
-                                    <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #ffffff; background-color: transparent;">@(item.RestTime?.ToString(@"hh\:mm") ?? "-")</td>
+                                    <td class="text-info" style="background-color: transparent !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">@(item.AttendanceTime?.ToString("HH:mm") ?? "-")</td>
+                                    <td class="text-info" style="background-color: transparent !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">@(item.LeaveTime?.ToString("HH:mm") ?? "-")</td>
+                                    <td style="background-color: transparent !important; color: #ffffff !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">@(item.RestTime?.ToString(@"hh\:mm") ?? "-")</td>
+                                    <td style="background-color: transparent !important; color: #ffffff !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">@dailyHoursText</td>
                                 }
 
-                                <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: transparent;">
-                                    @if (!string.IsNullOrEmpty(item.Remarks))
+                                @* 🌟 新機能：ドラッグ（ホバー）で理由が見える備考欄 *@
+                                <td style="background-color: transparent !important; color: #ffffff !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">
+                                    @if (displayBadges.Any())
                                     {
-                                        <span class="badge bg-light text-dark fw-normal">@item.Remarks</span>
+                                        <span title="@string.Join(" / ", displayTooltips)" style="cursor: help; text-decoration: underline dotted rgba(255,255,255,0.5);">
+                                            @string.Join("、", displayBadges)
+                                        </span>
                                     }
                                     else
                                     {
-                                        <span style="color: rgba(255, 255, 255, 0.5);">-</span>
+                                        <span style="color: rgba(255, 255, 255, 0.5) !important;">-</span>
                                     }
                                 </td>
-                                <td style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); background-color: transparent;">
-                                    <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-@item.WorkDate.Day" style="border: 1px solid rgba(255, 255, 255, 0.5); color: #ffffff; background-color: transparent; border-radius: 50px; padding: 0.2rem 1rem;">
-                                        編集
-                                    </button>
+
+                                <td style="background-color: transparent !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">
+                                    @if (isEdited)
+                                    {
+                                        <span class="badge" style="background-color: @editorColor !important; color: #000 !important; font-weight: bold !important; padding: 0.4rem 0.8rem;">@editorLastName</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span style="color: rgba(255, 255, 255, 0.25) !important;">-</span>
+                                    }
+                                </td>
+
+                                <td style="background-color: transparent !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;">
+                                    <button type="button" class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-@item.WorkDate.Day" style="border: 1px solid rgba(255, 255, 255, 0.5) !important; color: #ffffff !important; background-color: transparent !important; border-radius: 50px !important; padding: 0.2rem 1rem !important;">編集</button>
                                 </td>
                             </tr>
 
                             @* --- 各日の編集モーダル --- *@
                             <div class="modal fade" id="editModal-@item.WorkDate.Day" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff; color: #333333;">
+                                    <div class="modal-content" style="border-radius: 20px; border: none; background-color: #ffffff; color: #333333;">
                                         <form asp-controller="WorkList" asp-action="UpdateWorkRecord" method="post">
                                             <input type="hidden" name="workId" value="@item.Id" />
                                             <input type="hidden" name="year" value="@Model.SelectedYear" />
@@ -191,40 +246,77 @@
                                             <input type="hidden" name="week" value="@selectedWeek" />
                                             <input type="hidden" name="targetStaffCd" value="@Model.TargetStaffCd" />
 
-                                            <div class="modal-header" style="border-bottom: none; padding-top: 2rem; padding-bottom: 0;">
+                                            <div class="modal-header" style="border-bottom: none; padding-top: 2rem;">
                                                 <h5 class="modal-title fw-bold" style="color: #3b598f; width: 100%; text-align: center;">@item.WorkDate.ToString("MM/dd") の実績編集</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; right: 1.5rem; top: 1.5rem;"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" style="position: absolute; right: 1.5rem; top: 1.5rem;"></button>
                                             </div>
 
                                             <div class="modal-body text-start" style="padding: 2rem;">
-
                                                 @if (isManagerMode)
                                                 {
-                                                    <div class="mb-3">
-                                                        <label class="form-label small" style="color: #666666;">出勤時間</label>
-                                                        <input type="time" name="attendanceTimeStr" class="form-control" value="@(item.AttendanceTime?.ToString("HH:mm"))" style="border-radius: 10px;" />
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label small" style="color: #666666;">退勤時間</label>
-                                                        <input type="time" name="leaveTimeStr" class="form-control" value="@(item.LeaveTime?.ToString("HH:mm"))" style="border-radius: 10px;" />
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label small" style="color: #666666;">休憩時間</label>
-                                                        <input type="time" name="restTimeStr" class="form-control" value="@(item.RestTime?.ToString(@"hh\:mm"))" style="border-radius: 10px;" />
-                                                    </div>
+                                                    <div class="mb-3"><label class="form-label small" style="color: #666666;">出勤時間</label><input type="time" name="attendanceTimeStr" class="form-control" value="@(item.AttendanceTime?.ToString("HH:mm") ?? "00:00")" style="border-radius: 10px;" /></div>
+                                                    <div class="mb-3"><label class="form-label small" style="color: #666666;">退勤時間</label><input type="time" name="leaveTimeStr" class="form-control" value="@(item.LeaveTime?.ToString("HH:mm") ?? "00:00")" style="border-radius: 10px;" /></div>
+                                                    <div class="mb-3"><label class="form-label small" style="color: #666666;">休憩時間</label><input type="time" name="restTimeStr" class="form-control" value="@(item.RestTime == null || item.RestTime == TimeSpan.Zero ? "01:00" : item.RestTime.Value.ToString(@"hh\:mm"))" style="border-radius: 10px;" /></div>
                                                 }
                                                 else
                                                 {
-                                                    <div class="alert alert-info py-2 small text-center mb-4">時間はシステムで打刻されています。</div>
+
+                                                    <div class="alert alert-info py-2 small text-center mb-4">打刻以外はメモのみ入力可能です。</div>
                                                 }
 
-                                                <div class="mb-4">
-                                                    <label class="form-label small" style="color: #666666;">備考・メモ</label>
-                                                    <input type="text" name="remarks" class="form-control" value="@item.Remarks" style="border-radius: 10px; border: 1px solid #cccccc; padding: 0.8rem;" placeholder="例：有給休暇、遅刻等" />
+                                                @* 🌟 新機能：備考のチェックボックスと理由入力フィールド *@
+                                                <div class="mb-4 p-3" style="background: rgba(0,0,0,0.03); border-radius: 10px; border: 1px solid #e0e0e0;">
+                                                    <label class="form-label small fw-bold mb-3" style="color: #444;">備考・ステータス（該当するものにチェック）</label>
+
+                                                    @* 遅刻 *@
+                                                    <div class="form-check mb-2">
+                                                        <input class="form-check-input" type="checkbox" name="chkLate" value="true" id="chkLate_@item.WorkDate.Day" onchange="document.getElementById('lateReason_@item.WorkDate.Day').style.display = this.checked ? 'block' : 'none';" @(isLate ? "checked" : "")>
+                                                        <label class="form-check-label small" for="chkLate_@item.WorkDate.Day" style="color: #666;">遅刻</label>
+                                                        <input type="text" name="lateReason" id="lateReason_@item.WorkDate.Day" class="form-control form-control-sm mt-1" style="display: @(isLate ? "block" : "none"); border-radius: 6px;" placeholder="遅刻の理由を入力" value="@ExtractValue(r, "遅刻")" />
+                                                    </div>
+
+                                                    @* 早退 *@
+                                                    <div class="form-check mb-2">
+                                                        <input class="form-check-input" type="checkbox" name="chkEarly" value="true" id="chkEarly_@item.WorkDate.Day" onchange="document.getElementById('earlyReason_@item.WorkDate.Day').style.display = this.checked ? 'block' : 'none';" @(isEarly ? "checked" : "")>
+                                                        <label class="form-check-label small" for="chkEarly_@item.WorkDate.Day" style="color: #666;">早退</label>
+                                                        <input type="text" name="earlyReason" id="earlyReason_@item.WorkDate.Day" class="form-control form-control-sm mt-1" style="display: @(isEarly ? "block" : "none"); border-radius: 6px;" placeholder="早退の理由を入力" value="@ExtractValue(r, "早退")" />
+                                                    </div>
+
+                                                    @* 欠勤 *@
+                                                    <div class="form-check mb-2">
+                                                        <input class="form-check-input" type="checkbox" name="chkAbsence" value="true" id="chkAbsence_@item.WorkDate.Day" onchange="document.getElementById('absenceReason_@item.WorkDate.Day').style.display = this.checked ? 'block' : 'none';" @(isAbsence ? "checked" : "")>
+                                                        <label class="form-check-label small" for="chkAbsence_@item.WorkDate.Day" style="color: #666;">欠勤</label>
+                                                        <input type="text" name="absenceReason" id="absenceReason_@item.WorkDate.Day" class="form-control form-control-sm mt-1" style="display: @(isAbsence ? "block" : "none"); border-radius: 6px;" placeholder="欠勤の理由を入力" value="@ExtractValue(r, "欠勤")" />
+                                                    </div>
+
+                                                    @* 有給休暇 *@
+                                                    <div class="form-check mb-2">
+                                                        <input class="form-check-input" type="checkbox" name="chkPaidLeave" value="true" id="chkPaidLeave_@item.WorkDate.Day" onchange="document.getElementById('paidLeaveTypes_@item.WorkDate.Day').style.display = this.checked ? 'block' : 'none';" @(isPaidLeave ? "checked" : "")>
+                                                        <label class="form-check-label small" for="chkPaidLeave_@item.WorkDate.Day" style="color: #666;">有給休暇</label>
+
+                                                        @* 有給を選択した時だけ現れるラジオボタン *@
+                                                        <div id="paidLeaveTypes_@item.WorkDate.Day" class="mt-2 p-2" style="display: @(isPaidLeave ? "block" : "none"); background: #ffffff; border-radius: 6px; border: 1px solid #ddd;">
+                                                            @{
+                                                                string plType = ExtractValue(r, "有給");
+                                                            }
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="paidLeaveType" id="plAM_@item.WorkDate.Day" value="午前休" @(plType == "午前休" ? "checked" : "")>
+                                                                <label class="form-check-label small" for="plAM_@item.WorkDate.Day" style="color: #666;">午前休</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="paidLeaveType" id="plPM_@item.WorkDate.Day" value="午後休" @(plType == "午後休" ? "checked" : "")>
+                                                                <label class="form-check-label small" for="plPM_@item.WorkDate.Day" style="color: #666;">午後休</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="paidLeaveType" id="plFull_@item.WorkDate.Day" value="全日" @(plType == "全日" || string.IsNullOrEmpty(plType) ? "checked" : "")>
+                                                                <label class="form-check-label small" for="plFull_@item.WorkDate.Day" style="color: #666;">全日</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <div class="d-grid">
-                                                    <button type="submit" class="btn btn-lg fw-bold text-white" style="background-color: #51995f; border-radius: 12px; padding: 0.8rem;">保存する</button>
+                                                <div class="d-grid mt-4">
+                                                    <button type="submit" class="btn btn-lg fw-bold text-white shadow" style="background-color: #51995f; border-radius: 12px; padding: 1rem;"><i class="bi bi-check-circle me-2"></i>決定</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -238,37 +330,21 @@
         </div>
     </div>
 
-    @* ========================================================= *@
-    @* 🌸 いただいたデザインそのままの「ログアウト確認用モーダル」 *@
-    @* ========================================================= *@
+    @* --- ログアウトモーダル --- *@
     <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff; color: #333333;">
+            <div class="modal-content" style="border-radius: 20px; border: none; background-color: #ffffff; color: #333333;">
                 <div class="modal-body text-center" style="padding: 3rem 2rem;">
-
-                    @* 🌸 赤いアイコンと確認メッセージ *@
                     <i class="fa-solid fa-right-from-bracket mb-3" style="font-size: 4rem; color: #ff6384;"></i>
-                    <h4 class="fw-bold mb-4" style="color: #333333;">ログアウトしますか？</h4>
-
-                    @* 🌸 縦に2つボタンを並べる *@
+                    <h4 class="fw-bold mb-4">ログアウトしますか？</h4>
                     <div class="d-grid gap-3">
-                        @* 💡 最適化：既存のLoginアクションを叩くだけで自動リセットされるため、飛び先をLoginへ変更しました！ *@
-                        <a asp-controller="Login" asp-action="Login" class="btn btn-lg fw-bold text-decoration-none" style="background-color: #ff6384; color: #ffffff; border-radius: 12px; padding: 1rem;">
-                            はい、ログアウトします
-                        </a>
-
-                        @* キャンセルして戻るボタン（モーダルを閉じるだけ） *@
-                        <button type="button" class="btn btn-lg fw-bold" data-bs-dismiss="modal" style="background-color: #f1f3f5; color: #495057; border-radius: 12px; padding: 1rem;">
-                            キャンセル
-                        </button>
+                        <a asp-controller="Login" asp-action="Login" class="btn btn-lg fw-bold text-decoration-none" style="background-color: #ff6384; color: #ffffff; border-radius: 12px; padding: 1rem;">はい、ログアウトします</a>
+                        <button type="button" class="btn btn-lg fw-bold" data-bs-dismiss="modal" style="background-color: #f1f3f5; color: #495057; border-radius: 12px; padding: 1rem;">キャンセル</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    @* 💡 ポップアップなどの動きを制御するJavaScript *@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
