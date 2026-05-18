@@ -97,7 +97,6 @@ namespace shinnzinn2026.Controllers
                 {
                     vm.AttendanceList.Add(work);
 
-                    // 🌟 修正：有給休暇のチェックが入っている日は労働時間を8時間として月間集計に足す
                     if (work.Remarks != null && work.Remarks.Contains("[有給:"))
                     {
                         total += 8.0;
@@ -123,18 +122,16 @@ namespace shinnzinn2026.Controllers
             vm.TotalHours = Math.Round(total, 2);
         }
 
-        // 🌟 修正：チェックボックス類を受け取れるように引数を大量に追加
+        // 🌟 修正：1つしか選べないため、statusType という1つの変数で受け取ります
         [HttpPost]
         public async Task<IActionResult> UpdateWorkRecord(
             long workId, string? attendanceTimeStr, string? leaveTimeStr, string? restTimeStr,
-            bool chkLate, string? lateReason,
-            bool chkEarly, string? earlyReason,
-            bool chkAbsence, string? absenceReason,
-            bool chkPaidLeave, string? paidLeaveType,
+            string? statusType, string? lateReason, string? earlyReason, string? absenceReason, string? paidLeaveType,
             int year, int month, int day, int week, string targetStaffCd)
         {
             var loginStaffCd = HttpContext.Session.GetString("LoginStaffCd");
             var loginUser = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == loginStaffCd);
+            bool isManager = loginUser?.ManagerFlag == 1;
 
             WorkModel work;
             bool isNew = false;
@@ -150,18 +147,22 @@ namespace shinnzinn2026.Controllers
                 if (work == null) return RedirectToAction("WorkList", new { SelectedYear = year, SelectedMonth = month, SelectedWeek = week, targetStaffCd = targetStaffCd });
             }
 
-            // 🌟 修正：チェックボックスの状態から新しい備考文字列を作成する
+            // 🌟 修正：ラジオボタン（statusType）に基づいて備考文字列を生成
             string newRemarks = "";
-            if (chkLate) newRemarks += $"[遅刻:{lateReason ?? ""}]";
-            if (chkEarly) newRemarks += $"[早退:{earlyReason ?? ""}]";
-            if (chkAbsence) newRemarks += $"[欠勤:{absenceReason ?? ""}]";
-            if (chkPaidLeave) newRemarks += $"[有給:{paidLeaveType ?? "全日"}]";
+            if (statusType == "late") newRemarks = $"[遅刻:{lateReason ?? ""}]";
+            else if (statusType == "early") newRemarks = $"[早退:{earlyReason ?? ""}]";
+            else if (statusType == "absence") newRemarks = $"[欠勤:{absenceReason ?? ""}]";
+            else if (statusType == "paidLeave")
+            {
+                // 有給は管理者のみ設定可能ですが、すでに設定されているものを一般社員が保存した場合は維持します
+                newRemarks = $"[有給:{paidLeaveType ?? "全日"}]";
+            }
 
             work.Remarks = newRemarks;
             work.UpdatedTime = DateTime.Now;
             work.UpdatedId = loginUser?.Id ?? 0;
 
-            if (loginUser?.ManagerFlag == 1)
+            if (isManager)
             {
                 if (TimeSpan.TryParse(attendanceTimeStr, out var at)) work.AttendanceTime = work.WorkDate.Date.Add(at);
                 else if (string.IsNullOrEmpty(attendanceTimeStr)) work.AttendanceTime = null;
