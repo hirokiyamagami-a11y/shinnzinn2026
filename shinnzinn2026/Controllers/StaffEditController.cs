@@ -70,17 +70,29 @@ namespace shinnzinn2026.Controllers
         [HttpPost]
         public async Task<IActionResult> StaffDelete(string StaffCd)
         {
-            // 1. 削除したい社員を探す
             var staff = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == StaffCd);
             if (staff == null) return NotFound();
 
-            // 2. データベースから完全に削除する（DELETE処理）
-            _context.Staffs.Remove(staff);
+            // 1. 削除した人（ログイン中のユーザー）のIDを記録する
+            string? loginStaffCd = HttpContext.Session.GetString("LoginStaffCd");
+            if (!string.IsNullOrEmpty(loginStaffCd))
+            {
+                var editor = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == loginStaffCd);
+                if (editor != null)
+                {
+                    staff.UpdatedId = editor.Id;
+                }
+            }
+
+            // 2. 物理削除(Remove)をやめて、論理削除(フラグを立てる)に変更！
+            staff.DeleteFlag = 1;
+
+            staff.UpdatedTime = DateTime.Now;
+
+            // 3. データベースに変更を確定（更新）
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = $"{staff.Name} さんの削除が完了しました。";
-
-            // 3. 削除が終わったら、一覧画面へ戻る
             return RedirectToAction("StaffList", "StaffList");
         }
     }

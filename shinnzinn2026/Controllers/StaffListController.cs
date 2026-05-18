@@ -22,11 +22,14 @@ namespace shinnzinn2026.Controllers
                 int pageSize = 5; // 1ページに表示する人数
 
                 // 全体で何人いるか数えて、全部で何ページになるか計算する
-                int totalItems = await _context.Staffs.CountAsync();
+                int totalItems = await _context.Staffs
+                    .Where(s => s.DeleteFlag == 0)
+                    .CountAsync();
                 int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
                 // 指定されたページの5人だけを切り取って取得
                 var staffList = await _context.Staffs
+                    .Where(s => s.DeleteFlag == 0) // 削除されていない人間のみ表示
                     .OrderBy(s => s.Id)
                     .Skip((page - 1) * pageSize)  // 前のページまでの分をスキップ
                     .Take(pageSize)               // 5件だけ取得
