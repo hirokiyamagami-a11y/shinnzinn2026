@@ -3,7 +3,6 @@
     ViewData["Title"] = "ユーザー編集";
 }
 
-@* 🌸 ここは消しちゃダメ！外側の枠を消す魔法と、入力欄をクリックした時の「光るアニメーション（:focus）」だけはここに残すわよ！ *@
 <style>
     header, footer {
         display: none !important;
@@ -34,7 +33,7 @@
                 <h2 class="display-6 fw-bold mb-0" style="color: #ffffff;">ユーザー編集</h2>
             </div>
 
-            @* 🌸 エラーメッセージ *@
+            @* エラーメッセージ *@
             @if (ViewBag.ErrorMessage != null)
             {
                 <div style="background-color: rgba(255, 99, 132, 0.2); border: 1px solid #ff6384; color: #ffdbe0; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; text-align: center; font-weight: bold;">
@@ -118,7 +117,7 @@
     </script>
 }
 
-@* 🌸 削除確認ポップアップ（モーダル） *@
+@* 削除確認ポップアップ（モーダル） *@
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff;">

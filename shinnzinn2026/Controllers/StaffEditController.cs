@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using shinnzinn2026.Data;
-using shinnzinn2026.Models;
 
 namespace shinnzinn2026.Controllers
 {
@@ -14,8 +13,7 @@ namespace shinnzinn2026.Controllers
             _context = context;
         }
 
-        // 🌸 1. 画面を「表示する（GET）」ための扉よ！
-        // [HttpGet] をつけることで、「リンクから飛んできた時はこっちを開けてね」と明示できるわ。
+        // 1. 画面を「表示する（GET）」ための扉よ
         [HttpGet]
         public async Task<IActionResult> StaffEdit(string id)
         {
@@ -25,8 +23,7 @@ namespace shinnzinn2026.Controllers
             return View(staff);
         }
 
-        // 🌸 2. 画面から「データを受け取って保存する（POST）」ための扉よ！
-        // [HttpPost] があるから、「保存ボタンを押した時」だけこっちが呼ばれるわ。
+        // 2. 画面から「データを受け取って保存する（POST）」ための扉
         [HttpPost]
         public async Task<IActionResult> StaffEdit(string StaffCd, string Name, string Password, string PasswordConfirm)
         {
@@ -38,7 +35,7 @@ namespace shinnzinn2026.Controllers
             {
                 if (Password != PasswordConfirm)
                 {
-                    ViewBag.ErrorMessage = "パスワードが一致しません！もう一度確認しなさい！";
+                    ViewBag.ErrorMessage = "パスワードが一致しません。\nもう一度確認してください。";
                     return View(staff);
                 }
                 staff.Password = Password;
@@ -48,6 +45,19 @@ namespace shinnzinn2026.Controllers
             staff.Name = Name;
             staff.UpdatedTime = DateTime.Now;
 
+            string? loginStaffCd = HttpContext.Session.GetString("LoginStaffCd");
+            if (!string.IsNullOrEmpty(loginStaffCd))
+            {
+                var editor = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == loginStaffCd);
+
+                if (editor != null)
+                {
+                    staff.UpdatedId = editor.Id;
+                }
+            }
+            // データベースに変更を確定（保存）
+            await _context.SaveChangesAsync();
+
             // データベースに変更を確定（保存）させる
             await _context.SaveChangesAsync();
 
@@ -56,7 +66,7 @@ namespace shinnzinn2026.Controllers
             return View(staff);
         }
 
-        // 🌸 ユーザーをデータベースから完全に削除（物理削除）するアクション
+        // ユーザーをデータベースから完全に削除（物理削除）するアクション
         [HttpPost]
         public async Task<IActionResult> StaffDelete(string StaffCd)
         {
