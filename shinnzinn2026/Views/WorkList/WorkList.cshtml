@@ -1,7 +1,7 @@
 ﻿@using shinnzinn2026.ViewModels
 @model WorkListViewModel
 @{
-    // 💡 ここが魔法の1行！デフォルトのヘッダーとフッターを完全に排除します
+    // 💡 共通のヘッダー・フッターを消して完全なフルスクリーンにします
     Layout = null;
 
     ViewData["Title"] = "勤務実績一覧";
@@ -15,12 +15,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    @* モーダルやデザインを動かすためのBootstrapを直接読み込み *@
+    @* Bootstrapとアイコンの読み込み *@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    @* 🌸 ログアウトモーダルのアイコン（FontAwesome）を表示するための読み込み *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-@* 🌸 bodyタグ自体をダークブルーに塗りつぶして、完全なフルスクリーンにします！ *@
+@* 🌸 bodyタグ自体をダークブルーにして完全なフルスクリーン空間を作ります *@
 <body style="background-color: #2e4a7d; color: #ffffff; min-height: 100vh; padding-top: 3rem; padding-bottom: 5rem;">
 
     <div class="container">
@@ -39,7 +41,10 @@
                     <a asp-controller="StaffList" asp-action="StaffList" class="btn btn-sm btn-outline-warning rounded-pill px-4 mb-2">社員一覧へ戻る</a>
                     <br />
                 }
-                <a asp-controller="Login" asp-action="Login" class="btn btn-sm btn-outline-light rounded-pill px-4">TOPへ戻る</a>
+                @* 💡 ログアウト確認モーダルを呼び出す赤いボタン *@
+                <button type="button" class="btn btn-sm btn-danger rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                    <i class="bi bi-box-arrow-right"></i> ログアウト
+                </button>
             </div>
         </div>
 
@@ -174,7 +179,7 @@
                                 </td>
                             </tr>
 
-                            @* --- 編集モーダル --- *@
+                            @* --- 各日の編集モーダル --- *@
                             <div class="modal fade" id="editModal-@item.WorkDate.Day" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff; color: #333333;">
@@ -233,7 +238,36 @@
         </div>
     </div>
 
-    @* 💡 ポップアップなどの動きを制御するJavaScriptを読み込みます *@
+    @* ========================================================= *@
+    @* 🌸 いただいたデザインそのままの「ログアウト確認用モーダル」 *@
+    @* ========================================================= *@
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff; color: #333333;">
+                <div class="modal-body text-center" style="padding: 3rem 2rem;">
+
+                    @* 🌸 赤いアイコンと確認メッセージ *@
+                    <i class="fa-solid fa-right-from-bracket mb-3" style="font-size: 4rem; color: #ff6384;"></i>
+                    <h4 class="fw-bold mb-4" style="color: #333333;">ログアウトしますか？</h4>
+
+                    @* 🌸 縦に2つボタンを並べる *@
+                    <div class="d-grid gap-3">
+                        @* 💡 最適化：既存のLoginアクションを叩くだけで自動リセットされるため、飛び先をLoginへ変更しました！ *@
+                        <a asp-controller="Login" asp-action="Login" class="btn btn-lg fw-bold text-decoration-none" style="background-color: #ff6384; color: #ffffff; border-radius: 12px; padding: 1rem;">
+                            はい、ログアウトします
+                        </a>
+
+                        @* キャンセルして戻るボタン（モーダルを閉じるだけ） *@
+                        <button type="button" class="btn btn-lg fw-bold" data-bs-dismiss="modal" style="background-color: #f1f3f5; color: #495057; border-radius: 12px; padding: 1rem;">
+                            キャンセル
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* 💡 ポップアップなどの動きを制御するJavaScript *@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
