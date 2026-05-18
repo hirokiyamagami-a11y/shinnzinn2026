@@ -3,6 +3,8 @@
     ViewData["Title"] = "社員一覧";
 }
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style>
     header, footer {
         display: none !important;
@@ -14,14 +16,14 @@
     }
 </style>
 
-@* 🌸 画面全体を覆うダークブルーの箱（bodyの代わりよ） *@
+@* 画面全体を覆うダークブルーの箱*@
 <div style="background-color: #2e4a7d; min-height: 100vh; width: 100vw; margin-left: calc(50% - 50vw); padding: 3rem 1rem; color: #ffffff;">
     <div class="container pb-5">
         @*  中央の大きなカード *@
         <div style="background-color: #3b598f; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); padding: 3rem; position: relative;">
 
-            @* 🌸 ログアウトボタン *@
-            <button type="button" class="btn btn-sm text-decoration-none" data-bs-toggle="modal" data-bs-target="#logoutModal" style="position: absolute; top: 2rem; right: 2.5rem; background-color: rgba(255, 99, 132, 0.15); border: 1px solid #ff6384; color: #ffdbe0; border-radius: 50px; padding: 0.5rem 1.2rem; transition: all 0.3s;">
+            @* ログアウトボタン *@
+            <button type="button" class="btn shadow-sm" data-bs-toggle="modal" data-bs-target="#logoutModal" style="position: absolute; top: 2rem; right: 2.5rem; background-color: #e45460; color: #ffffff; border-radius: 50px; padding: 0.5rem 1.5rem; font-weight: bold; border: none; transition: all 0.3s;">
                 <i class="fa-solid fa-right-from-bracket"></i> ログアウト
             </button>
             @* --- タイトルエリア --- *@
@@ -78,7 +80,6 @@
                                                         ユーザー編集
                                                     </a>
 
-                                                    @* 💡 ここを a タグに変更し、WorkList へ targetStaffCd を渡すようにしました *@
                                                     <a asp-controller="WorkList" asp-action="WorkList" asp-route-targetStaffCd="@staff.StaffCd"
                                                        class="btn btn-lg fw-bold text-decoration-none" style="background-color: #51995f; color: #ffffff; border-radius: 12px; padding: 1rem;">
                                                         勤退時間編集
@@ -137,25 +138,24 @@
         </div>
     </div>
 </div>
-@* 🌸 ログアウト確認用モーダル *@
+@* ログアウト確認用モーダル *@
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff;">
-            <div class="modal-body text-center" style="padding: 3rem 2rem;">
-                
-                @* 🌸 赤いアイコンと確認メッセージ *@
-                <i class="fa-solid fa-right-from-bracket mb-3" style="font-size: 4rem; color: #ff6384;"></i>
-                <h4 class="fw-bold mb-4" style="color: #333333;">ログアウトしますか？</h4>
-                
-                @* 🌸 縦に2つボタンを並べる *@
+        <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2); background-color: #ffffff;">
+            <div class="modal-body text-center" style="padding: 4rem 3rem;">
+
+                <i class="fa-solid fa-right-from-bracket mb-4" style="font-size: 5rem; background: linear-gradient(135deg, #ff758c, #ff7eb3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;"></i>
+
+                <h4 class="fw-bold mb-5" style="color: #333333;">ログアウトしますか？</h4>
+
                 <div class="d-grid gap-3">
-                    @* 本当にログアウトするボタン（ここで初めてLogin画面へ） *@
-                    <a asp-controller="Login" asp-action="Login" class="btn btn-lg fw-bold" style="background-color: #ff6384; color: #ffffff; border-radius: 12px; padding: 1rem;">
+                    @* ログアウトボタン *@
+                    <a asp-controller="Login" asp-action="Login" class="btn btn-lg fw-bold" style="background: linear-gradient(135deg, #ff758c, #ff7eb3); color: #ffffff; border-radius: 12px; padding: 1rem; border: none; box-shadow: 0 8px 15px rgba(255, 117, 140, 0.3); transition: all 0.3s;">
                         はい、ログアウトします
                     </a>
-                    
-                    @* キャンセルして戻るボタン（モーダルを閉じるだけ） *@
-                    <button type="button" class="btn btn-lg fw-bold" data-bs-dismiss="modal" style="background-color: #f1f3f5; color: #495057; border-radius: 12px; padding: 1rem;">
+
+                    @* キャンセルして戻るボタン *@
+                    <button type="button" class="btn btn-lg fw-bold" data-bs-dismiss="modal" style="background-color: #f4f6f8; color: #555555; border-radius: 12px; padding: 1rem; border: none;">
                         キャンセル
                     </button>
                 </div>
@@ -184,7 +184,7 @@
         </div>
     </div>
 
-    @* 🌸 画面が一覧に戻ってきた瞬間に、自動でモーダルをフワッと開くJavaScript！ *@
+    @* 画面が一覧に戻ってきた瞬間に、自動でモーダルをフワッと開くJavaScript *@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var deleteSuccessModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
