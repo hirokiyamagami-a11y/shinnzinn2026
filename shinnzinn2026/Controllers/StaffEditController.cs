@@ -55,5 +55,23 @@ namespace shinnzinn2026.Controllers
             ViewBag.SuccessMessage = "変更を保存しました";
             return View(staff);
         }
+
+        // 🌸 ユーザーをデータベースから完全に削除（物理削除）するアクション
+        [HttpPost]
+        public async Task<IActionResult> StaffDelete(string StaffCd)
+        {
+            // 1. 削除したい社員を探す
+            var staff = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == StaffCd);
+            if (staff == null) return NotFound();
+
+            // 2. データベースから完全に削除する（DELETE処理）
+            _context.Staffs.Remove(staff);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"{staff.Name} さんの削除が完了しました。";
+
+            // 3. 削除が終わったら、一覧画面へ戻る
+            return RedirectToAction("StaffList", "StaffList");
+        }
     }
 }

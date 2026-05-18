@@ -164,3 +164,31 @@
         </div>
     </div>
 </div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff;">
+                <div class="modal-body text-center" style="padding: 3rem 2rem;">
+
+                    @* 爽やかなグリーンのチェックマークよ！ *@
+                    <i class="fa-solid fa-circle-check mb-3" style="font-size: 4rem; color: #8cc63f;"></i>
+                    <h4 class="fw-bold mb-4" style="color: #333333;">@TempData["SuccessMessage"]</h4>
+
+                    @* 閉じるボタン（確認を押したらポップアップが閉じて、最新の一覧が見れるわ） *@
+                    <button type="button" class="btn btn-lg fw-bold" data-bs-dismiss="modal" style="background-color: #3b598f; color: #ffffff; border-radius: 12px; padding: 0.8rem 2rem; width: 100%;">
+                        確認
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* 🌸 画面が一覧に戻ってきた瞬間に、自動でモーダルをフワッと開くJavaScript！ *@
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var deleteSuccessModal = new bootstrap.Modal(document.getElementById('deleteSuccessModal'));
+            deleteSuccessModal.show();
+        });
+    </script>
+}
