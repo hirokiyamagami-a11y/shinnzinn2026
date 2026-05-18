@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http; // 🌟 必須：セッション（バトン）を使うために追加
 using shinnzinn2026.Data;
 using shinnzinn2026.Models;
-using System;
-using System.Linq;
 
 namespace shinnzinn2026.Controllers
 {
@@ -127,16 +124,20 @@ namespace shinnzinn2026.Controllers
         }
 
         // --- 新規登録画面を開く ---
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View("Login");
-        }
-
-        // --- 新規ユーザーを保存する ---
+        // ---------------------------------------------------------
+        // ② データを保存する（引数に confirmPassword を追加）
+        // ---------------------------------------------------------
         [HttpPost]
-        public IActionResult Register(string staffCd, string name, string password)
+        public IActionResult Register(string staffCd, string name, string password, string confirmPassword)
         {
+            // 🌟 追加：パスワードの一致チェック
+            if (password != confirmPassword)
+            {
+                ViewBag.ErrorMessage = "パスワードと確認用パスワードが一致しません。";
+                return View("Login"); // 一致しなければエラーを出して打刻画面に戻る
+            }
+
+            // ① 社員CDの重複チェック
             var existStaff = _context.Staffs.FirstOrDefault(s => s.StaffCd == staffCd && s.DeleteFlag == 0);
             if (existStaff != null)
             {
@@ -144,6 +145,7 @@ namespace shinnzinn2026.Controllers
                 return View("Login");
             }
 
+            // ② 新しいスタッフデータを作成
             var newStaff = new StaffModel
             {
                 StaffCd = staffCd,

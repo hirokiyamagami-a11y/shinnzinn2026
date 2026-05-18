@@ -2,29 +2,39 @@
     var modal = document.getElementById('authModal');
     var title = document.getElementById('modalTitle');
     var form = document.getElementById('modalForm');
-    // 🌟 追加：氏名入力欄のグループを取得
     var nameGroup = document.getElementById('modalGroupName');
+
+    var confirmGroup = document.getElementById('modalGroupConfirmPassword');
+    var passwordInput = document.getElementById('modalInputPassword');
 
     if (actionType === 'CheckIn') {
         title.innerText = '出勤';
         title.style.color = '#96c93d';
         form.action = '/Login/CheckIn';
         if (nameGroup) nameGroup.style.display = 'none';
+        if (confirmGroup) confirmGroup.style.display = 'none';       
+        if (passwordInput) passwordInput.style.marginBottom = '30px'; 
     } else if (actionType === 'CheckOut') {
         title.innerText = '退勤';
         title.style.color = '#ff512f';
         form.action = '/Login/CheckOut';
-        if (nameGroup) nameGroup.style.display = 'none'; 
+        if (nameGroup) nameGroup.style.display = 'none';
+        if (confirmGroup) confirmGroup.style.display = 'none';       
+        if (passwordInput) passwordInput.style.marginBottom = '30px'; 
     } else if (actionType === 'Register') {
         title.innerText = '新規登録';
-        title.style.color = '#00b09b';
+        title.style.color = '#2a5298';
         form.action = '/Login/Register';
         if (nameGroup) nameGroup.style.display = 'block';
+        if (confirmGroup) confirmGroup.style.display = 'block';      
+        if (passwordInput) passwordInput.style.marginBottom = '20px'; 
     } else if (actionType === 'Details') {
         title.innerText = '本人確認（詳細）';
         title.style.color = '#2a5298';
         form.action = '/Login/AuthenticateDetails';
-        if (nameGroup) nameGroup.style.display = 'none'; 
+        if (nameGroup) nameGroup.style.display = 'none';
+        if (confirmGroup) confirmGroup.style.display = 'none';     
+        if (passwordInput) passwordInput.style.marginBottom = '30px'; 
     }
     modal.style.display = 'flex';
 } function closeModal() {

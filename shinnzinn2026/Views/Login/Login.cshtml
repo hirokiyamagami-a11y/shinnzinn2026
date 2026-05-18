@@ -15,18 +15,17 @@
 
     <div style="position: relative; width: 85%; max-width: 1200px; padding: 100px 50px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); text-align: center; color: #ffffff;">
 
-        <div style="position: absolute; top: 40px; left: 50px; display: flex; gap: 15px;">
-            <a href="javascript:void(0)" id="btnRegister" style="display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s; cursor: pointer;">
+        <div style="position: absolute; top: 40px; left: 50px;">
+            <button type="button" id="btnRegister" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s; cursor: pointer; outline: none; font-family: inherit;">
                 新規登録
-            </a>
-        </div>
-
-        <div style="position: absolute; top: 40px; right: 50px;">
-            <button type="button" id="btnDetails" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s; cursor: pointer; border: none;">
-                詳細
             </button>
         </div>
 
+        <div style="position: absolute; top: 40px; right: 50px;">
+            <button type="button" id="btnDetails" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s; cursor: pointer; outline: none; font-family: inherit;">
+                詳細
+            </button>
+        </div>
         <h1 style="margin-top: 0; margin-bottom: 20px; font-size: 20px; font-weight: 400; letter-spacing: 8px; text-transform: uppercase; color: rgba(255,255,255,0.7);">
             Attendance System
         </h1>
@@ -60,7 +59,9 @@
                 </div>
 
                 <input type="password" name="password" placeholder="パスワード" required style="width: 100%; box-sizing: border-box; padding: 15px; font-size: 20px; margin-bottom: 30px; border-radius: 15px; border: 2px solid #ddd; outline: none; color: #333;">
-
+                <div id="modalGroupConfirmPassword" style="display: none; margin-bottom: 30px;">
+                    <input type="password" name="confirmPassword" placeholder="パスワード（確認用）" style="width: 100%; box-sizing: border-box; padding: 15px; font-size: 20px; border-radius: 15px; border: 2px solid #ddd; outline: none; color: #333;">
+                </div>
                 <button type="submit" style="width: 100%; padding: 15px; font-size: 24px; font-weight: bold; background: #2a5298; color: white; border: none; border-radius: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(42, 82, 152, 0.4);">
                     確定
                 </button>
