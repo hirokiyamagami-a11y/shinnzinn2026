@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http; // 🌟 必須：セッション（バトン）を使うために追加
 using shinnzinn2026.Data;
 using shinnzinn2026.Models;
+using System;
+using System.Linq;
 
 namespace shinnzinn2026.Controllers
 {
@@ -13,6 +16,7 @@ namespace shinnzinn2026.Controllers
             _context = context;
         }
 
+        // --- ログイン（打刻）画面を表示 ---
         [HttpGet]
         public IActionResult Login()
         {
@@ -20,6 +24,7 @@ namespace shinnzinn2026.Controllers
             return View();
         }
 
+        // --- 「出勤」ボタン処理 ---
         [HttpPost]
         public IActionResult CheckIn(string staffCd, string password)
         {
@@ -56,6 +61,7 @@ namespace shinnzinn2026.Controllers
             return View("Login");
         }
 
+        // --- 「退勤」ボタン処理 ---
         [HttpPost]
         public IActionResult CheckOut(string staffCd, string password)
         {
@@ -84,7 +90,9 @@ namespace shinnzinn2026.Controllers
 
             work.LeaveTime = DateTime.Now;
             work.UpdatedTime = DateTime.Now;
-            work.UpdatedId = staff.Id;
+
+            // 🌟 修正：手動編集データと色を分けるため、自動打刻時はあえて UpdatedId を入れません
+            // work.UpdatedId = staff.Id; 
 
             _context.Works.Update(work);
             _context.SaveChanges();
@@ -93,6 +101,7 @@ namespace shinnzinn2026.Controllers
             return View("Login");
         }
 
+        // --- 「詳細」ボタンからの認証・振り分け処理 ---
         [HttpPost]
         public IActionResult AuthenticateDetails(string staffCd, string password)
         {
@@ -104,6 +113,7 @@ namespace shinnzinn2026.Controllers
                 return View("Login");
             }
 
+            // 🌟 必須：これで実績画面に「誰がログインしたか」を教えます
             HttpContext.Session.SetString("LoginStaffCd", staff.StaffCd);
 
             if (staff.ManagerFlag == 1)
@@ -116,22 +126,17 @@ namespace shinnzinn2026.Controllers
             }
         }
 
-        // ---------------------------------------------------------
-        // ① 画面を開く（基本は共通モーダル内で動くため、予備用です）
-        // ---------------------------------------------------------
+        // --- 新規登録画面を開く ---
         [HttpGet]
         public IActionResult Register()
         {
             return View("Login");
         }
 
-        // ---------------------------------------------------------
-        // ② データを保存する（共通モーダルからPOST送信されたときに動く）
-        // ---------------------------------------------------------
+        // --- 新規ユーザーを保存する ---
         [HttpPost]
         public IActionResult Register(string staffCd, string name, string password)
         {
-            // ① 社員CDの重複チェック
             var existStaff = _context.Staffs.FirstOrDefault(s => s.StaffCd == staffCd && s.DeleteFlag == 0);
             if (existStaff != null)
             {

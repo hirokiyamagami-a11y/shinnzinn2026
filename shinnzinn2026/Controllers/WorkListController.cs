@@ -14,7 +14,11 @@ namespace shinnzinn2026.Controllers
     public class WorkListController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public WorkListController(ApplicationDbContext context) { _context = context; }
+
+        public WorkListController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         public async Task<IActionResult> WorkList(int? SelectedYear, int? SelectedMonth, int? SelectedWeek, string? targetStaffCd)
@@ -40,7 +44,6 @@ namespace shinnzinn2026.Controllers
             };
 
             ViewData["SelectedWeek"] = SelectedWeek ?? 0;
-
             await LoadTargetData(viewModel, SelectedWeek ?? 0);
             return View(viewModel);
         }
@@ -50,6 +53,21 @@ namespace shinnzinn2026.Controllers
             var targetUser = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == vm.TargetStaffCd);
             vm.TargetUserName = targetUser?.Name ?? "不明なユーザー";
 
+            var allStaffs = await _context.Staffs.ToListAsync();
+            var palette = new[] { "#FFEB3B", "#4AF2A1", "#FF9CF5", "#00E5FF", "#FFB74D", "#B39DDB" };
+            int colorIndex = 0;
+
+            var staffLastNameMap = new Dictionary<int, string>();
+            var staffColorMap = new Dictionary<int, string>();
+
+            foreach (var s in allStaffs)
+            {
+                var parts = (s.Name ?? "").Split(new[] { ' ', '　' }, StringSplitOptions.RemoveEmptyEntries);
+                staffLastNameMap[s.Id] = parts.Length > 0 ? parts[0] : s.Name;
+                staffColorMap[s.Id] = palette[colorIndex % palette.Length];
+                colorIndex++;
+            }
+
             var dbWorks = await _context.Works
                 .Where(w => w.StaffCd == vm.TargetStaffCd &&
                             w.WorkDate.Year == vm.SelectedYear &&
@@ -57,6 +75,9 @@ namespace shinnzinn2026.Controllers
                 .ToListAsync();
 
             vm.AttendanceList = new List<WorkModel>();
+            vm.EditorNames = new Dictionary<string, string>();
+            vm.EditorColors = staffColorMap;
+
             double total = 0;
             int daysInMonth = DateTime.DaysInMonth(vm.SelectedYear, vm.SelectedMonth);
 
@@ -70,49 +91,57 @@ namespace shinnzinn2026.Controllers
 
                 var date = new DateTime(vm.SelectedYear, vm.SelectedMonth, i);
                 var work = dbWorks.FirstOrDefault(w => w.WorkDate.Date == date);
+                string dateKey = date.ToString("yyyyMMdd");
 
                 if (work != null)
                 {
                     vm.AttendanceList.Add(work);
-                    if (work.AttendanceTime.HasValue && work.LeaveTime.HasValue)
+
+                    // 🌟 修正：有給休暇のチェックが入っている日は労働時間を8時間として月間集計に足す
+                    if (work.Remarks != null && work.Remarks.Contains("[有給:"))
+                    {
+                        total += 8.0;
+                    }
+                    else if (work.AttendanceTime.HasValue && work.LeaveTime.HasValue)
                     {
                         total += (work.LeaveTime.Value - work.AttendanceTime.Value - (work.RestTime ?? TimeSpan.Zero)).TotalHours;
                     }
+
+                    if (work.UpdatedId.HasValue && work.UpdatedId.Value != 0 && staffLastNameMap.ContainsKey((int)work.UpdatedId.Value))
+                    {
+                        vm.EditorNames[dateKey] = staffLastNameMap[(int)work.UpdatedId.Value];
+                    }
+                    else { vm.EditorNames[dateKey] = "-"; }
                 }
                 else
                 {
-                    vm.AttendanceList.Add(new WorkModel
-                    {
-                        Id = 0,
-                        StaffCd = vm.TargetStaffCd,
-                        WorkDate = date,
-                        RestTime = TimeSpan.FromMinutes(60)
-                    });
+                    vm.AttendanceList.Add(new WorkModel { Id = 0, StaffCd = vm.TargetStaffCd, WorkDate = date, RestTime = TimeSpan.FromMinutes(60) });
+                    vm.EditorNames[dateKey] = "-";
                 }
             }
 
             vm.TotalHours = Math.Round(total, 2);
         }
 
+        // 🌟 修正：チェックボックス類を受け取れるように引数を大量に追加
         [HttpPost]
-        public async Task<IActionResult> UpdateWorkRecord(long workId, string? attendanceTimeStr, string? leaveTimeStr, string? restTimeStr, string? remarks, int year, int month, int day, int week, string targetStaffCd)
+        public async Task<IActionResult> UpdateWorkRecord(
+            long workId, string? attendanceTimeStr, string? leaveTimeStr, string? restTimeStr,
+            bool chkLate, string? lateReason,
+            bool chkEarly, string? earlyReason,
+            bool chkAbsence, string? absenceReason,
+            bool chkPaidLeave, string? paidLeaveType,
+            int year, int month, int day, int week, string targetStaffCd)
         {
             var loginStaffCd = HttpContext.Session.GetString("LoginStaffCd");
             var loginUser = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == loginStaffCd);
-            bool isManager = loginUser?.ManagerFlag == 1;
 
             WorkModel work;
             bool isNew = false;
 
             if (workId == 0)
             {
-                work = new WorkModel
-                {
-                    StaffCd = targetStaffCd,
-                    WorkDate = new DateTime(year, month, day),
-                    RegistrationTime = DateTime.Now,
-                    RegistrantId = loginUser?.Id ?? 0
-                };
+                work = new WorkModel { StaffCd = targetStaffCd, WorkDate = new DateTime(year, month, day), RegistrationTime = DateTime.Now, RegistrantId = loginUser?.Id ?? 0 };
                 isNew = true;
             }
             else
@@ -121,20 +150,27 @@ namespace shinnzinn2026.Controllers
                 if (work == null) return RedirectToAction("WorkList", new { SelectedYear = year, SelectedMonth = month, SelectedWeek = week, targetStaffCd = targetStaffCd });
             }
 
-            work.Remarks = remarks;
+            // 🌟 修正：チェックボックスの状態から新しい備考文字列を作成する
+            string newRemarks = "";
+            if (chkLate) newRemarks += $"[遅刻:{lateReason ?? ""}]";
+            if (chkEarly) newRemarks += $"[早退:{earlyReason ?? ""}]";
+            if (chkAbsence) newRemarks += $"[欠勤:{absenceReason ?? ""}]";
+            if (chkPaidLeave) newRemarks += $"[有給:{paidLeaveType ?? "全日"}]";
+
+            work.Remarks = newRemarks;
             work.UpdatedTime = DateTime.Now;
             work.UpdatedId = loginUser?.Id ?? 0;
 
-            if (isManager)
+            if (loginUser?.ManagerFlag == 1)
             {
                 if (TimeSpan.TryParse(attendanceTimeStr, out var at)) work.AttendanceTime = work.WorkDate.Date.Add(at);
-                else if (attendanceTimeStr == "") work.AttendanceTime = null;
+                else if (string.IsNullOrEmpty(attendanceTimeStr)) work.AttendanceTime = null;
 
                 if (TimeSpan.TryParse(leaveTimeStr, out var lt)) work.LeaveTime = work.WorkDate.Date.Add(lt);
-                else if (leaveTimeStr == "") work.LeaveTime = null;
+                else if (string.IsNullOrEmpty(leaveTimeStr)) work.LeaveTime = null;
 
                 if (TimeSpan.TryParse(restTimeStr, out var rt)) work.RestTime = rt;
-                else if (restTimeStr == "") work.RestTime = null;
+                else if (string.IsNullOrEmpty(restTimeStr)) work.RestTime = null;
             }
             else if (isNew)
             {
@@ -145,14 +181,12 @@ namespace shinnzinn2026.Controllers
             {
                 if (work.AttendanceTime.HasValue || work.LeaveTime.HasValue || !string.IsNullOrEmpty(work.Remarks))
                 {
-                    _context.Works.Add(work);
-                    await _context.SaveChangesAsync();
+                    _context.Works.Add(work); await _context.SaveChangesAsync();
                 }
             }
             else
             {
-                _context.Works.Update(work);
-                await _context.SaveChangesAsync();
+                _context.Works.Update(work); await _context.SaveChangesAsync();
             }
 
             return RedirectToAction("WorkList", new { SelectedYear = year, SelectedMonth = month, SelectedWeek = week, targetStaffCd = targetStaffCd });
