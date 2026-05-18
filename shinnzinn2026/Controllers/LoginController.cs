@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http; // 💡 追加：セッション（バトン）を使うために必要
 using shinnzinn2026.Data;
 using shinnzinn2026.Models;
 
@@ -14,16 +13,13 @@ namespace shinnzinn2026.Controllers
             _context = context;
         }
 
-        // 🌟 1. ログイン（打刻）画面を表示
         [HttpGet]
         public IActionResult Login()
         {
-            // 💡 追加：ログイン画面を開いた時は念のため以前のバトンを捨てる（安全対策）
             HttpContext.Session.Clear();
             return View();
         }
 
-        // 🌟 2. 「出勤」ボタン処理 （※一切変更していません）
         [HttpPost]
         public IActionResult CheckIn(string staffCd, string password)
         {
@@ -60,7 +56,6 @@ namespace shinnzinn2026.Controllers
             return View("Login");
         }
 
-        // 🌟 3. 「退勤」ボタン処理 （※一切変更していません）
         [HttpPost]
         public IActionResult CheckOut(string staffCd, string password)
         {
@@ -98,11 +93,9 @@ namespace shinnzinn2026.Controllers
             return View("Login");
         }
 
-        // 🌟 4. 「詳細」ボタンからの認証・振り分け処理
         [HttpPost]
         public IActionResult AuthenticateDetails(string staffCd, string password)
         {
-            // 認証チェック
             var staff = _context.Staffs.FirstOrDefault(s => s.StaffCd == staffCd && s.Password == password && s.DeleteFlag == 0);
 
             if (staff == null)
@@ -111,20 +104,59 @@ namespace shinnzinn2026.Controllers
                 return View("Login");
             }
 
-            // 💡 ここだけ追加！実績画面に「誰がログインしたか」を教えるためのバトン
             HttpContext.Session.SetString("LoginStaffCd", staff.StaffCd);
 
-            // ManagerFlag による判定 (1: 管理者, 0: 一般)
             if (staff.ManagerFlag == 1)
             {
-                // 管理者なら StaffListController の StaffList アクションへ
                 return RedirectToAction("StaffList", "StaffList");
             }
             else
             {
-                // 一般社員なら WorkListController の WorkList アクションへ
                 return RedirectToAction("WorkList", "WorkList");
             }
+        }
+
+        // ---------------------------------------------------------
+        // ① 画面を開く（基本は共通モーダル内で動くため、予備用です）
+        // ---------------------------------------------------------
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View("Login");
+        }
+
+        // ---------------------------------------------------------
+        // ② データを保存する（共通モーダルからPOST送信されたときに動く）
+        // ---------------------------------------------------------
+        [HttpPost]
+        public IActionResult Register(string staffCd, string name, string password)
+        {
+            // ① 社員CDの重複チェック
+            var existStaff = _context.Staffs.FirstOrDefault(s => s.StaffCd == staffCd && s.DeleteFlag == 0);
+            if (existStaff != null)
+            {
+                ViewBag.ErrorMessage = "この社員CDは既に登録されています。";
+                return View("Login");
+            }
+
+            var newStaff = new StaffModel
+            {
+                StaffCd = staffCd,
+                Name = name,
+                Password = password,
+                ManagerFlag = 0,
+                DeleteFlag = 0,
+                RegistrationTime = DateTime.Now
+            };
+
+            _context.Staffs.Add(newStaff);
+            _context.SaveChanges();
+
+            newStaff.RegistrantId = newStaff.Id;
+            _context.SaveChanges();
+
+            ViewBag.Message = $"{newStaff.Name} さんの登録が完了しました！";
+            return View("Login");
         }
     }
 }

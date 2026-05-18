@@ -16,25 +16,24 @@
     <div style="position: relative; width: 85%; max-width: 1200px; padding: 100px 50px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); text-align: center; color: #ffffff;">
 
         <div style="position: absolute; top: 40px; left: 50px; display: flex; gap: 15px;">
-            <a href="/StaffList/StaffList" style="display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s;">
-                Staff
-            </a>
-            <a href="/WorkList/WorkList" style="display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s;">
-                Work
+            <a href="javascript:void(0)" id="btnRegister" style="display: inline-block; padding: 12px 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s; cursor: pointer;">
+                新規登録
             </a>
         </div>
 
         <div style="position: absolute; top: 40px; right: 50px;">
-            <button type="button" id="btnDetails" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s; cursor: pointer;">
+            <button type="button" id="btnDetails" style="display: inline-block; padding: 12px 30px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff; text-decoration: none; font-weight: bold; font-size: 16px; border-radius: 50px; transition: 0.3s; cursor: pointer; border: none;">
                 詳細
             </button>
         </div>
+
         <h1 style="margin-top: 0; margin-bottom: 20px; font-size: 20px; font-weight: 400; letter-spacing: 8px; text-transform: uppercase; color: rgba(255,255,255,0.7);">
             Attendance System
         </h1>
 
         <div id="realtimeClock" style="font-size: 80px; font-weight: 700; margin-bottom: 80px; letter-spacing: 4px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); color: #fff; min-height: 100px; display: flex; justify-content: center; align-items: baseline;">
         </div>
+
         <div style="display: flex; justify-content: center; gap: 80px;">
             <button type="button" id="btnCheckIn" style="width: 300px; height: 120px; font-size: 36px; font-weight: bold; background: linear-gradient(135deg, #00b09b, #96c93d); color: white; border: none; border-radius: 60px; box-shadow: 0 10px 30px rgba(0, 176, 155, 0.4); cursor: pointer; letter-spacing: 8px;">
                 出勤
@@ -51,11 +50,17 @@
 
             <span id="btnCloseModal" style="position: absolute; top: 20px; right: 30px; font-size: 30px; color: #999; cursor: pointer; font-weight: bold;">&times;</span>
 
-            <h2 id="modalTitle" style="color: #333; margin-top: 0; margin-bottom: 30px; letter-spacing: 2px;">打刻</h2>
+            <h2 id="modalTitle" style="color: #333; margin-top: 0; margin-bottom: 30px; letter-spacing: 2px;">登録</h2>
 
             <form id="modalForm" method="post" action="">
                 <input type="text" name="staffCd" placeholder="社員CD" required style="width: 100%; box-sizing: border-box; padding: 15px; font-size: 20px; margin-bottom: 20px; border-radius: 15px; border: 2px solid #ddd; outline: none; color: #333;">
+
+                <div id="modalGroupName" style="display: none; margin-bottom: 20px;">
+                    <input type="text" name="name" placeholder="氏名" style="width: 100%; box-sizing: border-box; padding: 15px; font-size: 20px; border-radius: 15px; border: 2px solid #ddd; outline: none; color: #333;">
+                </div>
+
                 <input type="password" name="password" placeholder="パスワード" required style="width: 100%; box-sizing: border-box; padding: 15px; font-size: 20px; margin-bottom: 30px; border-radius: 15px; border: 2px solid #ddd; outline: none; color: #333;">
+
                 <button type="submit" style="width: 100%; padding: 15px; font-size: 24px; font-weight: bold; background: #2a5298; color: white; border: none; border-radius: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(42, 82, 152, 0.4);">
                     確定
                 </button>

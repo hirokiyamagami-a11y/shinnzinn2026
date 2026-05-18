@@ -1,30 +1,33 @@
-﻿// ==========================================
-// 🌟 1. モーダル操作用の関数
-// ==========================================
-
-function openModal(actionType) {
+﻿function openModal(actionType) {
     var modal = document.getElementById('authModal');
     var title = document.getElementById('modalTitle');
     var form = document.getElementById('modalForm');
+    // 🌟 追加：氏名入力欄のグループを取得
+    var nameGroup = document.getElementById('modalGroupName');
 
     if (actionType === 'CheckIn') {
         title.innerText = '出勤';
         title.style.color = '#96c93d';
         form.action = '/Login/CheckIn';
+        if (nameGroup) nameGroup.style.display = 'none';
     } else if (actionType === 'CheckOut') {
         title.innerText = '退勤';
         title.style.color = '#ff512f';
         form.action = '/Login/CheckOut';
+        if (nameGroup) nameGroup.style.display = 'none'; 
+    } else if (actionType === 'Register') {
+        title.innerText = '新規登録';
+        title.style.color = '#00b09b';
+        form.action = '/Login/Register';
+        if (nameGroup) nameGroup.style.display = 'block';
     } else if (actionType === 'Details') {
-        // 詳細ボタン用の設定
         title.innerText = '本人確認（詳細）';
         title.style.color = '#2a5298';
         form.action = '/Login/AuthenticateDetails';
+        if (nameGroup) nameGroup.style.display = 'none'; 
     }
     modal.style.display = 'flex';
-}
-
-function closeModal() {
+} function closeModal() {
     document.getElementById('authModal').style.display = 'none';
 }
 
@@ -122,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // 各ボタンの要素取得
     var btnCheckIn = document.getElementById('btnCheckIn');
     var btnCheckOut = document.getElementById('btnCheckOut');
+    var btnRegister = document.getElementById('btnRegister');
     var btnDetails = document.getElementById('btnDetails'); // 詳細ボタン
     var btnCloseModal = document.getElementById('btnCloseModal');
     var btnCloseResultModal = document.getElementById('btnCloseResultModal');
@@ -129,8 +133,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // クリックイベントの登録
     if (btnCheckIn) btnCheckIn.addEventListener('click', () => openModal('CheckIn'));
     if (btnCheckOut) btnCheckOut.addEventListener('click', () => openModal('CheckOut'));
+    if (btnRegister) btnRegister.addEventListener('click', () => openModal('Register'));
     if (btnDetails) btnDetails.addEventListener('click', () => openModal('Details'));
-
     if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
     if (btnCloseResultModal) btnCloseResultModal.addEventListener('click', closeResultModal);
 
