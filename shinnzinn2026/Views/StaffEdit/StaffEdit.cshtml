@@ -13,6 +13,44 @@
         overflow-x: hidden;
     }
 
+    /* 🌸 共通デザインのクラス化 🌸 */
+    .page-wrapper {
+        background-color: #2e4a7d;
+        min-height: 100vh;
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        padding: 3rem 1rem;
+        color: #ffffff;
+    }
+
+    .main-card {
+        background-color: #3b598f;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 3rem;
+    }
+
+    /* フォーム周り */
+    .form-label-custom {
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-custom {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        color: #ffffff;
+        padding: 0.8rem 1rem;
+    }
+
+    .input-readonly {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        pointer-events: none;
+    }
+
     .glass-input-focus:focus {
         background-color: rgba(255, 255, 255, 0.15) !important;
         border-color: #8cc63f !important;
@@ -20,90 +58,139 @@
         color: #ffffff !important;
         outline: none !important;
     }
+
+    /* エラーメッセージ */
+    .error-box {
+        background-color: rgba(255, 99, 132, 0.2);
+        border: 1px solid #ff6384;
+        color: #ffdbe0;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    /* ボタン群 */
+    .btn-save {
+        background: linear-gradient(135deg, #42e695, #3bb2b8);
+        color: #ffffff;
+        border-radius: 50px;
+        padding: 1rem;
+        border: none;
+        box-shadow: 0 5px 15px rgba(66, 230, 149, 0.3);
+    }
+
+    .btn-delete-trigger {
+        background-color: rgba(255, 99, 132, 0.15);
+        border: 1px solid #ff6384;
+        color: #ffdbe0;
+        border-radius: 50px;
+        padding: 1rem;
+        transition: all 0.3s;
+    }
+
+    .btn-cancel {
+        background-color: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.7);
+        border-radius: 50px;
+        padding: 1rem;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* モーダル用 */
+    .modal-custom {
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        background-color: #ffffff;
+    }
+
+    .btn-modal-primary {
+        background-color: #3b598f;
+        color: #ffffff;
+        border-radius: 12px;
+        padding: 0.8rem 2rem;
+        width: 100%;
+    }
+
+    .btn-modal-danger {
+        background-color: #ff6384;
+        color: #ffffff;
+        border-radius: 12px;
+        padding: 1rem;
+    }
+
+    .btn-modal-cancel {
+        background-color: #f1f3f5;
+        color: #495057;
+        border-radius: 12px;
+        padding: 1rem;
+    }
 </style>
 
-<div style="background-color: #2e4a7d; min-height: 100vh; width: 100vw; margin-left: calc(50% - 50vw); padding: 3rem 1rem; color: #ffffff;">
+<div class="page-wrapper">
     <div class="container" style="max-width: 600px;">
 
         @* --- 編集カード --- *@
-        <div style="background-color: #3b598f; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); padding: 3rem;">
-
+        <div class="main-card">
             <div class="text-center mb-5">
                 <div class="mb-2 fw-bold" style="letter-spacing: 0.3em; font-size: 0.9rem; color: #8cc63f;">USER EDIT</div>
-                <h2 class="display-6 fw-bold mb-0" style="color: #ffffff;">ユーザー編集</h2>
+                <h2 class="display-6 fw-bold mb-0 text-white">ユーザー編集</h2>
             </div>
 
             @* エラーメッセージ *@
             @if (ViewBag.ErrorMessage != null)
             {
-                <div style="background-color: rgba(255, 99, 132, 0.2); border: 1px solid #ff6384; color: #ffdbe0; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; text-align: center; font-weight: bold;">
-                    @ViewBag.ErrorMessage
-                </div>
+                <div class="error-box">@ViewBag.ErrorMessage</div>
             }
 
             <form asp-action="StaffEdit" method="post">
-
-                @* 隠しデータとしてユーザーコードを送る *@
                 <input type="hidden" name="StaffCd" value="@Model.StaffCd" />
 
-                @* 1. ユーザーコード *@
                 <div class="mb-4">
-                    <label style="color: rgba(255, 255, 255, 0.7); font-weight: 600; margin-bottom: 0.5rem;">ユーザーコード</label>
-                    <input type="text" class="form-control glass-input-focus" value="@Model.StaffCd" tabindex="-1" style="pointer-events: none; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: #ffffff; padding: 0.8rem 1rem;" readonly>
+                    <label class="form-label-custom">ユーザーコード</label>
+                    <input type="text" class="form-control input-custom input-readonly glass-input-focus" value="@Model.StaffCd" tabindex="-1" readonly>
                 </div>
 
-                @* 2. 名前 *@
                 <div class="mb-4">
-                    <label style="color: rgba(255, 255, 255, 0.7); font-weight: 600; margin-bottom: 0.5rem;">名前</label>
-                    <input type="text" class="form-control glass-input-focus" name="Name" value="@Model.Name" style="background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: #ffffff; padding: 0.8rem 1rem;" required>
+                    <label class="form-label-custom">名前</label>
+                    <input type="text" class="form-control input-custom glass-input-focus" name="Name" value="@Model.Name" required>
                 </div>
 
-                @* 3. パスワード *@
                 <div class="mb-4">
-                    <label style="color: rgba(255, 255, 255, 0.7); font-weight: 600; margin-bottom: 0.5rem;">新しいパスワード</label>
-                    <input type="password" class="form-control glass-input-focus" name="Password" placeholder="変更する場合のみ入力" style="background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: #ffffff; padding: 0.8rem 1rem;">
+                    <label class="form-label-custom">新しいパスワード</label>
+                    <input type="password" class="form-control input-custom glass-input-focus" name="Password" placeholder="変更する場合のみ入力">
                 </div>
 
-                @* 4. パスワード再入力 *@
                 <div class="mb-5">
-                    <label style="color: rgba(255, 255, 255, 0.7); font-weight: 600; margin-bottom: 0.5rem;">パスワード（再入力）</label>
-                    <input type="password" class="form-control glass-input-focus" name="PasswordConfirm" placeholder="変更する場合のみ入力" style="background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: #ffffff; padding: 0.8rem 1rem;">
+                    <label class="form-label-custom">パスワード（再入力）</label>
+                    <input type="password" class="form-control input-custom glass-input-focus" name="PasswordConfirm" placeholder="変更する場合のみ入力">
                 </div>
 
-                @* --- 保存ボタン --- *@
+                @* --- 保存・削除・キャンセルボタン --- *@
                 <div class="d-grid gap-3">
-                    <button type="submit" class="btn btn-lg fw-bold" style="background: linear-gradient(135deg, #42e695, #3bb2b8); color: #ffffff; border-radius: 50px; padding: 1rem; border: none; box-shadow: 0 5px 15px rgba(66, 230, 149, 0.3);">
-                        変更を保存する
-                    </button>
-
-                    @* 削除ボタン *@
-                    <button type="button" class="btn btn-lg fw-bold" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" style="background-color: rgba(255, 99, 132, 0.15); border: 1px solid #ff6384; color: #ffdbe0; border-radius: 50px; padding: 1rem; transition: all 0.3s;">
-                        ユーザーを削除する
-                    </button>
-
-                    <a asp-controller="StaffList" asp-action="StaffList" class="btn btn-lg fw-bold text-decoration-none" style="background-color: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); border-radius: 50px; padding: 1rem; border: 1px solid rgba(255,255,255,0.1);">
-                        キャンセル
-                    </a>
+                    <button type="submit" class="btn btn-lg fw-bold btn-save">変更を保存する</button>
+                    <button type="button" class="btn btn-lg fw-bold btn-delete-trigger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">ユーザーを削除する</button>
+                    <a asp-controller="StaffList" asp-action="StaffList" class="btn btn-lg fw-bold text-decoration-none btn-cancel">キャンセル</a>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-@* 成功ポップアップ（モーダル） *@
+@* --- 以降はモーダル群（画面の外） --- *@
+
+@* 成功ポップアップ *@
 @if (ViewBag.SuccessMessage != null)
 {
     <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff;">
+            <div class="modal-content modal-custom">
                 <div class="modal-body text-center" style="padding: 3rem 2rem;">
-
                     <i class="fa-solid fa-circle-check mb-3" style="font-size: 4rem; color: #8cc63f;"></i>
                     <h4 class="fw-bold mb-4" style="color: #333333;">@ViewBag.SuccessMessage</h4>
-
-                    <a asp-controller="StaffList" asp-action="StaffList" class="btn btn-lg fw-bold" style="background-color: #3b598f; color: #ffffff; border-radius: 12px; padding: 0.8rem 2rem; width: 100%;">
-                        社員一覧へ戻る
-                    </a>
+                    <a asp-controller="StaffList" asp-action="StaffList" class="btn btn-lg fw-bold btn-modal-primary">社員一覧へ戻る</a>
                 </div>
             </div>
         </div>
@@ -117,31 +204,20 @@
     </script>
 }
 
-@* 削除確認ポップアップ（モーダル） *@
+@* 削除確認ポップアップ *@
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff;">
+        <div class="modal-content modal-custom">
             <div class="modal-body text-center" style="padding: 3rem 2rem;">
-
                 <i class="fa-solid fa-triangle-exclamation mb-3" style="font-size: 4rem; color: #ff6384;"></i>
                 <h4 class="fw-bold mb-4" style="color: #333333;">本当に削除しますか？</h4>
-                <p style="color: #666666; font-size: 0.9rem; margin-bottom: 2rem;">
-                    一覧から表視されなくなり、ログインもできなくなります。よろしいですか？
-                </p>
+                <p style="color: #666666; font-size: 0.9rem; margin-bottom: 2rem;">一覧から表示されなくなり、ログインもできなくなります。よろしいですか？</p>
 
-                @* 削除用の別フォーム。StaffDelete アクションへデータを送る *@
                 <form asp-action="StaffDelete" method="post" class="d-grid gap-3">
                     <input type="hidden" name="StaffCd" value="@Model.StaffCd" />
-
-                    <button type="submit" class="btn btn-lg fw-bold" style="background-color: #ff6384; color: #ffffff; border-radius: 12px; padding: 1rem;">
-                        削除
-                    </button>
-
-                    <button type="button" class="btn btn-lg fw-bold" data-bs-dismiss="modal" style="background-color: #f1f3f5; color: #495057; border-radius: 12px; padding: 1rem;">
-                        キャンセル
-                    </button>
+                    <button type="submit" class="btn btn-lg fw-bold btn-modal-danger">削除</button>
+                    <button type="button" class="btn btn-lg fw-bold btn-modal-cancel" data-bs-dismiss="modal">キャンセル</button>
                 </form>
-
             </div>
         </div>
     </div>
