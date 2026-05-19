@@ -87,16 +87,14 @@
     @* スマホ対応用のstyle *@
     <style>
             @@media (max-width: 885px) {
-                /* ① 親の部屋は「縦並び」にする */
                 #realtimeClock {
                     flex-direction: column !important;
                     align-items: center !important;
                     font-size: 40px !important;
                 }
-                /* ⭕ cshtmlの下部にある命令 */
                 .clock-time {
                     display: flex !important;
-                    flex-direction: row !important; /* これが縦並びを横並びに引き戻します */
+                    flex-direction: row !important; 
                     justify-content: center;
                 }
             }

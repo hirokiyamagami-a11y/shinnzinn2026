@@ -17,13 +17,17 @@ namespace shinnzinn2026.Controllers
         [HttpGet]
         public async Task<IActionResult> StaffEdit(string id)
         {
+            var loginStaffCd = HttpContext.Session.GetString("LoginStaffCd");
+            if (string.IsNullOrEmpty(loginStaffCd)) return RedirectToAction("Login", "Login");
+
+            var loginUser = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == loginStaffCd);
+            if (loginUser == null || loginUser.ManagerFlag != 1) return RedirectToAction("Login", "Login");
+
             var staff = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == id);
             if (staff == null) return NotFound();
 
             return View(staff);
-        }
-
-        // 2. 画面から「データを受け取って保存する（POST）」ための扉
+        }        // 2. 画面から「データを受け取って保存する（POST）」ための扉
         [HttpPost]
         public async Task<IActionResult> StaffEdit(string StaffCd, string Name, string Password, string PasswordConfirm)
         {
