@@ -171,11 +171,11 @@
             <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #ffffff;">
                 <div class="modal-body text-center" style="padding: 3rem 2rem;">
 
-                    @* 爽やかなグリーンのチェックマークよ！ *@
+                    @* グリーンのチェックマーク *@
                     <i class="fa-solid fa-circle-check mb-3" style="font-size: 4rem; color: #8cc63f;"></i>
                     <h4 class="fw-bold mb-4" style="color: #333333;">@TempData["SuccessMessage"]</h4>
 
-                    @* 閉じるボタン（確認を押したらポップアップが閉じて、最新の一覧が見れるわ） *@
+                    @* 閉じるボタン *@
                     <button type="button" class="btn btn-lg fw-bold" data-bs-dismiss="modal" style="background-color: #3b598f; color: #ffffff; border-radius: 12px; padding: 0.8rem 2rem; width: 100%;">
                         確認
                     </button>
@@ -192,3 +192,37 @@
         });
     </script>
 }
+@* 🌸 無操作による自動ログアウト機能 🌸 *@
+<script>
+    // DOMが読み込まれたらタイマーを準備する
+    document.addEventListener("DOMContentLoaded", function () {
+
+        let timeout;
+
+        // ここで放置までの制限時間を設定する
+        // 例：10分 = 10 * 60 * 1000 ミリ秒
+        const limitTime = 3 * 60 * 1000;
+
+        // タイマーをリセットする関数
+        function resetTimer() {
+            // 前のタイマーをキャンセル
+            clearTimeout(timeout);
+            // 新しいタイマーをセットし直す
+            timeout = setTimeout(function () {
+                // 時間切れになったら、ログイン画面へ強制リダイレクト
+                window.location.href = '/Login/Login';
+            }, limitTime);
+        }
+
+        // ユーザーが「何か操作した」とみなすイベントのリストよ
+        // 画面上でこれらが起きたら、すかさずタイマーをリセットするの！
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+        document.onclick = resetTimer;
+        document.onscroll = resetTimer;
+
+        // 最初に1回タイマーをスタートさせておくわね
+        resetTimer();
+    });
+</script>
