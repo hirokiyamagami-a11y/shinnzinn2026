@@ -3,143 +3,16 @@
     ViewData["Title"] = "ユーザー編集";
 }
 
-<style>
-    header, footer {
-        display: none !important;
-    }
-
-    body {
-        background-color: #2e4a7d !important;
-        overflow-x: hidden;
-    }
-
-    /* 🌸 共通デザインのクラス化 🌸 */
-    .page-wrapper {
-        background-color: #2e4a7d;
-        min-height: 100vh;
-        width: 100vw;
-        margin-left: calc(50% - 50vw);
-        padding: 3rem 1rem;
-        color: #ffffff;
-    }
-
-    .main-card {
-        background-color: #3b598f;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        padding: 3rem;
-    }
-
-    /* フォーム周り */
-    .form-label-custom {
-        color: rgba(255, 255, 255, 0.7);
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-
-    .input-custom {
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 12px;
-        color: #ffffff;
-        padding: 0.8rem 1rem;
-    }
-
-    .input-readonly {
-        background-color: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        pointer-events: none;
-    }
-
-    .glass-input-focus:focus {
-        background-color: rgba(255, 255, 255, 0.15) !important;
-        border-color: #8cc63f !important;
-        box-shadow: 0 0 10px rgba(140, 198, 63, 0.3) !important;
-        color: #ffffff !important;
-        outline: none !important;
-    }
-
-    /* エラーメッセージ */
-    .error-box {
-        background-color: rgba(255, 99, 132, 0.2);
-        border: 1px solid #ff6384;
-        color: #ffdbe0;
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        text-align: center;
-        font-weight: bold;
-    }
-
-    /* ボタン群 */
-    .btn-save {
-        background: linear-gradient(135deg, #42e695, #3bb2b8);
-        color: #ffffff;
-        border-radius: 50px;
-        padding: 1rem;
-        border: none;
-        box-shadow: 0 5px 15px rgba(66, 230, 149, 0.3);
-    }
-
-    .btn-delete-trigger {
-        background-color: rgba(255, 99, 132, 0.15);
-        border: 1px solid #ff6384;
-        color: #ffdbe0;
-        border-radius: 50px;
-        padding: 1rem;
-        transition: all 0.3s;
-    }
-
-    .btn-cancel {
-        background-color: rgba(255,255,255,0.05);
-        color: rgba(255,255,255,0.7);
-        border-radius: 50px;
-        padding: 1rem;
-        border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    /* モーダル用 */
-    .modal-custom {
-        border-radius: 20px;
-        border: none;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        background-color: #ffffff;
-    }
-
-    .btn-modal-primary {
-        background-color: #3b598f;
-        color: #ffffff;
-        border-radius: 12px;
-        padding: 0.8rem 2rem;
-        width: 100%;
-    }
-
-    .btn-modal-danger {
-        background-color: #ff6384;
-        color: #ffffff;
-        border-radius: 12px;
-        padding: 1rem;
-    }
-
-    .btn-modal-cancel {
-        background-color: #f1f3f5;
-        color: #495057;
-        border-radius: 12px;
-        padding: 1rem;
-    }
-</style>
+<link rel="stylesheet" href="~/css/staff.css" asp-append-version="true" />
 
 <div class="page-wrapper">
     <div class="container" style="max-width: 600px;">
-
-        @* --- 編集カード --- *@
         <div class="main-card">
             <div class="text-center mb-5">
                 <div class="mb-2 fw-bold" style="letter-spacing: 0.3em; font-size: 0.9rem; color: #8cc63f;">USER EDIT</div>
                 <h2 class="display-6 fw-bold mb-0 text-white">ユーザー編集</h2>
             </div>
 
-            @* エラーメッセージ *@
             @if (ViewBag.ErrorMessage != null)
             {
                 <div class="error-box">@ViewBag.ErrorMessage</div>
@@ -168,7 +41,6 @@
                     <input type="password" class="form-control input-custom glass-input-focus" name="PasswordConfirm" placeholder="変更する場合のみ入力">
                 </div>
 
-                @* --- 保存・削除・キャンセルボタン --- *@
                 <div class="d-grid gap-3">
                     <button type="submit" class="btn btn-lg fw-bold btn-save">変更を保存する</button>
                     <button type="button" class="btn btn-lg fw-bold btn-delete-trigger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">ユーザーを削除する</button>
@@ -179,9 +51,7 @@
     </div>
 </div>
 
-@* --- 以降はモーダル群（画面の外） --- *@
-
-@* 成功ポップアップ *@
+@* --- モーダル群 --- *@
 @if (ViewBag.SuccessMessage != null)
 {
     <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -195,7 +65,6 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var successModal = new bootstrap.Modal(document.getElementById('successModal'));
@@ -204,7 +73,6 @@
     </script>
 }
 
-@* 削除確認ポップアップ *@
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal-custom">
