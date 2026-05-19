@@ -79,6 +79,9 @@ namespace shinnzinn2026.Controllers
             vm.EditorColors = staffColorMap;
 
             double total = 0;
+            double totalOT = 0;
+            double totalNight = 0;
+
             int daysInMonth = DateTime.DaysInMonth(vm.SelectedYear, vm.SelectedMonth);
 
             for (int i = 1; i <= daysInMonth; i++)
@@ -93,36 +96,78 @@ namespace shinnzinn2026.Controllers
                 var work = dbWorks.FirstOrDefault(w => w.WorkDate.Date == date);
                 string dateKey = date.ToString("yyyyMMdd");
 
+                double dailyTotal = 0;
+                double dailyOT = 0;
+                double dailyNight = 0;
+
                 if (work != null)
                 {
                     vm.AttendanceList.Add(work);
 
-                    if (work.Remarks != null && work.Remarks.Contains("[有給:"))
+                    bool isPaidLeave = work.Remarks != null && work.Remarks.Contains("[有給:");
+
+                    if (isPaidLeave)
                     {
-                        total += 8.0;
+                        dailyTotal = 8.0;
                     }
                     else if (work.AttendanceTime.HasValue && work.LeaveTime.HasValue)
                     {
-                        total += (work.LeaveTime.Value - work.AttendanceTime.Value - (work.RestTime ?? TimeSpan.Zero)).TotalHours;
+                        // 総労働時間
+                        dailyTotal = (work.LeaveTime.Value - work.AttendanceTime.Value - (work.RestTime ?? TimeSpan.Zero)).TotalHours;
+                        if (dailyTotal < 0) dailyTotal = 0;
+
+                        // 🌟 追加：残業時間（8時間を超えた分）
+                        dailyOT = dailyTotal > 8.0 ? dailyTotal - 8.0 : 0;
+
+                        // 🌟 追加：深夜労働（22:00 〜 翌05:00の重複時間を計算）
+                        DateTime a = work.AttendanceTime.Value;
+                        DateTime l = work.LeaveTime.Value;
+
+                        DateTime p1Start = a.Date.AddDays(-1).AddHours(22);
+                        DateTime p1End = a.Date.AddHours(5);
+                        DateTime p2Start = a.Date.AddHours(22);
+                        DateTime p2End = a.Date.AddDays(1).AddHours(5);
+
+                        double nightOverlap = 0;
+                        if (a < p1End && l > p1Start)
+                        {
+                            var os = a > p1Start ? a : p1Start;
+                            var oe = l < p1End ? l : p1End;
+                            nightOverlap += (oe - os).TotalHours;
+                        }
+                        if (a < p2End && l > p2Start)
+                        {
+                            var os = a > p2Start ? a : p2Start;
+                            var oe = l < p2End ? l : p2End;
+                            nightOverlap += (oe - os).TotalHours;
+                        }
+                        dailyNight = Math.Max(0, nightOverlap);
                     }
 
                     if (work.UpdatedId.HasValue && work.UpdatedId.Value != 0 && staffLastNameMap.ContainsKey((int)work.UpdatedId.Value))
-                    {
                         vm.EditorNames[dateKey] = staffLastNameMap[(int)work.UpdatedId.Value];
-                    }
-                    else { vm.EditorNames[dateKey] = "-"; }
+                    else
+                        vm.EditorNames[dateKey] = "-";
                 }
                 else
                 {
                     vm.AttendanceList.Add(new WorkModel { Id = 0, StaffCd = vm.TargetStaffCd, WorkDate = date, RestTime = TimeSpan.FromMinutes(60) });
                     vm.EditorNames[dateKey] = "-";
                 }
+
+                vm.DailyOvertime[dateKey] = Math.Round(dailyOT, 2);
+                vm.DailyNightHours[dateKey] = Math.Round(dailyNight, 2);
+
+                total += dailyTotal;
+                totalOT += dailyOT;
+                totalNight += dailyNight;
             }
 
             vm.TotalHours = Math.Round(total, 2);
+            vm.TotalOvertimeHours = Math.Round(totalOT, 2);
+            vm.TotalNightHours = Math.Round(totalNight, 2);
         }
 
-        // 🌟 修正：1つしか選べないため、statusType という1つの変数で受け取ります
         [HttpPost]
         public async Task<IActionResult> UpdateWorkRecord(
             long workId, string? attendanceTimeStr, string? leaveTimeStr, string? restTimeStr,
@@ -147,16 +192,11 @@ namespace shinnzinn2026.Controllers
                 if (work == null) return RedirectToAction("WorkList", new { SelectedYear = year, SelectedMonth = month, SelectedWeek = week, targetStaffCd = targetStaffCd });
             }
 
-            // 🌟 修正：ラジオボタン（statusType）に基づいて備考文字列を生成
             string newRemarks = "";
             if (statusType == "late") newRemarks = $"[遅刻:{lateReason ?? ""}]";
             else if (statusType == "early") newRemarks = $"[早退:{earlyReason ?? ""}]";
             else if (statusType == "absence") newRemarks = $"[欠勤:{absenceReason ?? ""}]";
-            else if (statusType == "paidLeave")
-            {
-                // 有給は管理者のみ設定可能ですが、すでに設定されているものを一般社員が保存した場合は維持します
-                newRemarks = $"[有給:{paidLeaveType ?? "全日"}]";
-            }
+            else if (statusType == "paidLeave") newRemarks = $"[有給:{paidLeaveType ?? "全日"}]";
 
             work.Remarks = newRemarks;
             work.UpdatedTime = DateTime.Now;
@@ -167,7 +207,15 @@ namespace shinnzinn2026.Controllers
                 if (TimeSpan.TryParse(attendanceTimeStr, out var at)) work.AttendanceTime = work.WorkDate.Date.Add(at);
                 else if (string.IsNullOrEmpty(attendanceTimeStr)) work.AttendanceTime = null;
 
-                if (TimeSpan.TryParse(leaveTimeStr, out var lt)) work.LeaveTime = work.WorkDate.Date.Add(lt);
+                if (TimeSpan.TryParse(leaveTimeStr, out var lt))
+                {
+                    work.LeaveTime = work.WorkDate.Date.Add(lt);
+                    // 🌟 追加：日またぎ（20:00出勤〜02:00退勤など）の保存に対応！
+                    if (work.AttendanceTime.HasValue && work.LeaveTime < work.AttendanceTime)
+                    {
+                        work.LeaveTime = work.LeaveTime.Value.AddDays(1);
+                    }
+                }
                 else if (string.IsNullOrEmpty(leaveTimeStr)) work.LeaveTime = null;
 
                 if (TimeSpan.TryParse(restTimeStr, out var rt)) work.RestTime = rt;

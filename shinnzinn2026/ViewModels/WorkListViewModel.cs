@@ -13,13 +13,19 @@ namespace shinnzinn2026.ViewModels
         public string TargetStaffCd { get; set; } = "";
         public string TargetUserName { get; set; } = "";
         public bool IsViewingSelf => LoginStaffCd == TargetStaffCd;
+
         public List<WorkModel> AttendanceList { get; set; } = new();
+
+        // 🌟 追加：月間（週間）の各種合計時間
         public double TotalHours { get; set; }
+        public double TotalOvertimeHours { get; set; }
+        public double TotalNightHours { get; set; }
 
-        // 🌟 苗字を格納する箱 (Key: 日付文字列)
-        public Dictionary<string, string> EditorNames { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> EditorNames { get; set; } = new();
+        public Dictionary<int, string> EditorColors { get; set; } = new();
 
-        // 🌟 編集者ごとの色を格納する箱 (Key: スタッフID)
-        public Dictionary<int, string> EditorColors { get; set; } = new Dictionary<int, string>();
+        // 🌟 追加：日ごとの残業・深夜時間の計算結果をViewに渡す箱
+        public Dictionary<string, double> DailyOvertime { get; set; } = new();
+        public Dictionary<string, double> DailyNightHours { get; set; } = new();
     }
 }
