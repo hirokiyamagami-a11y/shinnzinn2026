@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using shinnzinn2026.Data;   // ApplicationDbContext がある場所
-using shinnzinn2026.Models;
 
 namespace shinnzinn2026.Controllers
 {
@@ -15,16 +14,26 @@ namespace shinnzinn2026.Controllers
         }
 
         // 引数に「page」を追加。何も指定されない時は1ページ目（page = 1）になる
+        // 引数に「page」を追加。何も指定されない時は1ページ目（page = 1）になる
         public async Task<IActionResult> StaffList(int page = 1)
         {
+            var loginStaffCd = HttpContext.Session.GetString("LoginStaffCd");
+            if (string.IsNullOrEmpty(loginStaffCd)) return RedirectToAction("Login", "Login");
+
+            var loginUser = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == loginStaffCd);
+            if (loginUser == null || loginUser.ManagerFlag != 1)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
             try
             {
-                int pageSize = 5; // 1ページに表示する人数
+                int pageSize = 5;
 
-                // 全体で何人いるか数えて、全部で何ページになるか計算する
                 int totalItems = await _context.Staffs
                     .Where(s => s.DeleteFlag == 0)
                     .CountAsync();
+
                 int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
                 // 指定されたページの5人だけを切り取って取得

@@ -12,29 +12,29 @@
         title.style.color = '#96c93d';
         form.action = '/Login/CheckIn';
         if (nameGroup) nameGroup.style.display = 'none';
-        if (confirmGroup) confirmGroup.style.display = 'none';       
-        if (passwordInput) passwordInput.style.marginBottom = '30px'; 
+        if (confirmGroup) confirmGroup.style.display = 'none';
+        if (passwordInput) passwordInput.style.marginBottom = '30px';
     } else if (actionType === 'CheckOut') {
         title.innerText = '退勤';
         title.style.color = '#ff512f';
         form.action = '/Login/CheckOut';
         if (nameGroup) nameGroup.style.display = 'none';
-        if (confirmGroup) confirmGroup.style.display = 'none';       
-        if (passwordInput) passwordInput.style.marginBottom = '30px'; 
+        if (confirmGroup) confirmGroup.style.display = 'none';
+        if (passwordInput) passwordInput.style.marginBottom = '30px';
     } else if (actionType === 'Register') {
         title.innerText = '新規登録';
         title.style.color = '#2a5298';
         form.action = '/Login/Register';
         if (nameGroup) nameGroup.style.display = 'block';
-        if (confirmGroup) confirmGroup.style.display = 'block';      
-        if (passwordInput) passwordInput.style.marginBottom = '20px'; 
+        if (confirmGroup) confirmGroup.style.display = 'block';
+        if (passwordInput) passwordInput.style.marginBottom = '20px';
     } else if (actionType === 'Details') {
         title.innerText = '本人確認（詳細）';
         title.style.color = '#2a5298';
         form.action = '/Login/AuthenticateDetails';
         if (nameGroup) nameGroup.style.display = 'none';
-        if (confirmGroup) confirmGroup.style.display = 'none';     
-        if (passwordInput) passwordInput.style.marginBottom = '30px'; 
+        if (confirmGroup) confirmGroup.style.display = 'none';
+        if (passwordInput) passwordInput.style.marginBottom = '30px';
     }
     modal.style.display = 'flex';
 } function closeModal() {
@@ -91,13 +91,14 @@ function startClock() {
                 <span id="clock-${id}" style="display: inline-block;">${val}</span>
             </span>`;
 
+        // ✨ 目指す形（時間パーツを新しいタグで挟み込む）
         clock.innerHTML = `
-            <span style="font-size: 0.5em; opacity: 0.8; margin-right: 15px;">${y}/${mon}/${d}</span>
-            ${wrap(h, 'h')} <span id="colon1" style="margin: 0 5px;">:</span>
-            ${wrap(min, 'm')} <span id="colon2" style="margin: 0 5px;">:</span>
-            ${wrap(sec, 's')}
-        `;
-
+    <span style="font-size: 0.5em; opacity: 0.8; margin-right: 15px;">${y}/${mon}/${d}</span>
+    
+    <span class="clock-time"> ${wrap(h, 'h')} <span id="colon1" style="margin: 0 5px;">:</span>
+        ${wrap(min, 'm')} <span id="colon2" style="margin: 0 5px;">:</span>
+        ${wrap(sec, 's')}
+    </span> `;
         ['h', 'm', 's'].forEach(type => {
             if (currentTime[type] !== lastTime[type]) {
                 const el = document.getElementById(`clock-${type}`);

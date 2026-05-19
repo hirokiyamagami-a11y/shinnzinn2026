@@ -84,7 +84,21 @@
             </button>
         </div>
     </div>
-
+    @* スマホ対応用のstyle *@
+    <style>
+            @@media (max-width: 885px) {
+                #realtimeClock {
+                    flex-direction: column !important;
+                    align-items: center !important;
+                    font-size: 40px !important;
+                }
+                .clock-time {
+                    display: flex !important;
+                    flex-direction: row !important; 
+                    justify-content: center;
+                }
+            }
+    </style>
     <script src="/js/login.js"></script>
 </body>
 </html>
