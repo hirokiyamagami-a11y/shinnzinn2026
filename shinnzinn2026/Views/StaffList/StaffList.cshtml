@@ -214,8 +214,7 @@
             }, limitTime);
         }
 
-        // ユーザーが「何か操作した」とみなすイベントのリストよ
-        // 画面上でこれらが起きたら、すかさずタイマーをリセットするの！
+        // ユーザーが「何か操作した」とみなすイベントのリスト
         window.onload = resetTimer;
         document.onmousemove = resetTimer;
         document.onkeypress = resetTimer;
