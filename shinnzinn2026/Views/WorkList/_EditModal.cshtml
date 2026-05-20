@@ -1,0 +1,106 @@
+﻿@using shinnzinn2026.Models
+@using shinnzinn2026.ViewModels
+@model WorkModel
+@{
+    // 親の画面から渡された変数を受け取ります
+    bool isManagerMode = ViewData["IsManagerMode"] as bool? ?? false;
+    int selectedWeek = ViewData["SelectedWeek"] as int? ?? 0;
+    string targetStaffCd = ViewData["TargetStaffCd"] as string ?? "";
+    int year = ViewData["SelectedYear"] as int? ?? DateTime.Now.Year;
+    int month = ViewData["SelectedMonth"] as int? ?? DateTime.Now.Month;
+    var parentModel = ViewData["ParentModel"] as WorkListViewModel;
+
+    string r = Model.Remarks ?? "";
+    bool isLate = r.Contains("[遅刻:");
+    bool isEarly = r.Contains("[早退:");
+    bool isAbsence = r.Contains("[欠勤:");
+    bool isPaidLeave = r.Contains("[有給:");
+}
+
+<div class="modal fade" id="editModal-@Model.WorkDate.Day" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-dark border-0 bg-white" style="border-radius: 1rem;">
+            <form asp-controller="WorkList" asp-action="UpdateWorkRecord" method="post">
+                <input type="hidden" name="workId" value="@Model.Id" />
+                <input type="hidden" name="year" value="@year" />
+                <input type="hidden" name="month" value="@month" />
+                <input type="hidden" name="day" value="@Model.WorkDate.Day" />
+                <input type="hidden" name="week" value="@selectedWeek" />
+                <input type="hidden" name="targetStaffCd" value="@targetStaffCd" />
+
+                <div class="modal-header border-0 pt-4 px-4">
+                    <h5 class="modal-title fw-bold">@Model.WorkDate.ToString("MM/dd") の実績編集</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    @if (isManagerMode)
+                    {
+                        <div class="row g-3 mb-4">
+                            <div class="col-6"><label class="form-label small text-muted">出勤</label><input type="time" name="attendanceTimeStr" class="form-control" value="@(Model.AttendanceTime?.ToString("HH:mm") ?? "00:00")" /></div>
+                            <div class="col-6"><label class="form-label small text-muted">退勤</label><input type="time" name="leaveTimeStr" class="form-control" value="@(Model.LeaveTime?.ToString("HH:mm") ?? "00:00")" /></div>
+                            <div class="col-12"><label class="form-label small text-muted">休憩</label><input type="time" name="restTimeStr" class="form-control" value="@(Model.RestTime?.ToString(@"hh\:mm") ?? "01:00")" /></div>
+                        </div>
+                    }
+
+                    <div class="p-3 bg-light rounded-3 mb-4 text-dark">
+                        <label class="form-label small fw-bold mb-2">ステータス設定</label>
+
+                        @* --- 設定なし --- *@
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="statusType" value="" id="n_@Model.WorkDate.Day" onchange="toggleStatus('@Model.WorkDate.Day', '')" @(!isLate && !isEarly && !isAbsence && !isPaidLeave ? "checked" : "")>
+                            <label class="form-check-label small" for="n_@Model.WorkDate.Day">設定なし</label>
+                        </div>
+
+                        @* --- 遅刻 --- *@
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="statusType" value="late" id="l_@Model.WorkDate.Day" onchange="toggleStatus('@Model.WorkDate.Day', 'late')" @(isLate ? "checked" : "")>
+                            <label class="form-check-label small" for="l_@Model.WorkDate.Day">遅刻</label>
+                            <input type="text" name="lateReason" id="lateReason_@Model.WorkDate.Day" class="form-control form-control-sm mt-1" style="display: @(isLate ? "block" : "none");" placeholder="理由を入力" value="@parentModel?.ExtractValue(r, "遅刻")" />
+                        </div>
+
+                        @* --- 早退（完全復活） --- *@
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="statusType" value="early" id="e_@Model.WorkDate.Day" onchange="toggleStatus('@Model.WorkDate.Day', 'early')" @(isEarly ? "checked" : "")>
+                            <label class="form-check-label small" for="e_@Model.WorkDate.Day">早退</label>
+                            <input type="text" name="earlyReason" id="earlyReason_@Model.WorkDate.Day" class="form-control form-control-sm mt-1" style="display: @(isEarly ? "block" : "none");" placeholder="理由を入力" value="@parentModel?.ExtractValue(r, "早退")" />
+                        </div>
+
+                        @* --- 欠勤（完全復活） --- *@
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="statusType" value="absence" id="a_@Model.WorkDate.Day" onchange="toggleStatus('@Model.WorkDate.Day', 'absence')" @(isAbsence ? "checked" : "")>
+                            <label class="form-check-label small" for="a_@Model.WorkDate.Day">欠勤</label>
+                            <input type="text" name="absenceReason" id="absenceReason_@Model.WorkDate.Day" class="form-control form-control-sm mt-1" style="display: @(isAbsence ? "block" : "none");" placeholder="理由を入力" value="@parentModel?.ExtractValue(r, "欠勤")" />
+                        </div>
+
+                        @* --- 有給休暇（完全復活＆管理者制御対応） --- *@
+                        @if (isManagerMode)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="statusType" value="paidLeave" id="p_@Model.WorkDate.Day" onchange="toggleStatus('@Model.WorkDate.Day', 'paidLeave')" @(isPaidLeave ? "checked" : "")>
+                                <label class="form-check-label small" for="p_@Model.WorkDate.Day">有給休暇</label>
+                                <div id="paidLeaveTypes_@Model.WorkDate.Day" class="mt-2" style="display: @(isPaidLeave ? "block" : "none");">
+                                    <select name="paidLeaveType" class="form-select form-select-sm">
+                                        @{
+                                            string pt = parentModel?.ExtractValue(r, "有給") ?? "";
+                                        }
+                                        <option value="全日" selected="@(pt == "全日")">全日</option>
+                                        <option value="午前休" selected="@(pt == "午前休")">午前休</option>
+                                        <option value="午後休" selected="@(pt == "午後休")">午後休</option>
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                        else if (isPaidLeave)
+                        {
+                            <div class="form-check"><input class="form-check-input" type="radio" checked disabled><label class="form-check-label small text-muted">有給休暇 (管理者のみ)</label></div>
+                            <input type="hidden" name="statusType" value="paidLeave" /><input type="hidden" name="paidLeaveType" value="@parentModel?.ExtractValue(r, "有給")" />
+                        }
+                    </div>
+
+                    <button type="submit" class="btn btn-lg btn-success w-100 fw-bold rounded-pill shadow-sm text-white">決定</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
