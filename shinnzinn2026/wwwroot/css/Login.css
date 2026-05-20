@@ -1,0 +1,192 @@
+﻿/* ==========================================
+   ベース背景・フォント設定
+   ========================================== */
+.bg-attendance {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    font-family: 'Segoe UI', Roboto, 'Hiragino Sans', 'Meiryo', sans-serif;
+}
+
+/* ==========================================
+   メインコンテナ（ガラスモーフィズム）
+   ========================================== */
+.container-main {
+    width: 85%;
+    max-width: 1200px;
+    padding: 100px 50px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.system-title {
+    margin-bottom: 20px;
+    font-size: 20px;
+    letter-spacing: 8px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================
+   ボタン・時計のカスタム装飾
+   ========================================== */
+.btn-glass {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    color: #fff !important;
+    font-size: 16px;
+}
+
+    .btn-glass:hover {
+        background: rgba(255, 255, 255, 0.3) !important;
+        color: #fff !important;
+    }
+
+/* ==========================================
+   時計エリアの完全決定版（シンプルに下揃え）
+   ========================================== */
+.clock-text {
+    font-size: 70px; /* 👈 秒のはみ出しを防ぐサイズ */
+    margin-bottom: 80px;
+    letter-spacing: 4px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    min-height: 100px;
+    /* 🌟 余計なGridやlh-1は廃止！純粋な横並びの下揃えにします */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+/* 🌟 日付：数字と同じ「1.2emの高さの箱」に入れて、下端でビシッと揃える */
+.clock-date {
+    font-size: 0.5em;
+    opacity: 0.8;
+    margin-right: 15px;
+    display: inline-block;
+    height: 1.2em;
+    vertical-align: bottom;
+}
+
+/* 🌟 コロン：これも数字と同じ「1.2emの高さの箱」に入れて、下端で揃える */
+.clock-colon {
+    display: inline-block;
+    height: 1.2em;
+    vertical-align: bottom;
+    margin: 0 5px;
+}.btn-attendance {
+    width: 300px;
+    height: 120px;
+    font-size: 36px;
+    letter-spacing: 8px;
+    border: none !important;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+/* 🌟 これを追記：数字全体の地面（ベースライン）を押し下げる魔法 */
+.clock-number-box {
+    /* 1.2emの箱の天井に余白を足して、数字全体を下に押し下げます */
+    padding-top: 6px !important; /* 👈 ここをミリ単位で調整してください！ */
+}
+    .btn-attendance:active {
+        transform: scale(0.96);
+    }
+
+.btn-attendance-in {
+    background: linear-gradient(135deg, #00b09b, #96c93d) !important;
+    box-shadow: 0 10px 30px rgba(0, 176, 155, 0.4);
+}
+
+.btn-attendance-out {
+    background: linear-gradient(135deg, #ff512f, #dd2476) !important;
+    box-shadow: 0 10px 30px rgba(221, 36, 118, 0.4);
+}
+
+/* ==========================================
+   モーダル関連のカスタム
+   ========================================== */
+.modal-backdrop-custom {
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.modal-content-custom {
+    width: 400px;
+}
+
+.modal-close-btn {
+    cursor: pointer;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.custom-letter-spacing {
+    letter-spacing: 2px;
+}
+
+.form-control-custom {
+    width: 100%;
+    padding: 15px !important;
+    font-size: 20px !important;
+    border-radius: 15px !important;
+    border: 2px solid #ddd !important;
+    color: #333 !important;
+}
+
+    .form-control-custom:focus {
+        border-color: #2a5298 !important;
+        box-shadow: 0 0 0 0.25rem rgba(42, 82, 152, 0.25) !important;
+    }
+
+.btn-submit-custom {
+    background: #2a5298 !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(42, 82, 152, 0.4);
+}
+
+.text-start-pre {
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+/* ==========================================
+   📱 レスポンシブ対応（横幅 885px 以下）
+   ========================================== */
+@media (max-width: 885px) {
+    .container-main {
+        padding: 80px 20px 40px 20px;
+        width: 92%;
+    }
+
+    #realtimeClock {
+        flex-direction: column !important;
+        align-items: center !important;
+        font-size: 46px !important;
+        margin-bottom: 40px;
+    }
+
+    .clock-time {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center;
+    }
+
+    .clock-date, .clock-colon {
+        padding-bottom: 0 !important;
+    }
+
+    .btn-group-responsive {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 20px !important;
+    }
+
+    .btn-attendance {
+        width: 100% !important;
+        max-width: 280px;
+        height: 80px !important;
+        font-size: 26px !important;
+        letter-spacing: 6px;
+    }
+}

@@ -37,7 +37,9 @@
         if (passwordInput) passwordInput.style.marginBottom = '30px';
     }
     modal.style.display = 'flex';
-} function closeModal() {
+}
+
+function closeModal() {
     document.getElementById('authModal').style.display = 'none';
 }
 
@@ -65,7 +67,6 @@ function closeResultModal() {
 // ==========================================
 // 🌟 2. リアルタイム時計＆押し出しアニメーション
 // ==========================================
-
 function startClock() {
     const clock = document.getElementById('realtimeClock');
     if (!clock) return;
@@ -87,18 +88,20 @@ function startClock() {
         const currentTime = { h, m: min, s: sec };
 
         const wrap = (val, id) => `
-            <span style="display: inline-block; position: relative; overflow: hidden; height: 1.2em; vertical-align: bottom;">
-                <span id="clock-${id}" style="display: inline-block;">${val}</span>
-            </span>`;
-
-        // ✨ 目指す形（時間パーツを新しいタグで挟み込む）
+    <span class="clock-number-box" style="display: inline-block; position: relative; overflow: hidden; height: 1.2em; vertical-align: bottom;">
+        <span id="clock-${id}" style="display: inline-block;">${val}</span>
+    </span>`;
+        // ✨ ズレの原因だった top: 12px を消去し、CSSで狙い撃ちするためのクラス名を足しました！
         clock.innerHTML = `
-    <span style="font-size: 0.5em; opacity: 0.8; margin-right: 15px;">${y}/${mon}/${d}</span>
-    
-    <span class="clock-time"> ${wrap(h, 'h')} <span id="colon1" style="margin: 0 5px;">:</span>
-        ${wrap(min, 'm')} <span id="colon2" style="margin: 0 5px;">:</span>
-        ${wrap(sec, 's')}
-    </span> `;
+            <span class="clock-date" style="font-size: 0.5em; opacity: 0.8; margin-right: 15px;">${y}/${mon}/${d}</span>
+            
+            <span class="clock-time">
+                ${wrap(h, 'h')} <span id="colon1" class="clock-colon" style="margin: 0 5px;">:</span>
+                ${wrap(min, 'm')} <span id="colon2" class="clock-colon" style="margin: 0 5px;">:</span>
+                ${wrap(sec, 's')}
+            </span>
+        `;
+
         ['h', 'm', 's'].forEach(type => {
             if (currentTime[type] !== lastTime[type]) {
                 const el = document.getElementById(`clock-${type}`);
@@ -128,7 +131,6 @@ function startClock() {
 // ==========================================
 // 🚀 3. メイン処理（イベントリスナー登録）
 // ==========================================
-
 document.addEventListener("DOMContentLoaded", function () {
     // 時計スタート
     startClock();
@@ -137,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var btnCheckIn = document.getElementById('btnCheckIn');
     var btnCheckOut = document.getElementById('btnCheckOut');
     var btnRegister = document.getElementById('btnRegister');
-    var btnDetails = document.getElementById('btnDetails'); // 詳細ボタン
+    var btnDetails = document.getElementById('btnDetails');
     var btnCloseModal = document.getElementById('btnCloseModal');
     var btnCloseResultModal = document.getElementById('btnCloseResultModal');
 
