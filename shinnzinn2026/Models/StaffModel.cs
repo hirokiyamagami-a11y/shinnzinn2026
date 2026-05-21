@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore; // ← これを追加（[Comment]を使うために必要）
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,16 +11,16 @@ namespace shinnzinn2026.Models
         [Key]
         [Column("id")]
         [Comment("社員ID")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // BIGSERIAL（自動採番）に対応
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required] // NOT NULL
+        [Required]
         [Column("staff_cd")]
         [MaxLength(10)]
         [Comment("社員CD")]
         public string StaffCd { get; set; } = "";
 
-        [Required] // NOT NULL
+        [Required]
         [Column("password")]
         [MaxLength(10)]
         [Comment("パスワード")]

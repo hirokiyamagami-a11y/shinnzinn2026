@@ -130,14 +130,38 @@ namespace shinnzinn2026.Controllers
         [HttpPost]
         public IActionResult Register(string staffCd, string name, string password, string confirmPassword)
         {
-            // 🌟 追加：パスワードの一致チェック
+            // =========================================================
+            // 🌟 1. Controller側での文字数・必須入力のチェック
+            // =========================================================
+
+            if (string.IsNullOrWhiteSpace(staffCd) || staffCd.Length > 10)
+            {
+                ViewBag.ErrorMessage = "社員CDは10文字以内で入力してください。";
+                return View("Login");
+            }
+
+            if (string.IsNullOrWhiteSpace(password) || password.Length > 10)
+            {
+                ViewBag.ErrorMessage = "パスワードは10文字以内で入力してください。";
+                return View("Login");
+            }
+
+            if (!string.IsNullOrWhiteSpace(name) && name.Length > 24)
+            {
+                ViewBag.ErrorMessage = "氏名は24文字以内で入力してください。";
+                return View("Login");
+            }
+
             if (password != confirmPassword)
             {
                 ViewBag.ErrorMessage = "パスワードと確認用パスワードが一致しません。";
-                return View("Login"); // 一致しなければエラーを出して打刻画面に戻る
+                return View("Login");
             }
 
-            // ① 社員CDの重複チェック
+            // =========================================================
+            // 🌟 2. データベースの確認と保存処理
+            // =========================================================
+
             var existStaff = _context.Staffs.FirstOrDefault(s => s.StaffCd == staffCd && s.DeleteFlag == 0);
             if (existStaff != null)
             {
@@ -145,7 +169,6 @@ namespace shinnzinn2026.Controllers
                 return View("Login");
             }
 
-            // ② 新しいスタッフデータを作成
             var newStaff = new StaffModel
             {
                 StaffCd = staffCd,

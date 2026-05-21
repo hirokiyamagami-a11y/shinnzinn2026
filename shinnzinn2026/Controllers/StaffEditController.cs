@@ -28,13 +28,30 @@ namespace shinnzinn2026.Controllers
 
             return View(staff);
         }        // 2. 画面から「データを受け取って保存する（POST）」ための扉
+                 // 2. 画面から「データを受け取って保存する（POST）」ための扉
         [HttpPost]
         public async Task<IActionResult> StaffEdit(string StaffCd, string Name, string Password, string PasswordConfirm)
         {
             var staff = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == StaffCd);
             if (staff == null) return NotFound();
 
-            // パスワードの入力チェック
+            // =========================================================
+            // 🌟 追加：文字数オーバーのチェック（エラーなら画面を戻す）
+            // =========================================================
+            if (!string.IsNullOrWhiteSpace(Name) && Name.Length > 24)
+            {
+                ViewBag.ErrorMessage = "氏名は24文字以内で入力してください。";
+                return View(staff); // 変更前の状態のまま画面を返す
+            }
+
+            if (!string.IsNullOrEmpty(Password) && Password.Length > 10)
+            {
+                ViewBag.ErrorMessage = "パスワードは10文字以内で入力してください。";
+                return View(staff);
+            }
+            // =========================================================
+
+            // パスワードの入力チェック（入力されている時だけ変更）
             if (!string.IsNullOrEmpty(Password) || !string.IsNullOrEmpty(PasswordConfirm))
             {
                 if (Password != PasswordConfirm)
@@ -53,16 +70,13 @@ namespace shinnzinn2026.Controllers
             if (!string.IsNullOrEmpty(loginStaffCd))
             {
                 var editor = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == loginStaffCd);
-
                 if (editor != null)
                 {
                     staff.UpdatedId = editor.Id;
                 }
             }
-            // データベースに変更を確定（保存）
-            await _context.SaveChangesAsync();
 
-            // データベースに変更を確定（保存）させる
+            // データベースに変更を確定（保存）
             await _context.SaveChangesAsync();
 
             // 成功メッセージを持たせて画面を返す
