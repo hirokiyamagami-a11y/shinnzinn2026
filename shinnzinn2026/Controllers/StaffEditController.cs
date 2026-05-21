@@ -13,7 +13,7 @@ namespace shinnzinn2026.Controllers
             _context = context;
         }
 
-        // 1. 画面を「表示する（GET）」ための扉よ
+        // 画面を「表示する（GET）」ための扉
         [HttpGet]
         public async Task<IActionResult> StaffEdit(string id)
         {
@@ -27,17 +27,16 @@ namespace shinnzinn2026.Controllers
             if (staff == null) return NotFound();
 
             return View(staff);
-        }        // 2. 画面から「データを受け取って保存する（POST）」ための扉
-                 // 2. 画面から「データを受け取って保存する（POST）」ための扉
+        }      
+
+         //  画面から「データを受け取って保存する（POST）」ための扉
         [HttpPost]
         public async Task<IActionResult> StaffEdit(string StaffCd, string Name, string Password, string PasswordConfirm)
         {
             var staff = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == StaffCd);
             if (staff == null) return NotFound();
 
-            // =========================================================
-            // 🌟 追加：文字数オーバーのチェック（エラーなら画面を戻す）
-            // =========================================================
+            // 文字数オーバーのチェック（エラーなら画面を戻す）
             if (!string.IsNullOrWhiteSpace(Name) && Name.Length > 24)
             {
                 ViewBag.ErrorMessage = "氏名は24文字以内で入力してください。";
@@ -49,7 +48,6 @@ namespace shinnzinn2026.Controllers
                 ViewBag.ErrorMessage = "パスワードは10文字以内で入力してください。";
                 return View(staff);
             }
-            // =========================================================
 
             // パスワードの入力チェック（入力されている時だけ変更）
             if (!string.IsNullOrEmpty(Password) || !string.IsNullOrEmpty(PasswordConfirm))
@@ -84,14 +82,14 @@ namespace shinnzinn2026.Controllers
             return View(staff);
         }
 
-        // ユーザーをデータベースから完全に削除（物理削除）するアクション
+        // ユーザーをデータベースから削除
         [HttpPost]
         public async Task<IActionResult> StaffDelete(string StaffCd)
         {
             var staff = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == StaffCd);
             if (staff == null) return NotFound();
 
-            // 1. 削除した人（ログイン中のユーザー）のIDを記録する
+            //  削除した人（ログイン中のユーザー）のIDを記録する
             string? loginStaffCd = HttpContext.Session.GetString("LoginStaffCd");
             if (!string.IsNullOrEmpty(loginStaffCd))
             {
@@ -102,12 +100,12 @@ namespace shinnzinn2026.Controllers
                 }
             }
 
-            // 2. 物理削除(Remove)をやめて、論理削除(フラグを立てる)に変更！
+            // 論理削除
             staff.DeleteFlag = 1;
 
             staff.UpdatedTime = DateTime.Now;
 
-            // 3. データベースに変更を確定（更新）
+            //  データベースに変更を確定（更新）
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = $"{staff.Name} さんの削除が完了しました。";
