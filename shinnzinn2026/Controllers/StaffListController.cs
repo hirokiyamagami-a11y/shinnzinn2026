@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using shinnzinn2026.ViewModels;
 using shinnzinn2026.Data;   // ApplicationDbContext がある場所
 
 namespace shinnzinn2026.Controllers
@@ -13,7 +14,6 @@ namespace shinnzinn2026.Controllers
             _context = context;
         }
 
-        // 引数に「page」を追加。何も指定されない時は1ページ目（page = 1）になる
         // 引数に「page」を追加。何も指定されない時は1ページ目（page = 1）になる
         public async Task<IActionResult> StaffList(int page = 1)
         {
@@ -47,6 +47,18 @@ namespace shinnzinn2026.Controllers
                 // 画面（View）でボタンを作るために、ページ情報を「ViewBag」に入れて送る
                 ViewBag.CurrentPage = page;
                 ViewBag.TotalPages = totalPages;
+
+                if (!string.IsNullOrEmpty(loginStaffCd))
+                {
+                    // DBからStaffCdが一致する社員データを1件検索する
+                    var loginStaff = _context.Staffs.FirstOrDefault(s => s.StaffCd == loginStaffCd);
+
+                    if (loginStaff != null)
+                    {
+                        ViewBag.LoginStaffCd = loginStaff.StaffCd;
+                        ViewBag.LoginUserName = loginStaff.Name;
+                    }
+                }
 
                 return View("StaffList", staffList);
             }

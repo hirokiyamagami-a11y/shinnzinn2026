@@ -3,11 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using shinnzinn2026.Data;
 using shinnzinn2026.ViewModels;
 using shinnzinn2026.Models;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace shinnzinn2026.Controllers
 {

@@ -9,13 +9,22 @@
 <div class="page-wrapper">
     <div class="container pb-5">
         <div class="main-card">
-            @* ログアウトボタン *@
+
+            @* ログアウトボタン (CSSの力で右上に自動配置されるわ！) *@
             <button type="button" class="btn shadow-sm responsive-logout-btn btn-logout" data-bs-toggle="modal" data-bs-target="#logoutModal">
                 <i class="fa-solid fa-right-from-bracket"></i> ログアウト
             </button>
 
-            @* タイトル *@
-            <div class="text-center mb-4">
+            @* --- 左上にログイン情報を配置 --- *@
+            <div class="text-start mb-2" style="position: relative; z-index: 1;">
+                <div class="fs-sm mb-1" style="color: rgba(255, 255, 255, 0.6);">
+                    <i class="fa-solid fa-user-circle"></i> @ViewBag.LoginStaffCd
+                </div>
+                <h6 class="fw-bold mb-0" style="color: #ffffff;">@ViewBag.LoginUserName 様</h6>
+            </div>
+
+            @* --- タイトル --- *@
+            <div class="text-center mb-4 mt-2">
                 <div class="mb-2 fw-bold" style="letter-spacing: 0.3em; font-size: 0.9rem; color: rgba(255, 255, 255, 0.6);">STAFF LIST</div>
                 <h2 class="display-5 fw-bold mb-0 text-white">社員一覧</h2>
             </div>
@@ -55,17 +64,32 @@
             }
             <nav class="mt-5">
                 <ul class="pagination justify-content-center">
+
+                    @* 「前へ」ボタン *@
                     <li class="page-item @(currentPage == 1 ? "disabled" : "")">
                         <a class="page-link" asp-action="StaffList" asp-route-page="@(currentPage - 1)" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.1); color: @(currentPage == 1 ? "rgba(255, 255, 255, 0.3)" : "#ffffff");">前へ</a>
                     </li>
 
+                    @* ページ番号と「…」を自動計算するループ *@
                     @for (int i = 1; i <= totalPages; i++)
                     {
-                        <li class="page-item @(i == currentPage ? "active" : "")">
-                            <a class="page-link" asp-action="StaffList" asp-route-page="@i" style="@(i == currentPage ? "background: linear-gradient(135deg, #42e695, #3bb2b8); border-color: transparent; box-shadow: 0 0 15px rgba(66, 230, 149, 0.4); color: #fff;" : "background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: #ffffff;")">@i</a>
-                        </li>
+                        //  最初(1)、最後(totalPages)、現在ページの前後1ページは数字を表示
+                        if (i == 1 || i == totalPages || (i >= currentPage - 1 && i <= currentPage + 1))
+                        {
+                            <li class="page-item @(i == currentPage ? "active" : "")">
+                                <a class="page-link" asp-action="StaffList" asp-route-page="@i" style="@(i == currentPage ? "background: linear-gradient(135deg, #42e695, #3bb2b8); border-color: transparent; box-shadow: 0 0 15px rgba(66, 230, 149, 0.4); color: #fff;" : "background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: #ffffff;")">@i</a>
+                            </li>
+                        }
+                        // 現在ページから「2つ離れた場所」は「…」を表示
+                        else if (i == currentPage - 2 || i == currentPage + 2)
+                        {
+                            <li class="page-item disabled">
+                                <span class="page-link" style="background-color: transparent; border-color: transparent; color: rgba(255, 255, 255, 0.5);">…</span>
+                            </li>
+                        }
                     }
 
+                    @* 「次へ」ボタン *@
                     <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
                         <a class="page-link" asp-action="StaffList" asp-route-page="@(currentPage + 1)" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.1); color: @(currentPage == totalPages ? "rgba(255, 255, 255, 0.3)" : "#ffffff");">次へ</a>
                     </li>
