@@ -162,13 +162,13 @@ namespace shinnzinn2026.Controllers
             // 🌟 2. データベースの確認と保存処理
             // =========================================================
 
-            var existStaff = _context.Staffs.FirstOrDefault(s => s.StaffCd == staffCd && s.DeleteFlag == 0);
+            // 変更前：&& s.DeleteFlag == 0 を消すだけ！
+            var existStaff = _context.Staffs.FirstOrDefault(s => s.StaffCd == staffCd);
             if (existStaff != null)
             {
-                ViewBag.ErrorMessage = "この社員CDは既に登録されています。";
+                ViewBag.ErrorMessage = "この社員CDは既に登録\n(過去に使用)されています。";
                 return View("Login");
             }
-
             var newStaff = new StaffModel
             {
                 StaffCd = staffCd,
