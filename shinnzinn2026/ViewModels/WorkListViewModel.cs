@@ -25,7 +25,6 @@ namespace shinnzinn2026.ViewModels
         public Dictionary<string, double> DailyOvertime { get; set; } = new();
         public Dictionary<string, double> DailyNightHours { get; set; } = new();
 
-        // 🌟 ヘルパー関数：備考から値を抽出する
         public string ExtractValue(string source, string key)
         {
             if (string.IsNullOrEmpty(source)) return "";
@@ -40,7 +39,6 @@ namespace shinnzinn2026.ViewModels
 
         private static HashSet<string>? _holidaysCache = null;
 
-        // 🌟 ヘルパー関数：祝日かどうか判定する
         public bool IsHoliday(DateTime date)
         {
             if (_holidaysCache == null)
