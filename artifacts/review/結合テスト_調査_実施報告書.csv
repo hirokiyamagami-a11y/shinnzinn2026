@@ -1,0 +1,24 @@
+項目,内容
+"タイトル","結合テスト 調査・実施報告書"
+"1. 目的と対象コンポーネント","目的: コントローラー層と永続化層を結合して、画面表示ロジック（セッションチェック、ページネーション）ならびにデータ取得の振る舞いを検証すること。 対象コンポーネント: Controllers/StaffListController.cs と Data/ApplicationDbContext.cs（DbSet<StaffModel>）。テスト基盤: xUnit、EF Core InMemory。"
+"2. 作成したテストケース","・正常系: StaffList_ReturnsView_WithPagedResults（pageSize=5 に基づくページング検証、ViewResult とモデルの検証）
+・異常系/認可: StaffList_RedirectsToLogin_WhenSessionMissing、StaffList_RedirectsToLogin_WhenNotManager
+・ページネーション境界: page が 0 や負、totalPages を超える場合のクリッピング検証
+・実装: xUnit + InMemory DB、簡易 ISession 実装（TestSession）を利用。"
+"3. 今回の成果（AI の自動生成範囲）","・テストメソッドの雛形、InMemory DB を使ったコンテキスト生成、TestSession の雛形、実行スクリプト（dotnet test と TRX 出力用）を AI が生成・提案
+・ビルド通過に必要な軽微な修正（型キャスト、セッション割当の明示化、ViewBag 参照の修正）を適用
+・ただし複数ファイルでの重複定義は手動で整理。"
+"4. 発生した課題・今後の対策","発生課題:
+・重複シンボルによるコンパイルエラー（CS1109 等）
+・Session 未構成によるランタイム例外
+・型不整合（int/short）
+・PowerShell と Excel COM のエンコーディング／排他問題
+・依存パッケージのセキュリティ警告（Npgsql）
+対策:
+・TestSession 等をテスト共通ユーティリティに一元化
+・スクリプトは UTF-8 (BOM) で保存、-File で実行、Excel を事前停止
+・TargetFramework を net8.0 に統一、依存パッケージを監査・更新
+・CI に依存脆弱性チェックとテスト自動化を導入。"
+"5. 再現手順（要点）","1) リポジトリルートで: dotnet test .\shinnzinn2026.Tests\shinnzinn2026.Tests.csproj --logger "trx;LogFileName=tests.trx" --results-directory TestResults
+2) TRX 解析スクリプトを実行（Excel を閉じた状態で）: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\RunTestsAndExportToExcel.ps1"
+"6. 結語","AI は短時間でテスト雛形と実行スクリプトを生成し、実行可能な状態まで導出しました。環境依存や重複定義の整理は人的対応が必要です。今後はユーティリティ共通化、TFM 統一、依存関係監査、CI 組込を推奨します。"

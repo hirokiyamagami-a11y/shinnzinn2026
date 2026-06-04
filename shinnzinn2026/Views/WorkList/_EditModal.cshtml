@@ -20,6 +20,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-dark border-0 bg-white" style="border-radius: 1.5rem; overflow: hidden;">
             <form asp-controller="WorkList" asp-action="UpdateWorkRecord" method="post">
+                @Html.AntiForgeryToken()
                 <input type="hidden" name="workId" value="@Model.Id" />
                 <input type="hidden" name="year" value="@year" />
                 <input type="hidden" name="month" value="@month" />

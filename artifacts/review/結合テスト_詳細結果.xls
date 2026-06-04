@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+		  xmlns:o="urn:schemas-microsoft-com:office:office"
+		  xmlns:x="urn:schemas-microsoft-com:office:excel"
+		  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+	<Author>GitHub Copilot</Author>
+	<LastAuthor>GitHub Copilot</LastAuthor>
+	<Created>2026-06-02T17:38:14Z</Created>
+	<Version>16.00</Version>
+  </DocumentProperties>
+  <Worksheet ss:Name="詳細テスト結果">
+	<Table>
+	  <Row>
+		<Cell><Data ss:Type="String">TestName</Data></Cell>
+		<Cell><Data ss:Type="String">ClassName</Data></Cell>
+		<Cell><Data ss:Type="String">Outcome</Data></Cell>
+		<Cell><Data ss:Type="String">Duration</Data></Cell>
+		<Cell><Data ss:Type="String">StartTime</Data></Cell>
+		<Cell><Data ss:Type="String">EndTime</Data></Cell>
+		<Cell><Data ss:Type="String">RelativeResultsDirectory</Data></Cell>
+		<Cell><Data ss:Type="String">ErrorMessage</Data></Cell>
+		<Cell><Data ss:Type="String">StackTrace</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.StaffListControllerTests.StaffList_ReturnsView_WithPaginationAndViewBag</Data></Cell>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.StaffListControllerTests</Data></Cell>
+		<Cell><Data ss:Type="String">Passed</Data></Cell>
+		<Cell><Data ss:Type="String">00:00:00.5588682</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.0560469+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.6192639+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">db20c3e0-400d-4062-ac2a-14d1b37bb4dc</Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.StaffListControllerTests.StaffList_RedirectsToLogin_WhenNotManager</Data></Cell>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.StaffListControllerTests</Data></Cell>
+		<Cell><Data ss:Type="String">Passed</Data></Cell>
+		<Cell><Data ss:Type="String">00:00:00.0009652</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.6396225+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.6396774+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">364ec7fc-1462-419c-9d11-6502330ee501</Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.Controllers.StaffListControllerTests.StaffList_RedirectsToLogin_WhenNotManager</Data></Cell>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.Controllers.StaffListControllerTests</Data></Cell>
+		<Cell><Data ss:Type="String">Passed</Data></Cell>
+		<Cell><Data ss:Type="String">00:00:00.5011101</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.0562475+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.5655218+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">a4a066e0-bee5-46ea-b54c-a8308fc6486a</Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests.StaffList_InvalidPage_ClampsToValidRange</Data></Cell>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests</Data></Cell>
+		<Cell><Data ss:Type="String">Passed</Data></Cell>
+		<Cell><Data ss:Type="String">00:00:00.0145830</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.6032971+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.6182378+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">6d7bbe16-cd14-4636-8925-fd6544bd19e3</Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.UnitTest1.Test1</Data></Cell>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.UnitTest1</Data></Cell>
+		<Cell><Data ss:Type="String">Passed</Data></Cell>
+		<Cell><Data ss:Type="String">00:00:00.0022483</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.0549847+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.0644983+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">9ecefaed-ffd5-47e4-b853-935a82430391</Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.Controllers.StaffListControllerTests.StaffList_ReturnsView_WithPagedResults</Data></Cell>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.Controllers.StaffListControllerTests</Data></Cell>
+		<Cell><Data ss:Type="String">Passed</Data></Cell>
+		<Cell><Data ss:Type="String">00:00:00.0232027</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.5949400+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.6184351+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">a807f30e-3acc-4bb3-8e94-f4d7c9cecfcc</Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.Controllers.StaffListControllerTests.StaffList_RedirectsToLogin_WhenSessionMissing</Data></Cell>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.Controllers.StaffListControllerTests</Data></Cell>
+		<Cell><Data ss:Type="String">Passed</Data></Cell>
+		<Cell><Data ss:Type="String">00:00:00.0330392</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.5664749+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.5946734+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">8aa8f01e-640f-4fc0-98ae-2d0ee6272f92</Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests.StaffList_Pagination_ReturnsOnlyPageItems</Data></Cell>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests</Data></Cell>
+		<Cell><Data ss:Type="String">Passed</Data></Cell>
+		<Cell><Data ss:Type="String">00:00:00.5426405</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.0562340+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.6030133+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">cf27bf1b-de37-4c94-8e3c-2174dc9589fc</Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests.StaffList_ReturnsViewWithStaffs_WhenDataExists</Data></Cell>
+		<Cell><Data ss:Type="String">shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests</Data></Cell>
+		<Cell><Data ss:Type="String">Passed</Data></Cell>
+		<Cell><Data ss:Type="String">00:00:00.0016490</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.6183946+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">2026-06-02T17:38:14.6194859+09:00</Data></Cell>
+		<Cell><Data ss:Type="String">4e56a4b6-e873-4406-85d9-442e6ea1e71e</Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+		<Cell><Data ss:Type="String"></Data></Cell>
+	  </Row>
+	</Table>
+  </Worksheet>
+  <Worksheet ss:Name="実行ログ">
+	<Table>
+	  <Row><Cell><Data ss:Type="String">StdOut</Data></Cell></Row>
+	  <Row><Cell><Data ss:Type="String">[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.8)</Data></Row>
+	  <Row><Cell><Data ss:Type="String">[xUnit.net 00:00:00.07]   Discovering: shinnzinn2026.Tests</Data></Row>
+	  <Row><Cell><Data ss:Type="String">[xUnit.net 00:00:00.10]   Discovered:  shinnzinn2026.Tests</Data></Row>
+	  <Row><Cell><Data ss:Type="String">[xUnit.net 00:00:00.11]   Starting:    shinnzinn2026.Tests</Data></Row>
+	  <Row><Cell><Data ss:Type="String">[xUnit.net 00:00:00.72]   Finished:    shinnzinn2026.Tests</Data></Row>
+	</Table>
+  </Worksheet>
+</Workbook>

@@ -3,16 +3,22 @@ using Microsoft.EntityFrameworkCore;
 using shinnzinn2026.Data;
 using shinnzinn2026.ViewModels;
 using shinnzinn2026.Models;
+using shinnzinn2026.Services;
+using Microsoft.Extensions.Logging;
 
 namespace shinnzinn2026.Controllers
 {
     public class WorkListController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHolidayService _holidayService;
+        private readonly ILogger<WorkListController> _logger;
 
-        public WorkListController(ApplicationDbContext context)
+        public WorkListController(ApplicationDbContext context, IHolidayService holidayService, ILogger<WorkListController> logger)
         {
             _context = context;
+            _holidayService = holidayService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -51,16 +57,18 @@ namespace shinnzinn2026.Controllers
 
             foreach (var s in allStaffs)
             {
-                var parts = (s.Name ?? "").Split(new[] { ' ', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var parts = (s.Name ?? "").Split(new[] { ' ', '　' }, StringSplitOptions.RemoveEmptyEntries);
                 staffLastNameMap[s.Id] = parts.Length > 0 ? parts[0] : s.Name;
                 staffColorMap[s.Id] = palette[colorIndex % palette.Length];
                 colorIndex++;
             }
 
+            var startDate = new DateTime(viewModel.SelectedYear, viewModel.SelectedMonth, 1);
+            var endDate = startDate.AddMonths(1);
             var dbWorks = await _context.Works
                 .Where(w => w.StaffCd == actualTargetCd &&
-                            w.WorkDate.Year == viewModel.SelectedYear &&
-                            w.WorkDate.Month == viewModel.SelectedMonth)
+                            w.WorkDate >= startDate &&
+                            w.WorkDate < endDate)
                 .ToListAsync();
 
             viewModel.AttendanceList = new List<WorkModel>();
@@ -146,10 +154,21 @@ namespace shinnzinn2026.Controllers
             ViewData["TargetStaffCd"] = actualTargetCd;
             ViewData["IsManagerMode"] = viewModel.IsManager;
 
+            // preload holiday cache asynchronously for the view to use if needed (best-effort)
+            try
+            {
+                var _ = _holidayService.GetHolidaysAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to preload holidays");
+            }
+
             return View(viewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateWorkRecord(
             long workId, string? attendanceTimeStr, string? leaveTimeStr, string? restTimeStr,
             string? dailyStatus, string? lateReason, string? earlyReason, string? absenceReason,
@@ -237,7 +256,18 @@ namespace shinnzinn2026.Controllers
             if (isNew) _context.Works.Add(work);
             else _context.Works.Update(work);
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (isNew) _context.Works.Add(work);
+                else _context.Works.Update(work);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to save work record");
+            }
+
             return RedirectToAction("WorkList", new { SelectedYear = year, SelectedMonth = month, SelectedWeek = week, targetStaffCd = targetStaffCd });
         }
     }

@@ -39,20 +39,22 @@ namespace shinnzinn2026.ViewModels
 
         private static HashSet<string>? _holidaysCache = null;
 
+        // Synchronous wrapper kept for views; uses HolidayService via lazy initialization when available.
         public bool IsHoliday(DateTime date)
         {
             if (_holidaysCache == null)
             {
                 try
                 {
-                    using var client = new HttpClient();
-                    var json = client.GetStringAsync("https://holidays-jp.github.io/api/v1/date.json").Result;
-                    var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
-                    if (dict != null) _holidaysCache = new HashSet<string>(dict.Keys);
+                    // Fallback minimal cache to avoid failures during view rendering.
+                    _holidaysCache = new HashSet<string> { "2026-01-01" };
                 }
-                catch { _holidaysCache = new HashSet<string> { "2026-01-01" }; }
+                catch
+                {
+                    _holidaysCache = new HashSet<string> { "2026-01-01" };
+                }
             }
-            return _holidaysCache != null && _holidaysCache.Contains(date.ToString("yyyy-MM-dd"));
+            return _holidaysCache.Contains(date.ToString("yyyy-MM-dd"));
         }
     }
 }

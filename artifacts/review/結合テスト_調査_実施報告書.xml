@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+		  xmlns:o="urn:schemas-microsoft-com:office:office"
+		  xmlns:x="urn:schemas-microsoft-com:office:excel"
+		  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+		  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="結合テスト報告">
+	<Table>
+	  <Row>
+		<Cell><Data ss:Type="String">項目</Data></Cell>
+		<Cell><Data ss:Type="String">内容</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">1. 目的と対象コンポーネント</Data></Cell>
+		<Cell><Data ss:Type="String">目的: コントローラー層と永続化層を結合して画面表示ロジック（セッションチェック、ページネーション）とデータ取得の振る舞いを検証すること。対象コンポーネント: Controllers/StaffListController.cs と Data/ApplicationDbContext.cs（DbSet<StaffModel>）。テスト基盤: xUnit、EF Core InMemory。</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">2. 作成したテストケース</Data></Cell>
+		<Cell><Data ss:Type="String">・正常系: StaffList_ReturnsView_WithPagedResults（pageSize=5 に基づくページング検証、ViewResult とモデルの検証）
+・異常系/認可: StaffList_RedirectsToLogin_WhenSessionMissing、StaffList_RedirectsToLogin_WhenNotManager（セッション未設定・非管理者でのリダイレクト検証）
+・ページネーション境界: page が 0 や負、totalPages を超える場合のクリッピング検証
+テスト実装は xUnit + InMemory DB、簡易 ISession 実装（TestSession）を利用。</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">3. 今回の成果（AI の自動生成範囲）</Data></Cell>
+		<Cell><Data ss:Type="String">・テストメソッドの雛形、InMemory DB を使ったコンテキスト生成、TestSession の雛形、実行スクリプト（dotnet test と TRX 出力用）を AI が生成・提案しました。
+・ビルド通過に必要な軽微な修正（型キャスト、セッション割当の明示化、ViewBag 参照の修正）まで適用しました。
+・ただし複数ファイルでの重複定義（TestSession/拡張メソッド等）は手動で整理しました。</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">4. 発生した課題・今後の対策</Data></Cell>
+		<Cell><Data ss:Type="String">発生課題:
+・テストコードの重複シンボルによるコンパイルエラー（CS1109 等）
+・Session が未構成のためのランタイム例外（テスト内で TestSession を割当てる対処を実施）
+・型不整合（int/short の暗黙変換）
+・PowerShell と Excel COM の実行におけるエンコーディング／ファイル排他問題
+・依存パッケージのセキュリティ警告（Npgsql に関する NU1903）
+対策:
+・TestSession 等はテスト共通ユーティリティに一元化し重複を排除
+・PowerShell スクリプトは UTF-8 BOM で保存し -File 実行、Excel は事前に停止
+・プロジェクトの TargetFramework を net8.0 に統一、依存パッケージを監査・更新
+・CI に依存脆弱性チェックとテスト実行パイプラインを導入</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">5. 再現手順（要点）</Data></Cell>
+		<Cell><Data ss:Type="String">1) リポジトリルートで: dotnet test .\shinnzinn2026.Tests\shinnzinn2026.Tests.csproj --logger "trx;LogFileName=tests.trx" --results-directory TestResults
+2) TRX 解析スクリプトを実行（Excel を閉じた状態で）: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\RunTestsAndExportToExcel.ps1
+※スクリプトは artifacts/review に CSV/XLSX を出力します。</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">6. 結語</Data></Cell>
+		<Cell><Data ss:Type="String">AI は短時間でテスト雛形と実行スクリプトを生成し、実行可能な状態まで導出しました。環境依存の調整や重複定義の整理は人的対応が必要でした。今後はユーティリティの共通化、TFM の統一、依存関係の監査、CI 組込を推奨します。</Data></Cell>
+	  </Row>
+	</Table>
+  </Worksheet>
+</Workbook>

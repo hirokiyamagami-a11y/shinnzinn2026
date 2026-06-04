@@ -1,0 +1,10 @@
+﻿File,Location,Issue,Severity,Recommendation
+"Controllers/StaffListController.cs","全体","例外発生時にユーザー向けに内部例外メッセージを直に返している","Medium","例外ログを記録して一般的なエラーメッセージ（ユーザー向け）を返す。機密情報を含むメッセージは出力しない。"
+"Controllers/StaffListController.cs","StaffList(int page)","pageパラメータの上限チェックがない（page > totalPages の場合など）","Low","page を 1..totalPages の範囲にクランプする。"
+"Controllers/StaffListController.cs","StaffList(int page)","DBアクセスで同期呼び出しが混在していた（修正済）","Info","非同期メソッドを使う（FirstOrDefaultAsync 等）。"
+"Controllers/StaffEditController.cs","POST StaffEdit","CSRF 対策の指定がない（[ValidateAntiForgeryToken] がない）","High","POST アクションに [ValidateAntiForgeryToken] を追加し、フォームに @Html.AntiForgeryToken() を含める。"
+"Controllers/StaffEditController.cs","全体","認可がコントローラ/アクションに付与されていない（Manager 判定は手動）","High","ASP.NET Core の認可属性（例：[Authorize(Roles=Manager)]）やポリシーを導入し、認可ロジックを中央管理する。"
+"Models/StaffModel.cs","Password フィールド","パスワードを平文で保存しているように見える（セキュリティリスク）","Critical","パスワードはハッシュ化（bcrypt/Argon2 等）して保存。平文/短い制限（MaxLength=10）を見直す。"
+"Views/StaffList/StaffList.cshtml","モーダル生成箇所","全行に対してモーダルを生成している（大量データ時のパフォーマンス懸念）","Medium","行ごとにモーダルを生成するのではなく、モーダルを1つ用意して対象行のデータを動的に差し替える。"
+"Views/StaffList/StaffList.cshtml","ページネーション","totalPages が 0 のケースをコントローラで処理していない（ビュー側でデフォルトにしている）","Low","コントローラ側で totalPages を最低 1 に設定するか、Model/ViewModel にページ情報を含める。"
+"Data/ApplicationDbContext.cs","OnModelCreating","StaffCd を代替キーにしている点は良いが、外部キー制約に null 許容や遅延ロードの考慮が必要な場合がある","Info","関連性の要件に応じて .IsRequired() 等を追加。"

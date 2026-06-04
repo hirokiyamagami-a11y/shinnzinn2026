@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using shinnzinn2026.ViewModels;
 using shinnzinn2026.Data;   // ApplicationDbContext がある場所
@@ -35,6 +36,11 @@ namespace shinnzinn2026.Controllers
                     .CountAsync();
 
                 int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+                totalPages = Math.Max(totalPages, 1);
+
+                // page 範囲を補正
+                if (page < 1) page = 1;
+                if (page > totalPages) page = totalPages;
 
                 // 指定されたページの5人だけを切り取って取得
                 var staffList = await _context.Staffs
@@ -51,7 +57,7 @@ namespace shinnzinn2026.Controllers
                 if (!string.IsNullOrEmpty(loginStaffCd))
                 {
                     // DBからStaffCdが一致する社員データを1件検索する
-                    var loginStaff = _context.Staffs.FirstOrDefault(s => s.StaffCd == loginStaffCd);
+                    var loginStaff = await _context.Staffs.FirstOrDefaultAsync(s => s.StaffCd == loginStaffCd);
 
                     if (loginStaff != null)
                     {
@@ -62,9 +68,10 @@ namespace shinnzinn2026.Controllers
 
                 return View("StaffList", staffList);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return Content($"エラー発生：{ex.Message}");
+                // エラー詳細をユーザーに返さない
+                return StatusCode(500, "サーバーエラーが発生しました。");
             }
         }
     }

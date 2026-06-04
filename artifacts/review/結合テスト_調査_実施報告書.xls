@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+		  xmlns:o="urn:schemas-microsoft-com:office:office"
+		  xmlns:x="urn:schemas-microsoft-com:office:excel"
+		  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+		  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+	<Author>GitHub Copilot</Author>
+	<LastAuthor>GitHub Copilot</LastAuthor>
+	<Created>2026-06-02T00:00:00Z</Created>
+	<Version>16.00</Version>
+  </DocumentProperties>
+  <Worksheet ss:Name="結合テスト報告">
+	<Table>
+	  <Row>
+		<Cell><Data ss:Type="String">項目</Data></Cell>
+		<Cell><Data ss:Type="String">詳細</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">タイトル</Data></Cell>
+		<Cell><Data ss:Type="String">結合テスト 調査・実施報告書</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">作成日</Data></Cell>
+		<Cell><Data ss:Type="String">2026/06/02</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">1. 目的と対象コンポーネント</Data></Cell>
+		<Cell><Data ss:Type="String">目的: Web アプリケーションにおけるコントローラ層と永続化層を結合して、画面表示ロジック（セッションによる認可判定、ページネーション）とデータ取得の振る舞いを検証すること。
+対象コンポーネント: Controllers/StaffListController.cs（コントローラ）と Data/ApplicationDbContext.cs（EF Core の DbContext、DbSet<StaffModel>）。テスト基盤は xUnit、データストアは Microsoft.EntityFrameworkCore.InMemory を用いたインメモリ DB を採用。</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">2. 作成したテストケース（項目）</Data></Cell>
+		<Cell><Data ss:Type="String">以下のテストケースを作成し、コントローラと DbContext の結合的動作を検証しました。
+・正常系: StaffList_ReturnsView_WithPagedResults — 複数レコード挿入後、page=2 等で期待される件数と StaffCd が返ることを検証（pageSize=5 想定）。
+・認可系: StaffList_RedirectsToLogin_WhenSessionMissing — セッションにログイン情報が無い場合は Login にリダイレクトされる。
+・認可系: StaffList_RedirectsToLogin_WhenNotManager — セッションにログインはあるが ManagerFlag が 0 の場合は Login にリダイレクトされる。
+・ページネーション境界: page が 0 や負、また totalPages を超える場合に page が 1..totalPages にクリップされる挙動を確認。
+実装ポイント: xUnit、InMemory DB を使用。HttpContext.Session はテスト用の簡易 ISession 実装（TestSession）でバイト配列を直接格納して模擬。</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">3. 実施手順（要約）</Data></Cell>
+		<Cell><Data ss:Type="String">ローカルで dotnet test を実行して TRX を出力し、TRX 解析スクリプト（PowerShell）で CSV/XLSX を生成するワークフローを用意しました。
+実行例:
+1) dotnet test .\shinnzinn2026.Tests\shinnzinn2026.Tests.csproj --logger "trx;LogFileName=tests.trx" --results-directory TestResults
+2) PowerShell スクリプトで TestResults/tests.trx を解析して artifacts/review に出力（CSV/XLSX）。
+※Excel COM 操作は Excel を事前に終了してから実行する必要があります。</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">4. 今回の成果（AI が自動生成した範囲）</Data></Cell>
+		<Cell><Data ss:Type="String">AI による自動生成で実現したこと:
+・xUnit のテストメソッド雛形（正常系／異常系／ページネーション）
+・InMemory DB を用いた ApplicationDbContext のテスト用初期化コード
+・TestSession（ISession を模した簡易実装）の雛形
+・dotnet test 実行コマンド、TRX 出力および TRX 解析用 PowerShell スクリプトの雛形
+AI が補助して適用した修正:
+・ビルドエラー解消のための型キャスト、セッション割当、ViewBag 参照箇所の最小修正
+制限事項:
+・自動生成による複数ファイルの重複定義はコンパイル競合を招き、手動で整理しました。
+・環境依存の設定（Excel COM、PowerShell エンコーディング等）は人手での確認が必要です。</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">5. 発生した課題（技術的）</Data></Cell>
+		<Cell><Data ss:Type="String">検出された主な課題:
+1) 自動生成物の重複定義によるコンパイルエラー（同名クラスや拡張メソッドの衝突） → 対策: テストユーティリティの共通化、一意な名前空間の付与。
+2) テスト中の Session 未構成による InvalidOperationException → 対策: テストで明示的に TestSession を割当。
+3) 型不整合（int/short の暗黙変換エラー） → 対策: テスト側で明示的キャストを追加。
+4) PowerShell と Excel COM のエンコーディング／排他問題 → 対策: スクリプトは UTF-8(BOM) で保存し -File で実行、Excel を事前停止。
+5) 依存パッケージ警告（NU1903: Npgsql のアドバイザリ） → 対策: 依存関係の監査と必要に応じたバージョン更新。</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">6. 改善提案（推奨）</Data></Cell>
+		<Cell><Data ss:Type="String">・TestSession 等の共通ユーティリティをテスト専用プロジェクトに切り出し重複を排除する。
+・ソリューションの TargetFramework を net8.0 に統一し、テストプロジェクトの TFM を固定する。
+・PowerShell スクリプトを UTF-8(BOM) で保存し、Excel 操作は明示的に Excel を停止してから実行する手順を定着させる。
+・CI に TRX 生成・解析・脆弱性チェックを組み込み自動化する。</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">7. 再現手順（詳細）</Data></Cell>
+		<Cell><Data ss:Type="String">1) リポジトリルートで: dotnet test .\shinnzinn2026.Tests\shinnzinn2026.Tests.csproj --logger "trx;LogFileName=tests.trx" --results-directory TestResults
+2) TestResults/tests.trx を解析するスクリプトを実行（Excel を閉じた状態で）: powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\RunTestsAndExportToExcel.ps1
+3) 出力先: artifacts/review に CSV および必要に応じて .xlsx を出力</Data></Cell>
+	  </Row>
+	  <Row>
+		<Cell><Data ss:Type="String">8. 結語</Data></Cell>
+		<Cell><Data ss:Type="String">AI は短期間でテストコードと実行スクリプトの大半を生成しましたが、生成物の統合や環境依存部分は人的な手直しが必要でした。今後はユーティリティの共通化と CI 組込を優先し、同様の自動生成ワークフローを安定化させることを推奨します。</Data></Cell>
+	  </Row>
+	</Table>
+  </Worksheet>
+</Workbook>

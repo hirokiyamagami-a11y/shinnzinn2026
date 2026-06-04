@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="0cc4ecc8-9473-4d5b-a806-a63430eb8e48" name="Sodeyama@SODEYAMA-SAC 2026-06-02 18:21:25" runUser="SODEYAMA-SAC\Sodeyama" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-06-02T18:21:25.8309002+09:00" queuing="2026-06-02T18:21:25.8309006+09:00" start="2026-06-02T18:21:24.6829442+09:00" finish="2026-06-02T18:21:25.8796003+09:00" />
+  <TestSettings name="default" id="53ff158d-e42f-4c45-8270-7fcb26520cdb">
+    <Deployment runDeploymentRoot="Sodeyama_SODEYAMA-SAC_2026-06-02_18_21_25" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="f9c135f9-a5dd-49ef-9cbe-2f3b64918f32" testId="cbf88445-18f3-16b5-09bb-2702fbf19b8b" testName="shinnzinn2026.Tests.StaffListControllerTests.StaffList_RedirectsToLogin_WhenNoSession" computerName="SODEYAMA-SAC" duration="00:00:00.0004536" startTime="2026-06-02T18:21:25.7888252+09:00" endTime="2026-06-02T18:21:25.7890192+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f9c135f9-a5dd-49ef-9cbe-2f3b64918f32" />
+    <UnitTestResult executionId="a30e3f7c-da07-4aaa-a83b-9c7b2dd4acfd" testId="7b73505d-6b50-c7a0-7a63-e69917d53df2" testName="shinnzinn2026.Tests.Controllers.StaffListControllerTests.StaffList_ReturnsView_WithPagedResults" computerName="SODEYAMA-SAC" duration="00:00:00.0288716" startTime="2026-06-02T18:21:25.7588053+09:00" endTime="2026-06-02T18:21:25.7875802+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a30e3f7c-da07-4aaa-a83b-9c7b2dd4acfd" />
+    <UnitTestResult executionId="65f39bca-4e0d-4577-994b-e0ceb214bebb" testId="1830d7e9-349b-a5c3-5680-4428facc2035" testName="shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests.StaffList_Pagination_ReturnsOnlyPageItems" computerName="SODEYAMA-SAC" duration="00:00:00.5632427" startTime="2026-06-02T18:21:25.2021133+09:00" endTime="2026-06-02T18:21:25.7688888+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="65f39bca-4e0d-4577-994b-e0ceb214bebb" />
+    <UnitTestResult executionId="6e99fbe7-7b26-4c63-b59a-6108f36db084" testId="f4dda12d-72cf-fa48-7d0b-488a5abcafd0" testName="shinnzinn2026.Tests.StaffListControllerTests.StaffList_RedirectsToLogin_WhenNotManager" computerName="SODEYAMA-SAC" duration="00:00:00.0008204" startTime="2026-06-02T18:21:25.8075410+09:00" endTime="2026-06-02T18:21:25.8078264+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6e99fbe7-7b26-4c63-b59a-6108f36db084" />
+    <UnitTestResult executionId="e8fc29a0-5d4a-4d4f-ac26-b8686a31a9f2" testId="42cba3c6-8717-ebb6-6312-752c7df565f8" testName="shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests.StaffList_InvalidPage_ClampsToValidRange" computerName="SODEYAMA-SAC" duration="00:00:00.0190159" startTime="2026-06-02T18:21:25.7691521+09:00" endTime="2026-06-02T18:21:25.7878969+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e8fc29a0-5d4a-4d4f-ac26-b8686a31a9f2" />
+    <UnitTestResult executionId="a9dda4ad-7310-4375-9af3-0719932a121e" testId="917a0e74-67f4-ebcb-345c-efa80407d197" testName="shinnzinn2026.Tests.StaffListControllerTests.StaffList_ReturnsView_WithPaginationAndViewBag" computerName="SODEYAMA-SAC" duration="00:00:00.5830232" startTime="2026-06-02T18:21:25.2023155+09:00" endTime="2026-06-02T18:21:25.7886121+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a9dda4ad-7310-4375-9af3-0719932a121e" />
+    <UnitTestResult executionId="ac8082cd-55c2-4388-ae98-1f64008fab8a" testId="c4e89b12-f2dd-19fd-da00-177889442312" testName="shinnzinn2026.Tests.UnitTest1.Test1" computerName="SODEYAMA-SAC" duration="00:00:00.0021090" startTime="2026-06-02T18:21:25.2010369+09:00" endTime="2026-06-02T18:21:25.2091737+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac8082cd-55c2-4388-ae98-1f64008fab8a" />
+    <UnitTestResult executionId="69be8305-64ed-42fb-99dc-74f0d900b505" testId="1becb80a-aaab-1d63-d47c-ce5ed909093b" testName="shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests.StaffList_ReturnsViewWithStaffs_WhenDataExists" computerName="SODEYAMA-SAC" duration="00:00:00.0012431" startTime="2026-06-02T18:21:25.7879986+09:00" endTime="2026-06-02T18:21:25.8075866+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="69be8305-64ed-42fb-99dc-74f0d900b505" />
+    <UnitTestResult executionId="9d79c278-4644-4a3f-995b-d3aefa291f6c" testId="c4b84be9-f38d-4a16-f276-88392c35e858" testName="shinnzinn2026.Tests.Controllers.StaffListControllerTests.StaffList_RedirectsToLogin_WhenSessionMissing" computerName="SODEYAMA-SAC" duration="00:00:00.0320203" startTime="2026-06-02T18:21:25.7275400+09:00" endTime="2026-06-02T18:21:25.7585449+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9d79c278-4644-4a3f-995b-d3aefa291f6c" />
+    <UnitTestResult executionId="a4bf9ec9-a597-408e-b7f3-c87ae7a5de44" testId="603cb94c-cb9c-9279-1f7b-8fb457ad0a44" testName="shinnzinn2026.Tests.Controllers.StaffListControllerTests.StaffList_RedirectsToLogin_WhenNotManager" computerName="SODEYAMA-SAC" duration="00:00:00.5208545" startTime="2026-06-02T18:21:25.2022996+09:00" endTime="2026-06-02T18:21:25.7265032+09:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4bf9ec9-a597-408e-b7f3-c87ae7a5de44" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="shinnzinn2026.Tests.Controllers.StaffListControllerTests.StaffList_RedirectsToLogin_WhenNotManager" storage="c:\users\sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.tests\bin\debug\net10.0\shinnzinn2026.tests.dll" id="603cb94c-cb9c-9279-1f7b-8fb457ad0a44">
+      <Execution id="a4bf9ec9-a597-408e-b7f3-c87ae7a5de44" />
+      <TestMethod codeBase="C:\Users\Sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.Tests\bin\Debug\net10.0\shinnzinn2026.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="shinnzinn2026.Tests.Controllers.StaffListControllerTests" name="StaffList_RedirectsToLogin_WhenNotManager" />
+    </UnitTest>
+    <UnitTest name="shinnzinn2026.Tests.UnitTest1.Test1" storage="c:\users\sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.tests\bin\debug\net10.0\shinnzinn2026.tests.dll" id="c4e89b12-f2dd-19fd-da00-177889442312">
+      <Execution id="ac8082cd-55c2-4388-ae98-1f64008fab8a" />
+      <TestMethod codeBase="C:\Users\Sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.Tests\bin\Debug\net10.0\shinnzinn2026.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="shinnzinn2026.Tests.UnitTest1" name="Test1" />
+    </UnitTest>
+    <UnitTest name="shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests.StaffList_InvalidPage_ClampsToValidRange" storage="c:\users\sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.tests\bin\debug\net10.0\shinnzinn2026.tests.dll" id="42cba3c6-8717-ebb6-6312-752c7df565f8">
+      <Execution id="e8fc29a0-5d4a-4d4f-ac26-b8686a31a9f2" />
+      <TestMethod codeBase="C:\Users\Sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.Tests\bin\Debug\net10.0\shinnzinn2026.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests" name="StaffList_InvalidPage_ClampsToValidRange" />
+    </UnitTest>
+    <UnitTest name="shinnzinn2026.Tests.StaffListControllerTests.StaffList_ReturnsView_WithPaginationAndViewBag" storage="c:\users\sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.tests\bin\debug\net10.0\shinnzinn2026.tests.dll" id="917a0e74-67f4-ebcb-345c-efa80407d197">
+      <Execution id="a9dda4ad-7310-4375-9af3-0719932a121e" />
+      <TestMethod codeBase="C:\Users\Sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.Tests\bin\Debug\net10.0\shinnzinn2026.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="shinnzinn2026.Tests.StaffListControllerTests" name="StaffList_ReturnsView_WithPaginationAndViewBag" />
+    </UnitTest>
+    <UnitTest name="shinnzinn2026.Tests.Controllers.StaffListControllerTests.StaffList_ReturnsView_WithPagedResults" storage="c:\users\sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.tests\bin\debug\net10.0\shinnzinn2026.tests.dll" id="7b73505d-6b50-c7a0-7a63-e69917d53df2">
+      <Execution id="a30e3f7c-da07-4aaa-a83b-9c7b2dd4acfd" />
+      <TestMethod codeBase="C:\Users\Sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.Tests\bin\Debug\net10.0\shinnzinn2026.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="shinnzinn2026.Tests.Controllers.StaffListControllerTests" name="StaffList_ReturnsView_WithPagedResults" />
+    </UnitTest>
+    <UnitTest name="shinnzinn2026.Tests.Controllers.StaffListControllerTests.StaffList_RedirectsToLogin_WhenSessionMissing" storage="c:\users\sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.tests\bin\debug\net10.0\shinnzinn2026.tests.dll" id="c4b84be9-f38d-4a16-f276-88392c35e858">
+      <Execution id="9d79c278-4644-4a3f-995b-d3aefa291f6c" />
+      <TestMethod codeBase="C:\Users\Sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.Tests\bin\Debug\net10.0\shinnzinn2026.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="shinnzinn2026.Tests.Controllers.StaffListControllerTests" name="StaffList_RedirectsToLogin_WhenSessionMissing" />
+    </UnitTest>
+    <UnitTest name="shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests.StaffList_ReturnsViewWithStaffs_WhenDataExists" storage="c:\users\sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.tests\bin\debug\net10.0\shinnzinn2026.tests.dll" id="1becb80a-aaab-1d63-d47c-ce5ed909093b">
+      <Execution id="69be8305-64ed-42fb-99dc-74f0d900b505" />
+      <TestMethod codeBase="C:\Users\Sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.Tests\bin\Debug\net10.0\shinnzinn2026.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests" name="StaffList_ReturnsViewWithStaffs_WhenDataExists" />
+    </UnitTest>
+    <UnitTest name="shinnzinn2026.Tests.StaffListControllerTests.StaffList_RedirectsToLogin_WhenNotManager" storage="c:\users\sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.tests\bin\debug\net10.0\shinnzinn2026.tests.dll" id="f4dda12d-72cf-fa48-7d0b-488a5abcafd0">
+      <Execution id="6e99fbe7-7b26-4c63-b59a-6108f36db084" />
+      <TestMethod codeBase="C:\Users\Sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.Tests\bin\Debug\net10.0\shinnzinn2026.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="shinnzinn2026.Tests.StaffListControllerTests" name="StaffList_RedirectsToLogin_WhenNotManager" />
+    </UnitTest>
+    <UnitTest name="shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests.StaffList_Pagination_ReturnsOnlyPageItems" storage="c:\users\sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.tests\bin\debug\net10.0\shinnzinn2026.tests.dll" id="1830d7e9-349b-a5c3-5680-4428facc2035">
+      <Execution id="65f39bca-4e0d-4577-994b-e0ceb214bebb" />
+      <TestMethod codeBase="C:\Users\Sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.Tests\bin\Debug\net10.0\shinnzinn2026.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="shinnzinn2026.Tests.IntegrationTests.StaffListControllerTests" name="StaffList_Pagination_ReturnsOnlyPageItems" />
+    </UnitTest>
+    <UnitTest name="shinnzinn2026.Tests.StaffListControllerTests.StaffList_RedirectsToLogin_WhenNoSession" storage="c:\users\sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.tests\bin\debug\net10.0\shinnzinn2026.tests.dll" id="cbf88445-18f3-16b5-09bb-2702fbf19b8b">
+      <Execution id="f9c135f9-a5dd-49ef-9cbe-2f3b64918f32" />
+      <TestMethod codeBase="C:\Users\Sodeyama\source\repos\hirokiyamagami-a11y\shinnzinn2026\shinnzinn2026.Tests\bin\Debug\net10.0\shinnzinn2026.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="shinnzinn2026.Tests.StaffListControllerTests" name="StaffList_RedirectsToLogin_WhenNoSession" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="cbf88445-18f3-16b5-09bb-2702fbf19b8b" executionId="f9c135f9-a5dd-49ef-9cbe-2f3b64918f32" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7b73505d-6b50-c7a0-7a63-e69917d53df2" executionId="a30e3f7c-da07-4aaa-a83b-9c7b2dd4acfd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1830d7e9-349b-a5c3-5680-4428facc2035" executionId="65f39bca-4e0d-4577-994b-e0ceb214bebb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f4dda12d-72cf-fa48-7d0b-488a5abcafd0" executionId="6e99fbe7-7b26-4c63-b59a-6108f36db084" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="42cba3c6-8717-ebb6-6312-752c7df565f8" executionId="e8fc29a0-5d4a-4d4f-ac26-b8686a31a9f2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="917a0e74-67f4-ebcb-345c-efa80407d197" executionId="a9dda4ad-7310-4375-9af3-0719932a121e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c4e89b12-f2dd-19fd-da00-177889442312" executionId="ac8082cd-55c2-4388-ae98-1f64008fab8a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1becb80a-aaab-1d63-d47c-ce5ed909093b" executionId="69be8305-64ed-42fb-99dc-74f0d900b505" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c4b84be9-f38d-4a16-f276-88392c35e858" executionId="9d79c278-4644-4a3f-995b-d3aefa291f6c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="603cb94c-cb9c-9279-1f7b-8fb457ad0a44" executionId="a4bf9ec9-a597-408e-b7f3-c87ae7a5de44" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="一覧に存在しない結果" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="読み込まれたすべての結果" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="10" executed="10" passed="10" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.8)&#xD;
+[xUnit.net 00:00:00.07]   Discovering: shinnzinn2026.Tests&#xD;
+[xUnit.net 00:00:00.10]   Discovered:  shinnzinn2026.Tests&#xD;
+[xUnit.net 00:00:00.11]   Starting:    shinnzinn2026.Tests&#xD;
+[xUnit.net 00:00:00.74]   Finished:    shinnzinn2026.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using shinnzinn2026.Data;
+using shinnzinn2026.Services;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,11 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 // --- ここまで追加 ---
+
+// Add in-memory caching and HttpClient support for holiday service
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IHolidayService, HolidayService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -45,5 +51,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Login}/{id?}");
+
+
 
 app.Run();
